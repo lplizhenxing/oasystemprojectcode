@@ -1,0 +1,160 @@
+package com.zszd.ai.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.zszd.ai.model.Department;
+import com.zszd.ai.service.DepartmentService;
+import com.zszd.ai.service.impl.DepartmentServiceImpl;
+
+/**
+ * 
+ * @author lvjc
+ * 
+ */
+@WebServlet(urlPatterns = { "/department" }, name = "department")
+public class DepartmentServlet extends HttpServlet {
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doPost(request, response);
+	}
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+		String path = request.getContextPath();
+		String basePath = request.getScheme() + "://" + request.getServerName()
+				+ ":" + request.getServerPort() + path + "/";
+		HttpSession session = request.getSession();// 获取session
+		String name = (String) session.getAttribute("login");
+		int roleId = (Integer) session.getAttribute("roleId");
+		int companyId = (Integer) session.getAttribute("companyId");
+		DepartmentService departmentService = new DepartmentServiceImpl();
+		String opr = request.getParameter("opr");
+		PrintWriter out = response.getWriter();
+		String departmentId = request.getParameter("departmentId");
+		if (opr.equals("list")) {
+			List<Department> list = null;
+			if (roleId == 6) {
+				list = null;
+			} else if(roleId ==5 || roleId == 4){
+				list = departmentService.queryDepartmentInfoByCompanyId(companyId);
+			} else{
+				list = departmentService.queryDepartmentInfo();
+			}
+			request.setAttribute("list", list);
+			request.getRequestDispatcher("jsp/department/department_list.jsp")
+					.forward(request, response);
+		} else if ("modify".equals(opr)) {
+			Department department = departmentService
+					.queryDepartmentById(Integer.parseInt(departmentId));
+			request.setAttribute("department", department);
+			request.getRequestDispatcher("jsp/department/department_modify.jsp")
+					.forward(request, response);
+		} else if ("delete".equals(opr)) {
+			out.print("<script type='text/javascript'>");
+			out.print("alert('确认要删除吗？点击确认删除！');");
+			out.print("location.href=\"" + basePath
+					+ "department?opr=deleteDepartment&departmentId="
+					+ departmentId + "\";");
+			out.print("</script>");
+		} else if ("submitModify".equals(opr)) {
+			String departmentName = request.getParameter("departmentName");
+			int companytId = Integer.parseInt(request.getParameter("companytId"));
+			String tel = request.getParameter("departmentTel");
+			String fax = request.getParameter("departmentFax");
+			String province = request.getParameter("s_province");
+			String city = request.getParameter("s_city");
+			String county = request.getParameter("s_county");
+			String detail = request.getParameter("detail");
+			String address = province+city+county+detail;
+			Department department = departmentService.queryDepartmentById(Integer.parseInt(departmentId));
+			department.setName(departmentName);
+			department.setCompanyId(companytId);
+			department.setTelephone(tel);
+			department.setFax(fax);
+			department.setAddress(address);
+			int row = departmentService.updateDepartment(department);
+			if (row > 0) {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('当前部门更新成功，点击确认返回部门信息列表！');");
+				out.print("location.href=\"" + basePath
+						+ "department?opr=list\";");
+				out.print("</script>");
+			} else {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('当前部门更新失败，点击确认返回部门列表！');");
+				out.print("location.href=\"" + basePath
+						+ "department?opr=list\";");
+				out.print("</script>");
+			}
+		} else if ("submitAdd".equals(opr)) {
+			String departmentName = request.getParameter("departmentName");
+			int companytId = Integer.parseInt(request
+					.getParameter("companytId"));
+			String departmentTel = request.getParameter("departmentTel");
+			String departmentFax = request.getParameter("departmentFax");
+			String departmentTime = request.getParameter("departmentTime");
+			String province = request.getParameter("s_province");
+			String city = request.getParameter("s_city");
+			String county = request.getParameter("s_county");
+			String detail = request.getParameter("detail");
+			String departmentAddress =province+city+county+detail;
+			Department department = new Department();
+			department.setName(departmentName);
+			department.setCompanyId(companytId);
+			department.setTelephone(departmentTel);
+			department.setFax(departmentFax);
+			department.setBuildTime(departmentTime);
+			department.setAddress(departmentAddress);
+			int row = departmentService.insertDepartment(department);
+			if (row > 0) {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('添加部门成功');");
+				out.print("location.href=\"" + basePath
+						+ "department?opr=list\";");
+				out.print("</script>");
+			} else {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('添加部门失败');");
+				out.print("location.href=\"" + basePath
+						+ "department?opr=list\";");
+				out.print("</script>");
+			}
+		} else if ("deleteDepartment".equals(opr)) {
+			int id = Integer.parseInt(departmentId);
+			int count = departmentService.countDevByDepartmentId(id);
+			if (count == 0) {
+				int row = departmentService.deleteDepartmentById(id);
+				if (row > 0) {
+					out.print("<script type='text/javascript'>");
+					out.print("alert('删除成功！');");
+					out.print("location.href=\"" + basePath
+							+ "department?opr=list\";");
+					out.print("</script>");
+				} else {
+					out.print("<script type='text/javascript'>");
+					out.print("alert('删除失败！');");
+					out.print("location.href=\"" + basePath
+							+ "department?opr=list\";");
+					out.print("</script>");
+				}
+			} else {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('该部门下还有研发组，不能删除！');");
+				out.print("location.href=\"" + basePath
+						+ "department?opr=list\";");
+				out.print("</script>");
+			}
+		}
+	}
+}

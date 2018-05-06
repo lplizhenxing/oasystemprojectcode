@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zszd.ai.dao.sysuser.SysUserDao">
+
+	<select id="getLoginUser" resultType="SysUser">
+		select u.* from sysuser u
+		<trim prefix="where" prefixOverrides="and | or">
+			<if test="name != null">
+				and u.name= #{name}
+			</if>
+			and u.state =1
+		</trim>
+	</select>
+
+	<select id="queryAllSysUserInfo" resultType="SysUser">
+		select u.* from sysuser u where  u.state=1 
+	</select>
+	
+	<select id="query" resultType="int">
+		select count(1) from sysuser
+		where state=1 and name =#{name} and password=#{password}
+	</select>
+
+
+	<insert id="insert" parameterType="SysUser">
+		insert into sysuser
+		(name,password,loginIPaddress) values
+		(#{name},#{password},#{loginIPaddress})
+	</insert>
+
+	<update id="updateLoginRecord" parameterType="SysUser">
+		update sysuser set
+		lastloginDate = Now(),logincount =
+		#{logincount},loginIPaddress=#{loginIPaddress},isOnline=#{isOnline}
+		where name=#{name}
+	</update>
+
+	<select id="queryLoginCountsByName" resultType="int">
+		select logincount
+		from sysuser where state=1 and name =#{name}
+	</select>
+
+	<select id="getUserIdByUserName" resultType="int">
+		select id from
+		sysuser where state=1 and name =#{name}
+	</select>
+
+
+	<select id="getUserInfoByUserName" resultType="SysUser">
+		select * from
+		sysuser where state=1 and name =#{name}
+	</select>
+
+
+	<update id="updateUserPasswordInfo" parameterType="SysUser">
+		update
+		sysuser set password=#{password} where id=#{id}
+	</update>
+
+	<update id="updateSysUser" parameterType="SysUser">
+		update sysuser set
+		headPath=#{headPath} where name=#{name}
+	</update>
+
+
+	<select id="getAllUserInfo" resultType="SysUser">
+		select * from sysuser
+		where state = 1
+	</select>
+
+	<select id="getAllOnLineUserInfo" resultType="SysUser">
+		select * from
+		sysuser where state = 1 and isOnline ='Y'
+	</select>
+</mapper>

@@ -1,0 +1,44 @@
+package com.zszd.ai.service.impl;
+
+import java.util.List;
+
+import com.zszd.ai.dao.DrawDao;
+import com.zszd.ai.dao.impl.DrawDaoImpl;
+import com.zszd.ai.model.Draw;
+import com.zszd.ai.model.Employee;
+import com.zszd.ai.model.Workpoint;
+import com.zszd.ai.service.DrawService;
+import com.zszd.ai.service.EmployeeService;
+import com.zszd.ai.service.WorkPointService;
+
+public class DrawServiceImpl implements DrawService {
+	DrawDao dwDao = new DrawDaoImpl();
+
+	public int addDrawRecord(Draw draw) {
+		// 更新雇员工分值
+		EmployeeService employeeService = new EmployeeServiceImpl();
+  		Employee me = employeeService.getEmployeeInfoByLoginName(draw.getLoginName());
+		me.setWorkpoints(me.getWorkpoints() - 10);
+		int row = employeeService.updateEmployeeInfo(me);
+		
+		// 添加工分记录
+		WorkPointService workPointService = new WorkPointServiceImpl();
+		Workpoint wp = new Workpoint();
+		wp.setEmployeeId(me.getId());
+		wp.setRemarks("抽奖扣除10积分,抽到的是：" + draw.getPrizeName());
+		wp.setWorkpoint(-10);
+		workPointService.addWorkPointRecord(me,wp);
+
+		return dwDao.addDrawRecord(draw);
+	}
+
+	public List<Draw> findDrawByName(String name) {
+		return dwDao.findDrawByName(name);
+	}
+
+	@Override
+	public List<Draw> findAllDraw() {
+		return dwDao.findAllDraw();
+	}
+
+}

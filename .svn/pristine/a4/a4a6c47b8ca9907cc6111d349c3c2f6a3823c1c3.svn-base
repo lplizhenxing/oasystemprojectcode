@@ -1,0 +1,51 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+<div id="right">
+	<table>
+		<c:if test="${requestScope.list!=null}">
+			<tr>
+				<th>提出者&nbsp;&nbsp;</th>
+				<th>请假理由&nbsp;&nbsp;</th>
+				<th>请假时间&nbsp;&nbsp;</th>
+				<th>审批人&nbsp;&nbsp;</th>
+				<th>审批时间&nbsp;&nbsp;</th>
+				<th>状态&nbsp;&nbsp;</th>
+				<th>操作权限</th>
+			</tr>
+			<c:forEach items="${requestScope.list}" var="leave">
+				<tr>
+					<td colspan="7"><br /></td>
+				<tr>
+					<c:if test="${leave.state == '待审核'}">
+						<tr id="approveRecord">
+							<td>${leave.userName}&nbsp;&nbsp;</td>
+							<td>${leave.leaveReason}&nbsp;&nbsp;</td>
+							<td>${leave.leaveTime}&nbsp;&nbsp;</td>
+							<td>${leave.approvalName}&nbsp;&nbsp;</td>
+							<td>${leave.approvalTime}&nbsp;&nbsp;</td>
+							<td>${leave.state}&nbsp;&nbsp;</td>
+							<td><a href="leave?opr=approve&leaveId=${leave.id}">审核通过</a>
+								<a href="leave?opr=reject&leaveId=${leave.id}">驳回请假</a>
+							</td>
+						</tr>
+					</c:if>
+					<c:if test="${leave.state != '待审核'}">
+						<tr>
+							<td>${leave.userName}&nbsp;&nbsp;</td>
+							<td>${leave.leaveReason}&nbsp;&nbsp;</td>
+							<td>${leave.leaveTime}&nbsp;&nbsp;</td>
+							<td>${leave.approvalName}&nbsp;&nbsp;</td>
+							<td>${leave.approvalTime}&nbsp;&nbsp;</td>
+							<td>${leave.state}&nbsp;&nbsp;</td>
+							<td><a href="leave?opr=approve&leaveId=${leave.id}">审核通过</a>
+								<a href="leave?opr=reject&leaveId=${leave.id}">驳回请假</a>
+							</td>
+						</tr>
+					</c:if>
+			</c:forEach>
+		</c:if>
+	</table>
+</div>
+</section>
+<%@ include file="../common/footer.jsp"%>
+

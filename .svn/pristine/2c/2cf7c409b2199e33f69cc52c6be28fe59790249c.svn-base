@@ -1,0 +1,49 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/userlogin.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<base href="<%=basePath%>">
+
+<title>工作日志类型修改页面</title>
+
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" type="text/css" href="static/css/userindex.css">
+
+
+</head>
+<body>
+	<%@ include file="../common/userheader.jsp"%>
+	<section id="section"> 
+	<%@ include file="../common/userleft.jsp"%>
+	<div id="right">
+		<h1>修改工作日志类型信息</h1>
+		<form action="test?opr=submitModify" method="post">
+			<table>
+			<tr><input type="hidden" value=${requestScope.test.id } name="testId"></tr>
+			<tr>
+			<td>修改类型：</td>
+			<td><input type="text" value=${requestScope.test.typeName } name="typename"></td>
+			</tr>
+			<tr>
+			<td>修改内容：</td>
+			<td><input type="text" value=${requestScope.test.question } name="question"></td>
+			</tr>
+			<tr>
+			<td>修改答案：</td>
+			<td><input type="text" value=${requestScope.test.answer } name="answer"></td>
+			</tr>
+		</table>
+			<input type="submit" value="提交修改 ">
+		</form>
+	</div>
+	</section>
+<%@ include file="../common/footer.jsp"%>
+</body>
+</html>

@@ -1,0 +1,18 @@
+package com.zszd.ai.dao;
+
+import java.sql.Connection;
+import java.util.List;
+
+import com.zszd.ai.model.Speech;
+/**
+ * 演讲DAO接口
+ * @author lizx 20180103
+ *
+ */
+public interface SpeechDao {
+
+	List<Speech> queryAllSpeechInfo();
+
+	int updateClickNumberByVideo(Connection conn, Speech speech);
+
+}

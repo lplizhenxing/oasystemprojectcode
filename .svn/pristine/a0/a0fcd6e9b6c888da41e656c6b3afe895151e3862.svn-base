@@ -1,0 +1,77 @@
+package com.zszd.ai.service.sysfunctions;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Service;
+
+import com.zszd.ai.dao.sysfunctions.FunctionRoleDao;
+import com.zszd.ai.pojo.FunctionRole;
+import com.zszd.ai.tools.MyBatisUtil;
+@Service
+public class FunctionRoleServiceImpl implements FunctionRoleService {
+
+	@Resource 
+	private FunctionRoleDao functionRoleDao;
+	
+	/**
+	 * 
+	 * <p>Title queryAllFunctionRoleInfoByRoleId</p>
+	 * <p>根据角色ID查找对应的功能 </p>
+	 * @param roleId
+	 * @return
+	 * @see com.zszd.ai.service.sysfunctions.FunctionRoleService#queryAllFunctionRoleInfoByRoleId(int)
+	 */
+	@Override
+	public List<FunctionRole> queryAllFunctionRoleInfoByRoleId(
+			int roleId) {
+		return functionRoleDao.queryAllFunctionRoleInfoByRoleId(roleId);
+	}
+	
+	
+	@Override
+	public List<FunctionRole> queryAllFunctionRoleInfo() {
+		return functionRoleDao.queryAllFunctionRoleInfo();
+	}
+
+	@Override
+	public int addFunctionRoleInfo(FunctionRole functionRole) {
+		SqlSession sqlSession = null;
+		int rows =0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(FunctionRoleDao.class)
+					.addFunctionRoleInfo(functionRole);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+
+	
+
+	@Override
+	public int delFunctionRoleConfigInfoById(int functionRoleId) {
+		SqlSession sqlSession = null;
+		int rows =0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(FunctionRoleDao.class)
+					.delFunctionRoleConfigInfoById(functionRoleId);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+}

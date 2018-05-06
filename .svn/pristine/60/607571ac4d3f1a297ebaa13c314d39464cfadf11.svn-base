@@ -1,0 +1,141 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+<div id="right">
+	<div id="mess">${empty requestScope.message
+		?"":"验证信息:"}${requestScope.message}</div>
+	<form action="company?opr=submitAdd" method="post">
+		<table>
+			<tr>
+				<td>公司名称：&nbsp;&nbsp;</td>
+				<td style="width:300px"><input type="text" name="comname"
+					id="comname">&nbsp;<font color="red">*</font>
+				</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>公司地址：&nbsp;&nbsp;</td>
+				<td style="width:300px"><select id="s_province"
+					name="s_province"></select> <select id="s_city" name="s_city"></select>
+					<select id="s_county" name="s_county"></select><input name="detail">
+					&nbsp;<font color="red">*</font>
+				</td>
+				<td>
+					<div id="usernameDiv" style="display: inline"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>公司电话：&nbsp;&nbsp;</td>
+				<td><input type="text" name="tel" id="tel" />&nbsp;<font
+					color="red" id="telText">*</font>
+				</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>公司网站：&nbsp;&nbsp;</td>
+				<td><input type="text" name="url" id="url" />&nbsp;<font
+					color="red" id="urlText">*</font>
+				</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>公司传真：&nbsp;&nbsp;</td>
+				<td><input type="text" name="fax" id="fax" />&nbsp;<font
+					color="red" id="faxText">*</font>
+				</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>创建时间：&nbsp;&nbsp;</td>
+				<td><input type="date" name="buildTime" id="buildTime"
+					placeholder="选择日期" />&nbsp;<font color="red">*</font>
+				</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>所属班级：&nbsp;&nbsp;</td>
+				<td><select name="classId" id="classId"></select>&nbsp;<font
+					color="red">*</font>
+				</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td colsspan="3"><input type="submit" value="提交" id="submit">
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
+</section>
+<%@ include file="../common/footer.jsp"%>
+<script class="resources library"
+	src="http://sandbox.runjs.cn/uploads/rs/267/g3ugugjp/area.js"
+	type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+	$("form").submit(function() {
+		var postTitle = $("#comname").val();
+		if (postTitle.trim() == "") {
+			alert("公司名称不能为空！");
+			return false;
+		}
+		return true;
+	});
+
+	$(function() {
+		_init_area();
+		var classes = "opr=query&level=company";
+		$.get("classes", classes, function callabck(data) {
+			var jsonObj = eval("(" + data + ")");
+			var optionStr = "";
+			for ( var item in jsonObj) {
+				optionStr += "<option value=\""+item+"\">" + jsonObj[item]
+						+ "</option>";
+			}
+			$("#classId").html(optionStr);
+		});
+		$("#tel").blur(checkTel);
+		$("#fax").blur(checkFax);
+		$("#url").blur(checkUrl);
+		$("#submit").submit(function() {
+			var flag = true;
+			if (checkTel())
+				flag = false;
+			if (!checkFax())
+				flag = false;
+			if (!checkUrl())
+				flag = false;
+			return flag;
+		});
+		function checkTel() {
+			var mobile = $("#tel").val();
+			var reg = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;
+			if (!reg.test(mobile)) {
+				$("#telText").html("*电话号码不正确！");
+				return false;
+			}
+			$("#telText").html("*");
+			return true;
+		}
+		function checkFax() {
+			var mobile = $("#fax").val();
+			var reg = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;
+			if (!reg.test(mobile)) {
+				$("#faxText").html("*传真号码不正确！");
+				return false;
+			}
+			$("#faxText").html("*");
+			return true;
+		}
+		function checkUrl() {
+			var mobile = $("#url").val();
+			var reg = /^(((ht|f)tp(s?))\:\/\/)?(www.|[a-zA-Z].)[a-zA-Z0-9\-\.]+\.(com|edu|gov|mil|net|org|biz|info|name|museum|us|ca|uk)$/;
+			if (!reg.test(mobile)) {
+				$("#urlText").html("*网址不正确！");
+				return false;
+			}
+			$("#urlText").html("*");
+			return true;
+		}
+	});
+</script>
+

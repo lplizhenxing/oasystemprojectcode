@@ -1,0 +1,42 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/userlogin.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<base href="<%=basePath%>">
+
+<title>学习资料下载页面</title>
+
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" type="text/css" href="static/css/userindex.css">
+<style>
+   #right ol  li{
+      margin-left:50px;
+      line-height:50px;
+   }
+</style>
+</head>
+<body>
+	<%@ include file="../common/userheader.jsp"%>
+	<section id="section"> 
+	<%@ include	file="../common/userleft.jsp"%>
+	<div id="right">
+	<c:forEach var="map" items="${requestScope.fileNameMap}">
+        <c:url value="fileDownloadServlet" var="downurl">
+            <c:param name="filename" value="${map.key}"></c:param>
+        </c:url>
+        <p>${map.value }
+        <a href="${downurl}&opr=download">下载</a></p>
+   </c:forEach>
+	</div>
+	</section>
+	<%@ include file="../common/footer.jsp"%>
+</body>
+
+</html>

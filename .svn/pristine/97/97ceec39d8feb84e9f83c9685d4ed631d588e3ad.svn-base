@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zszd.ai.dao.WorkPointDao">
+	<select id="queryAllWorkPointInfo" resultType="WorkPoint">
+		select * from workpoint order by id desc
+	</select>
+
+	<select id="queryWorkPointRecordByEmployeeId" resultType="WorkPoint">
+		select * from workpoint where employeeId = #{employeeId} order by operatedate desc
+	</select>
+
+	<insert id="addWorkPointRecord" parameterType="WorkPoint" >
+		insert into workpoint (employeeId,workpoint,remarks) 
+		values (#{employeeId},#{workpoint},#{remarks})
+	</insert>
+
+	<select id="getWorkPointRecordCountByEmployeeId" resultType="int">
+		select count(1) from workpoint where employeeId = #{employeeId}
+	</select>
+
+	<select id="queryWorkPointRecordPageLikeEmployeeName" resultType="WorkPoint" >
+		select * from workpoint where employeeId in (select id from employee where name like CONCAT('%',#{name},'%')) 
+		order by operatedate desc limit #{currPageNum},#{pageSize}
+	</select>
+
+	<select id="queryWorkPointInfoByEmployeeId" resultType="WorkPoint">
+	    select * from workpoint where employeeId= #{employeeId} order by id desc
+	</select>
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   <mapper namespace="com.zszd.ai.dao.DepartmentDao">
+   	
+   	<select id="queryDepartmentInfo" resultType="department">
+   		select * from department
+   	</select>
+   	<select id="queryDepartmentById" resultType="department" parameterType="department">
+   		select * from department where id=#{id}
+   	</select>
+   	
+   	<insert id="insertDepartment"  parameterType="department">
+   		insert into department (name,companyId,telephone,fax,buildTime,address) values (#{name},#{companyId},#{telephone},#{fax},#{buildTime},#{address})
+   	</insert>
+   	<update id="updateDepartment" parameterType="department">
+   		update department set name=#{name},companyId=#{companyId},telephone=#{telephone},fax=#{fax},buildTime=#{buildTime},address=#{address} where id=#{id}
+   	</update>
+   	<!-- <delete id="deleteCompanyByState" parameterMap="company">
+   		delete * form company where state=0
+   	</delete> -->
+   </mapper>

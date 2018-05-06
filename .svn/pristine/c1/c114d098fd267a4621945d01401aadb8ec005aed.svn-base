@@ -1,0 +1,11 @@
+package com.zszd.ai.dao;
+
+import java.util.List;
+
+import com.zszd.ai.model.Goods;
+
+public interface GoodsDao {
+	List<Goods> getAllGoodsInfo();
+	Goods queryGoodsInfoById(int goodsId);
+	int updateGoodsStock(Goods goods);
+}

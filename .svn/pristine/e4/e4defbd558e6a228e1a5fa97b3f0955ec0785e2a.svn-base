@@ -1,0 +1,230 @@
+package com.zszd.ai.service.employee;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Service;
+
+import com.sun.org.apache.regexp.internal.recompile;
+import com.zszd.ai.dao.employee.EmployeeDao;
+import com.zszd.ai.pojo.Employee;
+import com.zszd.ai.tools.MyBatisUtil;
+
+/**
+ * 员工接口实现
+ * 
+ * @author lizx 20180103
+ * 
+ */
+@Service
+public class EmployeeServiceImpl implements EmployeeService {
+
+	@Resource
+	private EmployeeDao employeeDao;
+
+	@Override
+	public Employee getEmployeeInfoByLoginName(String name) {
+		return employeeDao.getEmployeeInfoByLoginName(name);
+	}
+
+	@Override
+	public String getEmployeeNameByLoginName(String loginname) {
+		return employeeDao.getEmployeeNameByLoginName(loginname);
+	}
+
+	/**
+	 * 查询所有员工信息
+	 * <p>
+	 * Title queryAllEmployeeInfo
+	 * </p>
+	 * <p>
+	 * Description
+	 * </p>
+	 * 
+	 * @return
+	 * @see com.zszd.ai.service.employee.EmployeeService#queryAllEmployeeInfo()
+	 */
+	@Override
+	public List<Employee> queryAllEmployeeInfo() {
+		return employeeDao.queryAllEmployeeInfo();
+	}
+
+	/**
+	 * 修改个人信息
+	 * <p>
+	 * Title updateAllInfo
+	 * </p>
+	 * <p>
+	 * Description
+	 * </p>
+	 * 
+	 * @param employee
+	 * @return
+	 * @see com.zszd.ai.service.employee.EmployeeService#updateAllInfo(com.zszd.ai.pojo.Employee)
+	 */
+	@Override
+	public int updateAllInfo(Employee employee) {
+		return employeeDao.updateAllInfo(employee);
+	}
+
+	@Override
+	public int queryWorkPointByName(String name) {
+		SqlSession sqlSession = null;
+		int workPoint = 0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			workPoint = sqlSession.getMapper(EmployeeDao.class)
+					.queryWorkPointByName(name);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return workPoint;
+	}
+
+	@Override
+	public String queryNameById(int id) {
+		return employeeDao.queryNameById(id);
+	}
+
+	@Override
+	public int getEmployeeCountByGroupId(int groupId) {
+		SqlSession sqlSession = null;
+		int num = 0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			num = sqlSession.getMapper(EmployeeDao.class)
+					.getEmployeeCountByGroupId(groupId);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return num;
+	}
+
+	@Override
+	public Employee queryEmployeeInfoById(int id) {
+		return employeeDao.queryEmployeeInfoById(id);
+	}
+
+	@Override
+	public int updateEmployeeInfo(Employee employee) {
+		return employeeDao.updateEmployeeInfo(employee);
+	}
+
+	@Override
+	public int queryWorkPointByAbbr(String name) {
+		SqlSession sqlSession = null;
+		int num = 0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			num = sqlSession.getMapper(EmployeeDao.class).queryWorkPointByAbbr(
+					name);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return num;
+	}
+
+	@Override
+	public int insert(Employee employee) {
+		SqlSession sqlSession = null;
+		int num = 0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			num = sqlSession.getMapper(EmployeeDao.class).insert(employee);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return num;
+	}
+
+	@Override
+	public int queryIdByName(String name) {
+		SqlSession sqlSession = null;
+		int id = 0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			id = sqlSession.getMapper(EmployeeDao.class).queryIdByName(name);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return id;
+	}
+
+	@Override
+	public List<Integer> queryIdLikeName(String name) {
+		SqlSession sqlSession = null;
+		List<Integer> list = new ArrayList<Integer>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			list = sqlSession.getMapper(EmployeeDao.class)
+					.queryIdLikeName(name);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return list;
+	}
+
+	@Override
+	public List<Employee> queryAllEmployeeInfoByCompanyId(int companyId) {
+		SqlSession sqlSession = null;
+		List<Employee> employees = new ArrayList<Employee>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			employees = sqlSession.getMapper(EmployeeDao.class)
+					.queryAllEmployeeInfoByCompanyId(companyId);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return employees;
+	}
+
+	@Override
+	public List<Employee> queryAllEmployeeInfoByClassLeader(String name) {
+		// TODO Auto-generated method stub
+		return employeeDao.queryAllEmployeeInfoByClassLeader(name);
+	}
+
+	@Override
+	public List<Employee> queryAllClassLeader() {
+		// TODO Auto-generated method stub
+		return employeeDao.queryAllClassLeader();
+	}
+
+	@Override
+	public List<Employee> queryAllClassTeacher() {
+		// TODO Auto-generated method stub
+		return employeeDao.queryAllClassTeacher();
+	}
+
+}

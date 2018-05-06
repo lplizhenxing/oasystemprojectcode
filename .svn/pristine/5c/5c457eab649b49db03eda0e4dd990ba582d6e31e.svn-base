@@ -1,0 +1,44 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+<div id="right">
+	<form action="bugs?opr=add" method="post">
+		<table>
+			<tr>
+				<td style="width:80px">bug标题：&nbsp;&nbsp;</td>
+				<td><input id="bugsTitle" type="text" name="bugsTitle" /></td>
+			</tr>
+			<tr>
+				<td style="width:80px">bug内容：&nbsp;&nbsp;</td>
+				<td><textarea id="bugsContent" name="bugsContent" rows="20"
+						cols="70"></textarea></td>
+			</tr>
+			<tr>
+				<td style="width:80px"><input type="submit" value="提交">
+				</td>
+				<td><input type="reset" value="重置"></td>
+			</tr>
+		</table>
+	</form>
+</div>
+</section>
+<%@ include file="../common/footer.jsp"%>
+
+<script type="text/javascript">
+	$(function() {
+		$("form").submit(function() {
+			var postTitle = $("#bugsTitle").val();
+			if (postTitle.trim() == "") {
+				alert("标题不能为空！");
+				return false;
+			}
+
+			var postContent = $("#bugsContent").val();
+			if (postContent.trim() == "") {
+				alert("内容不能为空！");
+				return false;
+			}
+
+			return true;
+		});
+	});
+</script>

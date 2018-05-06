@@ -1,0 +1,141 @@
+package com.zszd.ai.dao.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.zszd.ai.dao.DevgroupDao;
+import com.zszd.ai.model.Devgroup;
+import com.zszd.ai.utils.DataSourceUtil;
+/**
+ * 研发组DAO实现类
+ * @author lizx 20180103
+ *
+ */
+public class DevgroupDaoImpl implements DevgroupDao{
+
+	@Override
+	public String queryNameById(int id) {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		String sql = "select name from devgroup where id =?";
+		try {
+			Object[] oo = { id };
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				return rs.getString("name");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return null;
+	}
+
+	@Override
+	public List<Devgroup> queryAllDevGroupInfo() {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Devgroup devgroup = null;
+		List<Devgroup> devgroups = new ArrayList<Devgroup>();
+
+		String sql = "select * from devgroup";
+		try {
+			Object[] oo = null;
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				devgroup = new Devgroup();
+				devgroup.setId(rs.getInt("id"));
+				devgroup.setName(rs.getString("name"));
+				devgroup.setWatchword(rs.getString("watchword"));
+				devgroups.add(devgroup);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return devgroups;
+	}
+
+	@Override
+	public Devgroup queryDevGroupInfoById(int id) {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Devgroup devgroup = null;
+
+		String sql = "select * from devgroup where id=?";
+		try {
+			Object[] oo = {id};
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				devgroup = new Devgroup();
+				devgroup.setId(rs.getInt("id"));
+				devgroup.setName(rs.getString("name"));
+				devgroup.setWatchword(rs.getString("watchword"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return devgroup;
+	}
+
+	@Override
+	public int updateDevGroupInfo(Devgroup devgroup) {
+		Connection conn = DataSourceUtil.getConnection();
+		int row =0;
+		PreparedStatement ps=null;
+		String sql = "update devgroup set name = ? ,watchword=? where id =?";
+		Object[] oo={devgroup.getName(),devgroup.getWatchword(),devgroup.getId()};
+		try {	
+		 row=DataSourceUtil.executeUpdate(conn, ps, sql, oo);
+		}finally{
+			DataSourceUtil.colseAll(ps, conn,null);
+		}
+		return row;
+	}
+
+	@Override
+	public int deleteDevGroupById(int id) {
+		Connection conn = DataSourceUtil.getConnection();
+		int row =0;
+		PreparedStatement ps=null;
+		String sql = "delete from  devgroup where id =?";
+		Object[] oo={id};
+		try {	
+		 row=DataSourceUtil.executeUpdate(conn, ps, sql, oo);
+		}finally{
+			DataSourceUtil.colseAll(ps, conn,null);
+		}
+		return row;
+	}
+
+	@Override
+	public int insertDevGroup(Devgroup devgroup) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getDevGroupCountByDepartmentId(int id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+}

@@ -1,0 +1,157 @@
+package com.zszd.ai.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.zszd.ai.dao.EmployeeDao;
+import com.zszd.ai.dao.WorkPointDao;
+import com.zszd.ai.dao.impl.EmployeeDaoImpl;
+import com.zszd.ai.dao.impl.WorkPointDaoImpl;
+import com.zszd.ai.model.Employee;
+import com.zszd.ai.model.Page;
+import com.zszd.ai.model.Workpoint;
+import com.zszd.ai.service.WorkPointService;
+import com.zszd.ai.utils.MyBatisUtil;
+
+/**
+ * 工分接口实现
+ * 
+ * @author lizx 20180103
+ * 
+ */
+public class WorkPointServiceImpl implements WorkPointService {
+	EmployeeDao employeeDao = new EmployeeDaoImpl();
+	@Override
+	public List<Workpoint> queryAllWorkPointInfo() {
+		SqlSession sqlSession = null;
+		List<Workpoint> workpoints = new ArrayList<Workpoint>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			workpoints = sqlSession.getMapper(WorkPointDao.class)
+					.queryAllWorkPointInfo();
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return workpoints;
+	}
+
+	@Override
+	public boolean addWorkPointRecord(Employee employee, Workpoint wp) {
+		SqlSession sqlSession = null;
+		boolean flag = false;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			int employeeId = employeeDao.queryIdByName(employee.getName());
+			int workpoints = employeeDao.queryWorkPointByName(employee
+					.getName());
+			employee.setWorkpoints(workpoints + wp.getWorkpoint());
+			employee.setId(employeeId);
+			wp.setEmployeeId(employeeId);
+			int row1 = sqlSession.getMapper(WorkPointDao.class)
+					.addWorkPointRecord(wp);
+			int row2 = sqlSession.getMapper(EmployeeDao.class)
+					.updateEmployeeWorkPoint(employee);
+			flag = true;
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return flag;
+	}
+
+	@Override
+	public List<Workpoint> queryWorkPointInfoLikeName(String name) {
+		SqlSession sqlSession = null;
+		List<Workpoint> workpoints = new ArrayList<Workpoint>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			List<Integer> list = employeeDao.queryIdLikeName(name);
+			if (list != null) {
+				for (int employeeId : list) {
+					List<Workpoint> woList = sqlSession.getMapper(
+							WorkPointDao.class)
+							.queryWorkPointRecordByEmployeeId(employeeId);
+					workpoints.addAll(woList);
+				}
+			}
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return workpoints;
+	}
+
+	@Override
+	public int getWorkPointInfoCountLikeName(String name) {
+		SqlSession sqlSession = null;
+		int rows = 0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			List<Integer> list = employeeDao.queryIdLikeName(name);
+			if (list != null) {
+				for (int employeeId : list) {
+					rows += sqlSession.getMapper(WorkPointDao.class)
+							.getWorkPointRecordCountByEmployeeId(employeeId);
+				}
+			}
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+
+	@Override
+	public List<Workpoint> queryWorkPointInfoLikeNamePage(Page page, String name) {
+		SqlSession sqlSession = null;
+		List<Workpoint> workpoints = new ArrayList<Workpoint>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			int currPageNum = page.getCurrentPageNum();
+			int pageSize = page.getPageSize();
+			workpoints = sqlSession.getMapper(WorkPointDao.class)
+					.queryWorkPointRecordPageLikeEmployeeName(name, currPageNum,pageSize);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return workpoints;
+	}
+
+	@Override
+	public List<Workpoint> queryWorkPointInfoByEmployeeId(int employeeId) {
+		SqlSession sqlSession = null;
+		List<Workpoint> workpoints = new ArrayList<Workpoint>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			workpoints = sqlSession.getMapper(WorkPointDao.class)
+					.queryWorkPointInfoByEmployeeId(employeeId);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return workpoints;
+	}
+
+}

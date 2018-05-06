@@ -1,0 +1,160 @@
+package com.zszd.ai.dao.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import com.zszd.ai.dao.TestDao;
+import com.zszd.ai.model.Test;
+import com.zszd.ai.utils.DataSourceUtil;
+/**
+ * 工作日志类型DAO实现类
+ * @author lizx 20180103
+ *
+ */
+public class TestDaoImpl implements TestDao {
+
+	@Override
+	public List<Test> getTestByToday() {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Test test = null;
+		List<Test> tests = new ArrayList<Test>();
+		Date now=new Date();
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+		String testdate = sdf.format(now);
+        
+		String sql = "select * from test where substring(testdate,1,10)=?";
+		try {
+			Object[] oo = {testdate};
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				test = new Test();
+				test.setId(rs.getInt("id"));
+				test.setQuestion(rs.getString("question"));
+				test.setAnswer(rs.getString("answer"));
+				test.setTestdate(rs.getDate("testdate"));
+				test.setTypeName(rs.getString("typename"));
+				tests.add(test);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return tests;
+	}
+
+	@Override
+	public List<Test> queryALLTestInfo() {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Test test = null;
+		List<Test> tests = new ArrayList<Test>();
+		String sql = "select * from test order by testdate asc";
+		try {
+			Object[] oo = null;
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				test = new Test();
+				test.setId(rs.getInt("id"));
+				test.setQuestion(rs.getString("question"));
+				test.setAnswer(rs.getString("answer"));
+				test.setTestdate(rs.getDate("testdate"));
+				test.setTypeName(rs.getString("typename"));
+				tests.add(test);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return tests;
+	}
+
+	@Override
+	public int addTestInfo(Connection conn, Test test) {
+		int row =0;
+		PreparedStatement ps=null;
+		String sql = "insert into test (question,answer,typename) " +
+				"values (?,?,?)";
+		Object[] oo={test.getQuestion(),test.getAnswer(),test.getTypeName()};
+		try {	
+			row = DataSourceUtil.executeUpdate(conn, ps, sql, oo);
+		}finally{
+			DataSourceUtil.colseAll(ps, null,null);
+		}
+		return row;
+	}
+
+	@Override
+	public int deleteTestById(int id) {
+		Connection conn = DataSourceUtil.getConnection();
+		int row =0;
+		PreparedStatement ps=null;
+		String sql = "delete from  test where id =?";
+		Object[] oo={id};
+		try {	
+		    row=DataSourceUtil.executeUpdate(conn, ps, sql, oo);
+		}finally{
+			DataSourceUtil.colseAll(ps, conn,null);
+		}
+		return row;
+	}
+
+	@Override
+	public Test queryTestInfoById(int id) {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Test test = null;
+		String sql = "select * from test where id=?";
+		try {
+			Object[] oo = {id};
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				test = new Test();
+				test.setId(rs.getInt("id"));
+				test.setQuestion(rs.getString("question"));
+				test.setAnswer(rs.getString("answer"));
+				test.setTestdate(rs.getDate("testdate"));
+				test.setTypeName(rs.getString("typename"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return test;
+	}
+
+	@Override
+	public int updateTestInfo(Test test) {
+		Connection conn = DataSourceUtil.getConnection();
+		int row =0;
+		PreparedStatement ps=null;
+		String sql = "update test set typename = ? ,question=? ,answer=? where id =?";
+		Object[] oo={test.getTypeName(),test.getQuestion(),test.getAnswer(),test.getId()};
+		try {	
+		 row=DataSourceUtil.executeUpdate(conn, ps, sql, oo);
+		}finally{
+			DataSourceUtil.colseAll(ps, conn,null);
+		}
+		return row;
+	}
+
+
+}

@@ -1,0 +1,103 @@
+package com.zszd.ai.dao.impl;
+/*
+ * tianb
+ * 
+ * **/
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.zszd.ai.dao.DrawDao;
+import com.zszd.ai.model.Draw;
+import com.zszd.ai.utils.DataSourceUtil;
+
+public class DrawDaoImpl implements DrawDao {
+
+	@Override
+	public int addDrawRecord(Draw draw) {
+		Connection conn = DataSourceUtil.getConnection();
+		PreparedStatement ps=null;
+		int row=0;
+		String sql="insert into draw(loginName,drawTime,workpoint,prizeName) values(?,?,?,?)";
+		Object[] oo = {draw.getLoginName(),draw.getDrawTime(),draw.getWorkpoint(),draw.getPrizeName()};
+		try{
+			row = DataSourceUtil.executeUpdate(conn, ps, sql, oo);
+			}finally{
+				DataSourceUtil.colseAll(ps, conn,null);
+			}
+			return row;
+	}
+
+	@Override
+	public List<Draw> findDrawByName(String name) {
+		Connection conn = DataSourceUtil.getConnection();
+		PreparedStatement ps=null;
+		ResultSet rs = null;
+		Draw draw=null;
+		List<Draw> draws=new ArrayList<Draw>();
+		String sql="select drawTime,workpoint,prizeName from draw where loginName=?";
+		try {
+			Object[] oo = { name };
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+			draw=new Draw();
+			String date=rs.getString("drawTime");	
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+			draw.setDrawTime(sdf.parse(date));
+			draw.setWorkpoint(rs.getInt("workpoint"));
+			draw.setPrizeName(rs.getString("prizeName"));
+			draw.setLoginName(name);
+			draws.add(draw);
+			
+			}
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		} catch (ParseException e) {
+		
+			e.printStackTrace();
+		} finally{
+			DataSourceUtil.colseAll(ps, conn,null);
+		}
+		return draws;
+	}
+
+	@Override
+	public List<Draw> findAllDraw() {
+		Connection conn = DataSourceUtil.getConnection();
+		PreparedStatement ps=null;
+		ResultSet rs = null;
+		Draw draw=null;
+		List<Draw> draws=new ArrayList<Draw>();
+		String sql="select * from draw order by drawTime desc";
+		try {
+			Object[] oo = null;
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+			draw=new Draw();
+			String date=rs.getString("drawTime");	
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+			draw.setDrawTime(sdf.parse(date));
+			draw.setWorkpoint(rs.getInt("workpoint"));
+			draw.setPrizeName(rs.getString("prizeName"));
+			draw.setLoginName(rs.getString("loginName"));
+			draws.add(draw);
+			}
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		} catch (ParseException e) {
+		
+			e.printStackTrace();
+		} finally{
+			DataSourceUtil.colseAll(ps, conn,null);
+		}
+		return draws;
+	}
+
+}

@@ -1,0 +1,27 @@
+package com.zszd.ai.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.zszd.ai.model.Workpoint;
+/**
+ * 工分DAO接口
+ * @author lizx 20180103
+ *
+ */
+public interface WorkPointDao {
+
+	List<Workpoint> queryAllWorkPointInfo();
+
+	List<Workpoint> queryWorkPointRecordByEmployeeId(int employeeId);
+
+	int addWorkPointRecord(Workpoint wp);
+
+	int getWorkPointRecordCountByEmployeeId(int employeeId);
+
+	List<Workpoint> queryWorkPointRecordPageLikeEmployeeName(@Param("name")String name, @Param("currPageNum")int currPageNum,@Param("pageSize")int pageSize);
+
+	List<Workpoint> queryWorkPointInfoByEmployeeId(int employeeId);
+
+}

@@ -1,0 +1,18 @@
+package com.zszd.ai.dao;
+
+import java.sql.Connection;
+import java.util.List;
+
+import com.zszd.ai.model.Sensitivewords;
+/**
+ * 敏感词DAO接口
+ * @author lizx 20180103
+ *
+ */
+public interface SensitivewordsDao {
+
+	List<Sensitivewords> getAllSensitivewords(Connection conn);
+
+	int addSensitiveWordsInfo(Connection conn, Sensitivewords sensitivewords);
+
+}

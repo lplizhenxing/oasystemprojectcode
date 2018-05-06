@@ -1,0 +1,85 @@
+package com.zszd.ai.dao.impl;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.zszd.ai.dao.PostDao;
+import com.zszd.ai.model.Page;
+import com.zszd.ai.model.Post;
+import com.zszd.ai.utils.MyBatisUtil;
+
+/**
+ * 帖子DAO实现类
+ * 
+ * @author lizx 20180103
+ * 
+ */
+public class PostDaoImpl implements PostDao {
+
+
+	@Override
+	public Post getPostByPostId(int id) {
+		return 	null;
+	}
+
+	@Override
+	public int addPostInfo(Post post) {
+		return 0;
+	}
+
+	@Override
+	public int updatePost(Post post) {
+		return 0;
+	}
+
+	@Override
+	public int updateCommentCount( Post post) {
+		int row = 0;
+		
+		return row;
+	}
+
+	@Override
+	public int updatePostInfo( Post post) {
+		int row = 0;
+		
+		return row;
+	}
+
+	@Override
+	public int deletePostById(int id) {
+		int row = 0;
+		
+		return row;
+	}
+
+	@Override
+	public int getPostInfoCountLikeName( String keywords) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		int rows = 0;
+		
+		return rows;
+	}
+
+	@Override
+	public List<Post> queryPotRecordPageLikeName(Page p, String keywords) {
+		SqlSession sqlSession = null;
+		List<Post> posts = new ArrayList<Post>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			//调用getMapper(Mapper.class)执行dao接口方法来实现对数据库的查询操作
+			posts = sqlSession.getMapper(PostDao.class).queryPotRecordPageLikeName(p,keywords);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return posts; 
+	}
+
+}

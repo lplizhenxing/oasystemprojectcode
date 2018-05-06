@@ -1,0 +1,120 @@
+package com.zszd.ai.controller;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.zszd.ai.pojo.Employee;
+import com.zszd.ai.pojo.Report;
+import com.zszd.ai.pojo.ReportType;
+import com.zszd.ai.service.report.ReportService;
+import com.zszd.ai.service.report.ReportServiceImpl;
+import com.zszd.ai.tools.Constants;
+
+@Controller
+@RequestMapping("/sys/report")
+public class ReportController {
+	private Logger logger = Logger.getLogger(ReportController.class);
+
+	@Resource
+	ReportService reportService = new ReportServiceImpl();
+
+	@RequestMapping(value = "view.html")
+	public String view(HttpServletRequest request, HttpSession session) {
+		int roleId = ((Employee) session
+				.getAttribute(Constants.EMPlOYEE_SESSION)).getRoleId();
+		String name = ((Employee) session
+				.getAttribute(Constants.EMPlOYEE_SESSION)).getName();
+		int companyId = ((Employee) session
+				.getAttribute(Constants.EMPlOYEE_SESSION)).getCompanyId();
+		List<Report> list = null;
+		if (roleId == Constants.NORMALSTAFF) {
+			list = reportService.getUserbyuserName(name);
+		} else if (roleId == Constants.PRESIDENT || roleId == Constants.DIRETOR) {
+			list = reportService.getAllReportListByCompanyId(companyId);
+		} else {
+			list = reportService.getAllReportList();
+		}
+		request.setAttribute("list", list);
+		return "report/report_list";
+	}
+
+	// 实现跳转到添加班级页
+	@RequestMapping(value = "/addReport.html")
+	public String addReport(HttpServletRequest request) {
+		List<ReportType> reportTypelist = reportService.getAllReportType();
+		request.setAttribute("reportTypelist", reportTypelist);
+		return "report/report_add";
+	}
+
+	@RequestMapping(value = "toaddReport.html")
+	public String toaddReport(HttpServletRequest request, HttpSession session) {
+		String name = ((Employee) session
+				.getAttribute(Constants.EMPlOYEE_SESSION)).getName();
+		String reporttype = request.getParameter("reporttype");
+		ReportType rtype = reportService.gettypeIdByReportTypename(reporttype);
+		Integer typeId = rtype.getId();
+		String answer = request.getParameter("question");
+		String finish = request.getParameter("finishwork");
+		String plan = request.getParameter("plan");
+		String remark = request.getParameter("remark");
+		Report report = new Report();
+		report.setTypeId(typeId);
+		report.setUsername(name);
+		report.setQuestion(answer);
+		report.setFinishwork(finish);
+		report.setPlan(plan);
+		report.setRemark(remark);
+		int row = reportService.addReport(report);
+		if (row > 0) {
+			return "redirect:/sys/report/view.html";
+		} else {
+			request.setAttribute("error", "添加失败");
+			return "redirect:/sys/report/view.html";
+		}
+	}
+
+	@RequestMapping(value = "/modifyReport.html")
+	public String modifyReport(HttpServletRequest request) {
+		String reportId = request.getParameter("reportId");
+		Report report = reportService.getReportbyId(Integer.valueOf(reportId));
+		List<ReportType> reportTypelist = reportService.getAllReportType();
+		request.setAttribute("reportTypelist", reportTypelist);
+		request.setAttribute("report", report);
+		return "report/report_modify";
+	}
+
+	@RequestMapping(value = "/tomodifyReport.html")
+	public String tomodifyReport(HttpServletRequest request) {
+		String reporttype = request.getParameter("reporttype");
+		ReportType rtype = reportService.gettypeIdByReportTypename(reporttype);
+		Integer typeId = rtype.getId();
+		String question = request.getParameter("question");
+		String finish = request.getParameter("finishwork");
+		String plan = request.getParameter("plan");
+		String remark = request.getParameter("remark");
+		String reportIdchange = request.getParameter("reportIdchange");
+		
+		Report report = new Report();
+		report.setId(Integer.valueOf(reportIdchange));
+		report.setTypeId(typeId);
+		report.setQuestion(question);
+		report.setFinishwork(finish);
+		report.setPlan(plan);
+		report.setRemark(remark);
+		int row = reportService.modifyReport(report);
+		if (row > 0) {
+			return "redirect:/sys/report/view.html";
+		} else {
+			request.setAttribute("error", "操作失败");
+			return "redirect:/sys/report/view.html";
+		}
+	}
+
+}

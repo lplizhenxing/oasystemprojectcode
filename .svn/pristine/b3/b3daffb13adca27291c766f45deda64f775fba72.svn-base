@@ -1,0 +1,404 @@
+package com.zszd.ai.dao.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.zszd.ai.dao.EmployeeDao;
+import com.zszd.ai.model.Devgroup;
+import com.zszd.ai.model.Employee;
+import com.zszd.ai.utils.DataSourceUtil;
+/**
+ * 员工DAO实现类
+ * @author lizx 20180103
+ *
+ */
+public class EmployeeDaoImpl implements EmployeeDao {
+
+	@Override
+	public List<Employee> queryAllEmployeeInfo() {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Employee employee = null;
+		List<Employee> employees = new ArrayList<Employee>();
+
+		String sql = "select * from employee order by groupId asc";
+		try {
+			Object[] oo = null;
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				employee = new Employee();
+				employee.setId(rs.getInt("id"));
+				employee.setName(rs.getString("name"));
+				employee.setGroupId(rs.getInt("groupId"));
+				employee.setIsLeader(rs.getInt("isLeader"));
+				employee.setWorkpoints(rs.getInt("workpoints"));
+				Devgroup devgroup = new DevgroupDaoImpl().queryDevGroupInfoById(rs.getInt("groupId"));
+				employee.setDevgroup(devgroup);
+				employees.add(employee);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return employees;
+
+	}
+
+	@Override
+	public int queryWorkPointByName(String name) {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		String sql = "select workpoints from employee where name =?";
+		try {
+			Object[] oo = { name };
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				return rs.getInt("workpoints");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return -1;
+	}
+
+
+	@Override
+	public int queryIdByName(String name) {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		String sql = "select id from employee where name =?";
+		try {
+			Object[] oo = { name };
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				return rs.getInt("id");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return -1;
+	}
+
+	@Override
+	public int updateEmployeeWorkPoint(Employee employee) {
+		return 0;
+	}
+
+	@Override
+	public int queryWorkPointById(int id) {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		String sql = "select workpoints from employee where id =?";
+		try {
+			Object[] oo = { id };
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				return rs.getInt("workpoints");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return -1;
+	}
+
+	@Override
+	public String queryNameById(int id) {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		String sql = "select name from employee where id =?";
+		try {
+			Object[] oo = { id };
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				return rs.getString("name");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return null;
+	}
+
+	@Override
+	public int getEmployeeCountByGroupId(int groupId) {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		String sql = "select count(*) from employee where groupId =?";
+		try {
+			Object[] oo = { groupId };
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return 0;
+	}
+
+	@Override
+	public Employee queryEmployeeInfoById(int id) {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+	    Employee employee =null;
+
+		String sql = "select * from employee where id =?";
+		try {
+			Object[] oo = { id };
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				employee = new Employee();
+				employee.setId(rs.getInt("id"));
+				employee.setName(rs.getString("name"));
+				employee.setIsLeader(rs.getInt("isLeader"));
+				employee.setWorkpoints(rs.getInt("workpoints"));
+				employee.setGroupId(rs.getInt("groupId"));
+				employee.setAbbr(rs.getString("abbr"));
+				employee.setWorkType(rs.getString("workType"));
+				employee.setWorkUnit(rs.getString("workUnit"));
+				employee.setWorkState(rs.getString("workState"));
+				employee.setMajor(rs.getString("major"));
+				employee.setEndSchool(rs.getString("endSchool"));
+				employee.setEducation(rs.getString("education"));
+				employee.setEndTime(rs.getString("endTime"));
+				employee.setPostalcode(rs.getString("postalcode"));
+				employee.setPhone(rs.getString("phone"));
+				employee.setAddress(rs.getString("address"));
+				employee.setIntentionalCity(rs.getString("intentionalCity"));
+				employee.setIntentionalPost(rs.getString("intentionalPost"));
+				employee.setE_mail(rs.getString("e_mail"));
+				employee.setNamePinyin(rs.getString("namePinyin"));
+				employee.setSex(rs.getString("sex"));
+				employee.setValidDocuments(rs.getString("validDocuments"));
+				employee.setMyClass(rs.getString("myClass"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return employee;
+	}
+
+	@Override
+	public int updateEmployeeInfo(Employee employee) {
+		Connection conn = DataSourceUtil.getConnection();
+		int row =0;
+		PreparedStatement ps=null;
+		String sql = "update employee set name = ? ,groupId=?,isLeader=?,workpoints=? where id =?";
+		Object[] oo={employee.getName(),employee.getGroupId(),employee.getIsLeader(),
+				employee.getWorkpoints(),employee.getId()};
+		try {	
+		 row=DataSourceUtil.executeUpdate(conn, ps, sql, oo);
+		}finally{
+			DataSourceUtil.colseAll(ps, conn,null);
+		}
+		return row;
+	}
+
+	@Override
+	public int updateAllInfo(Employee employee) {
+		Connection conn = DataSourceUtil.getConnection();
+		int row =0;
+		PreparedStatement ps=null;
+		String sql = "update employee set workType=?,workUnit=?,workState=?,major=?,endSchool=?," +
+				"education=?,endTime=?,postalcode=?,phone=?,address=?,intentionalCity=?," +
+				"intentionalPost=?,e_mail=?,sex=?,validDocuments=?,myClass=? where id=?";
+		Object[] oo={employee.getWorkType(),
+		employee.getWorkUnit(),
+		employee.getWorkState(),
+		employee.getMajor(),
+		employee.getEndSchool(),
+		employee.getEducation(),
+		employee.getEndTime(),
+		employee.getPostalcode(),
+		employee.getPhone(),
+		employee.getAddress(),
+		employee.getIntentionalCity(),
+		employee.getIntentionalPost(),
+		employee.getE_mail(),
+		employee.getSex(),
+		employee.getValidDocuments(),
+		employee.getMyClass(),
+		employee.getId()
+		};
+		try {	
+		 row=DataSourceUtil.executeUpdate(conn, ps, sql, oo);
+		}finally{
+			DataSourceUtil.colseAll(ps, conn,null);
+		}
+		return row;
+	}
+	
+	@Override
+	public String getEmployeeNameByLoginName(String loginname) {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		String sql = "select name from employee where abbr =?";
+		try {
+			Object[] oo = { loginname };
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				return rs.getString("name");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return null;
+	}
+
+	@Override
+	public List<Integer> queryIdLikeName(String name) {
+		Connection conn = DataSourceUtil.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<Integer> list = new ArrayList<Integer>();
+		String sql = "select id from employee where name like ?";
+		try {
+			Object[] oo = { "%"+name+"%" };
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				list.add(rs.getInt("id"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return list;
+	}
+
+	@Override
+	public Employee getEmployeeInfoByLoginName(String name) {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+	    Employee employee =null;
+
+		String sql = "select * from employee where abbr =?";
+		try {
+			Object[] oo = { name };
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				employee = new Employee();
+				employee.setId(rs.getInt("id"));
+				employee.setName(rs.getString("name"));
+				employee.setIsLeader(rs.getInt("isLeader"));
+				employee.setWorkpoints(rs.getInt("workpoints"));
+				employee.setGroupId(rs.getInt("groupId"));
+				employee.setAbbr(rs.getString("abbr"));
+				employee.setWorkType(rs.getString("workType"));
+				employee.setWorkUnit(rs.getString("workUnit"));
+				employee.setWorkState(rs.getString("workState"));
+				employee.setMajor(rs.getString("major"));
+				employee.setEndSchool(rs.getString("endSchool"));
+				employee.setEducation(rs.getString("education"));
+				employee.setEndTime(rs.getString("endTime"));
+				employee.setPostalcode(rs.getString("postalcode"));
+				employee.setPhone(rs.getString("phone"));
+				employee.setAddress(rs.getString("address"));
+				employee.setIntentionalCity(rs.getString("intentionalCity"));
+				employee.setIntentionalPost(rs.getString("intentionalPost"));
+				employee.setE_mail(rs.getString("e_mail"));
+				employee.setNamePinyin(rs.getString("namePinyin"));
+				employee.setSex(rs.getString("sex"));
+				employee.setValidDocuments(rs.getString("validDocuments"));
+				employee.setMyClass(rs.getString("myClass"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return employee;
+	}
+
+	@Override
+	public int insert(Employee employee) {
+		int row =0;
+		Connection conn = DataSourceUtil.getConnection();
+		PreparedStatement ps=null;
+		String sql = "insert into employee (name,abbr,sex,validDocuments,myClass) " +
+				"values (?,?,?,?,?)";
+		Object[] oo={employee.getName(),employee.getAbbr(),employee.getSex(),employee.getValidDocuments(),employee.getMyClass()};
+		try {	
+		    row=DataSourceUtil.executeUpdate(conn, ps, sql, oo);
+		}finally{
+			DataSourceUtil.colseAll(ps, conn,null);
+		}
+		return row;
+	}
+
+	@Override
+	public int queryWorkPointByAbbr(String name) {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		String sql = "select workpoints from employee where abbr =?";
+		try {
+			Object[] oo = { name };
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				return rs.getInt("workpoints");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return -1;
+	}
+
+}

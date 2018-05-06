@@ -1,0 +1,34 @@
+package com.zszd.ai.dao;
+
+import java.sql.Connection;
+import java.util.List;
+
+import com.zszd.ai.model.SysUser;
+/**
+ * 系统用户DAO接口
+ * @author lizx 20180103
+ *
+ */
+public interface SysUserDao {
+
+	int insert(SysUser sysUser);
+
+	int query(SysUser sysUser);
+
+	int updateLoginRecord(SysUser sysUser);
+
+	int queryLoginCountsByName(String name);
+
+	int getUserIdByUserName(String name);
+
+	SysUser getUserInfoByUserName(String name);
+
+	int updateUserPasswordInfo(SysUser sysUser);
+
+	int updateSysUser(Connection conn, SysUser sysUser);
+
+	List<SysUser> getAllUserInfo(Connection conn);
+
+	List<SysUser> getAllOnLineUserInfo(Connection conn);
+
+}

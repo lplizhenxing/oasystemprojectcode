@@ -1,0 +1,59 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ include file="../common/userlogin.jsp"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<base href="<%=basePath%>">
+<title>待办事项新增页面</title>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" type="text/css" href="static/css/userindex.css">
+</head>
+<body>
+	<%@ include file="../common/userheader.jsp"%>
+	<section id="section"> <%@ include
+		file="../common/userleft.jsp"%>
+	<div id="right">
+		<h3>请提交待办事项</h3>
+		<form action="schedule?opr=add" method="post">
+			<table>
+				<tr>
+					<td style="width:80px">待办事项内容</td>
+					<td><textarea rows="20" cols="40" id="content" name="content"></textarea>
+					</td>
+
+				</tr>
+				<c:if test="${sessionScope.roleId != 6}">
+					<tr>
+						<td style="width:80px">分配给谁完成</td>
+						<td><input type="text" id="finishName" name="finishName"/>
+						</td>
+					</tr>
+				</c:if>
+				<tr>
+					<td style="width:80px"><input type="submit" value="提交">
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	</section>
+	<%@ include file="../common/footer.jsp"%>
+</body>
+<script type="text/javascript">
+	$(function() {
+		$("form").submit(function() {
+			var postTitle = $("#leaveReason").val();
+			if (postTitle.trim() == "") {
+				alert("请假理由不能为空！");
+				return false;
+			}
+			return true;
+		});
+	});
+</script>
+</html>

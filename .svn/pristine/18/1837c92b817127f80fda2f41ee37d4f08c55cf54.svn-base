@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zszd.ai.dao.RequirementsDao">
+<select id="queryAllRequirementInfo" resultType="Requirements">
+select * from requirements order by submitTime desc</select>
+<insert id="addRequirementsInfo" parameterType="Requirements">
+insert into requirements (title,content,userName) values (#{title},#{content},#{userName})
+</insert>
+<select id="getRequirementsById" parameterType="int" resultType="requirements">
+select * from requirements where id=#{id}
+</select>
+<update id="updateRequirementsInfo" parameterType="requirements">
+update requirements set title=#{title},content=#{content},state=#{state},resolveDevName=#{resolveDevName} where id=#{id}
+
+
+</update>
+
+</mapper>

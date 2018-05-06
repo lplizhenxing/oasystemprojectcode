@@ -1,0 +1,43 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+	<div id="right">
+		<table>
+			<c:if test="${requestScope.list!=null }">
+				<tr>
+					<th>员工名称&nbsp;&nbsp;</th>
+					<th>日志类型&nbsp;&nbsp;</th>
+					<th>问题和风险&nbsp;&nbsp;</th>
+					<th>完成的工作&nbsp;&nbsp;</th>
+					<th>明日计划&nbsp;&nbsp;</th>
+					<th>备注&nbsp;&nbsp;</th>
+					<th>提交日期&nbsp;&nbsp;</th>
+					<th>操作权限</th>
+				</tr>
+				<c:forEach items="${requestScope.list}" var="report">
+					<tr>
+						<td colspan="8"><br /></td>
+					<tr>
+					<tr>
+						<td style="width:100px">${report.username}&nbsp;&nbsp;</td>
+						<td style="width:50px">${report.typename}&nbsp;&nbsp;</td>
+						<td style="width:100px">${report.question}&nbsp;&nbsp;</td>
+						<td style="width:100px">${report.finishwork}&nbsp;&nbsp;</td>
+						<td style="width:100px">${report.plan}&nbsp;&nbsp;</td>
+						<td style="width:100px">${report.remark}&nbsp;&nbsp;</td>
+						<td style="width:100px">${report.createDate}&nbsp;&nbsp;</td>
+						<td><c:if test="${sessionScope.roleId eq 6}">
+								<a href='report?opr=modify&reportId=${report.id}'
+									style="color:red;">修改 </a>
+							</c:if>
+							<c:if test="${sessionScope.roleId ne 6}">
+								  <p style="color:red">目前只对普通员工开放修改权限</p>
+							</c:if>
+						</td>
+					</tr>
+				</c:forEach>
+			</c:if>
+		</table>
+	</div>
+	</section>
+	<%@ include file="../common/footer.jsp"%>
+

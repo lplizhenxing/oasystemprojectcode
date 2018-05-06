@@ -1,0 +1,17 @@
+package com.zszd.ai.dao;
+
+import java.util.List;
+
+import com.zszd.ai.model.Bugs;
+
+public interface BugsDao {
+
+	List<Bugs> queryAllDebugsInfo();
+
+	int addBugsInfo(Bugs bugs);
+
+	Bugs getBugsById(int id);
+
+	int updateBugsInfo(Bugs bugs);
+
+}

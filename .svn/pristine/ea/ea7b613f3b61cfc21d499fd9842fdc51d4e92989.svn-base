@@ -1,0 +1,81 @@
+package com.zszd.ai.service.impl;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.zszd.ai.dao.ComplaintDao;
+import com.zszd.ai.pojo.Complaint;
+import com.zszd.ai.service.ComplaintService;
+import com.zszd.ai.tools.MyBatisUtil;
+
+public class ComplaintServiceImpl implements ComplaintService {
+
+	@Override
+	public int addComplaint(Complaint comp) {
+		SqlSession sqlSession = null;
+		int result = 0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			result = sqlSession.getMapper(ComplaintDao.class).addComplaint(comp);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return result;
+	}
+
+	@Override
+	public int addFeedback(Complaint comp) {
+		SqlSession sqlSession = null;
+		int result = 0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			result = sqlSession.getMapper(ComplaintDao.class).addFeedback(comp);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return result;
+	}
+
+	@Override
+	public List<Complaint> queryComplaint() {
+		SqlSession sqlSession = null;
+		List<Complaint> complaintList = null;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			complaintList = sqlSession.getMapper(ComplaintDao.class).complaintList();
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return complaintList;
+	}
+
+	@Override
+	public Complaint queryComplaintById(Integer id) {
+		SqlSession sqlSession = null;
+		Complaint comp = null;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			comp = sqlSession.getMapper(ComplaintDao.class).queryComplaintById(id);
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return comp;
+	}
+
+}

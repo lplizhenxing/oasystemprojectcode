@@ -1,0 +1,144 @@
+package com.zszd.ai.service.impl;
+
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.zszd.ai.dao.PostDao;
+import com.zszd.ai.dao.impl.PostDaoImpl;
+import com.zszd.ai.model.Page;
+import com.zszd.ai.model.Post;
+import com.zszd.ai.service.PostService;
+import com.zszd.ai.utils.DataSourceUtil;
+import com.zszd.ai.utils.MyBatisUtil;
+
+/**
+ * 帖子接口实现
+ * 
+ * @author lizx 20180103
+ * 
+ */
+public class PostServiceImpl implements PostService {
+	PostDao pdDao = new PostDaoImpl();
+	@Override
+	public Post getPostByPostId(int id) {
+		SqlSession sqlSession = null;
+		Post post = null;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			post=sqlSession.getMapper(PostDao.class).getPostByPostId(id);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}		
+		return post;	
+	}
+
+	@Override
+	public int addPostInfo(Post post) {
+		SqlSession sqlSession = null;
+		int row=0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			row = sqlSession.getMapper(PostDao.class).addPostInfo(post);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return row;
+	}
+
+	@Override
+	public int updatePost(Post post) {
+		SqlSession sqlSession = null;
+		int row=0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			row = sqlSession.getMapper(PostDao.class).updatePost(post);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return row;
+	}
+
+	@Override
+	public int updatePostInfo(Post post) {
+		SqlSession sqlSession = null;
+		int row=0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			row = sqlSession.getMapper(PostDao.class).updatePostInfo(post);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return row;
+	}
+
+	@Override
+	public int deletePostById(int id) {
+		SqlSession sqlSession = null;
+		int row=0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			row = sqlSession.getMapper(PostDao.class).deletePostById(id);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return row;
+	}
+
+	@Override
+	public int getPostInfoCountLikeName(String keywords) {
+		SqlSession sqlSession = null;
+		int row=0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			row = sqlSession.getMapper(PostDao.class).getPostInfoCountLikeName(keywords);
+			
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return row;
+	}
+
+	@Override
+	public List<Post> queryPostInfoLikeNamePage(Page p, String keywords) {
+			List<Post> posts=new ArrayList<Post>();
+			SqlSession sqlSession = null;
+			try {
+				sqlSession = MyBatisUtil.createSqlSession();
+				posts = sqlSession.getMapper(PostDao.class).queryPotRecordPageLikeName(p,keywords);
+				sqlSession.commit();
+			} catch (Exception e) {
+				sqlSession.rollback();
+				e.printStackTrace();
+			}finally{
+				MyBatisUtil.closeSqlSession(sqlSession);
+			}
+			return posts;
+	}
+
+}

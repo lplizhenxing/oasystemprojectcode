@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zszd.ai.dao.CommentDao">
+<insert id="addCommentInfo" parameterType="Comment">
+insert into comment (postId,userName,userIP,content)
+values (#{postId},#{userName},#{userIP},#{content})
+</insert>
+<select id="getAllCommentByPostId" parameterType="int" resultType="Comment">
+select * from comment where postId=#{postId} order by commentDate desc
+
+</select>
+<select id="getCommentByCommentId" parameterType="int" resultType="Comment">
+select * from comment where id=#{commentId}
+</select>
+<update id="updateCommentInfo" parameterType="Comment">
+update comment set content =#{commentcontent}  where id =#{commentId}
+</update>
+<update id="deleteCommentById" parameterType="int">
+delete from  comment where id =#{commentId}
+</update>
+</mapper>

@@ -1,0 +1,71 @@
+package com.zszd.ai.pojo;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class SignRecord {
+
+	private int id;
+	private String userName;
+	private Date signTime;
+	private Date signOutTime;
+	private int state;
+	
+	private String signState;
+	private String signOutState;
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public String getSignTime() {
+		if(signTime!=null){
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			return sdf.format(signTime);
+		}
+		return null;
+
+	}
+	public void setSignTime(Date signTime) {
+		this.signTime = signTime;
+	}
+	public String getSignOutTime() {
+		if(signOutTime!=null){
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			return sdf.format(signOutTime);
+		}
+		return null;
+	}
+	public void setSignOutTime(Date signOutTime) {
+		this.signOutTime = signOutTime;
+	}
+	public int getState() {
+		return state;
+	}
+	public void setState(int state) {
+		this.state = state;
+	}
+	public String getSignState() {
+	    
+		return signState;
+	}
+	public void setSignState(String signState) {
+		this.signState = signState;
+	}
+	public String getSignOutState() {
+		return signOutState;
+	}
+	public void setSignOutState(String signOutState) {
+		this.signOutState = signOutState;
+	}
+	
+	
+}

@@ -1,0 +1,87 @@
+package com.zszd.ai.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.zszd.ai.model.Leave;
+import com.zszd.ai.model.Schedule;
+import com.zszd.ai.service.ScheduleService;
+import com.zszd.ai.service.impl.ScheduleServiceImpl;
+/**
+ * 代办事项
+ * @author lizx 20180103
+ *
+ */
+@WebServlet(urlPatterns = { "/schedule" }, name = "schedule")
+public class ScheduleServlet extends HttpServlet {
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		this.doPost(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+		String path = request.getContextPath();
+		String basePath = request.getScheme() + "://" + request.getServerName()
+				+ ":" + request.getServerPort() + path + "/";
+		PrintWriter out = response.getWriter();
+
+		HttpSession session = request.getSession();// 获取session
+		String name = (String) session.getAttribute("login");
+		int roleId = (Integer)session.getAttribute("roleId");
+		ScheduleService scheduleService = new ScheduleServiceImpl();
+		String opr = request.getParameter("opr");
+		if ("list".equals(opr)) {
+			List<Schedule> list  = null;
+			if(roleId==6){
+				list = scheduleService
+						.getScheduleByFinishName(name);
+			}else{
+				list = scheduleService
+						.getScheduleByCreateName(name);
+			}
+			request.setAttribute("list", list);
+			request.getRequestDispatcher("jsp/schedule/schedule_list.jsp")
+					.forward(request, response);
+		} else if ("add".equals(opr)) {
+			String content = request.getParameter("content");
+			String finishName = request.getParameter("finishName");
+			Schedule schedule = new Schedule();
+			if(roleId==6){
+				schedule.setContent(content);
+				schedule.setCreateName(name);
+				schedule.setFinishName(name);
+			}else{
+				schedule.setContent(content);
+				schedule.setCreateName(name);
+				schedule.setFinishName(finishName);
+			}			
+			int row = scheduleService.addScheduleInfo(schedule);
+			if (row > 0) {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('待办事项提交成功，点击确认回到待办事项页面！');");
+				out.print("location.href=\"" + basePath + "schedule?opr=list\";");
+				out.print("</script>");
+			} else {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('待办事项已提交，请查看已提交的待办事项！');");
+				out.print("location.href=\"" + basePath
+						+ "schedule?opr=list\";");
+				out.print("</script>");
+			}
+		}
+	}
+}

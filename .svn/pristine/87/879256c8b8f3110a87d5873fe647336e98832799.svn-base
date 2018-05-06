@@ -1,0 +1,24 @@
+package com.zszd.ai.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.zszd.ai.model.Requirements;
+
+public interface RequirementsDao {
+
+	List<Requirements> queryAllRequirementInfo();
+
+	int addRequirementsInfo(Requirements requirements);
+
+	Requirements getRequirementsById(@Param("id")int id);
+
+	int updateRequirementsInfo(Requirements requirements);
+
+	List<Requirements> queryAllRequirementInfoByCompanyId(@Param("companyId")int companyId);
+
+	List<Requirements> queryAllRequirementInfoByCompanyIdAndName(@Param("companyId")int companyId,
+			@Param("name")String name);
+
+}

@@ -1,0 +1,69 @@
+package com.zszd.ai.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.zszd.ai.dao.ScheduleDao;
+import com.zszd.ai.pojo.Schedule;
+import com.zszd.ai.service.ScheduleService;
+import com.zszd.ai.tools.MyBatisUtil;
+public class ScheduleServiceImpl implements ScheduleService {
+
+	@Override
+	public List<Schedule> getScheduleByFinishName(String name) {
+		SqlSession sqlSession = null;
+		List<Schedule> schedules = new ArrayList<Schedule>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			schedules = sqlSession.getMapper(ScheduleDao.class)
+					.getScheduleByFinishName(name);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return schedules;
+	}
+
+	@Override
+	public List<Schedule> getScheduleByCreateName(String name) {
+		SqlSession sqlSession = null;
+		List<Schedule> schedules = new ArrayList<Schedule>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			schedules = sqlSession.getMapper(ScheduleDao.class)
+					.getScheduleByCreateName(name);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return schedules;
+	}
+
+	@Override
+	public int addScheduleInfo(Schedule schedule) {
+		SqlSession sqlSession = null;
+		int rows =0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(ScheduleDao.class)
+					.addScheduleInfo(schedule);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+
+	
+}

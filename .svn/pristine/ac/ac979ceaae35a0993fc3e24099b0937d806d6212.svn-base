@@ -1,0 +1,95 @@
+package com.zszd.ai.service.impl;
+
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+
+import com.zszd.ai.dao.RequirementsDao;
+
+
+import com.zszd.ai.model.Requirements;
+import com.zszd.ai.service.RequirementsService;
+
+import com.zszd.ai.utils.MyBatisUtil;
+
+public class RequirementsServiceImpl implements RequirementsService {
+
+	
+	@Override
+	public List<Requirements> queryAllRequirementInfo() {
+		List<Requirements> requirementsList = null;
+		SqlSession sqlsession = null;
+		try {
+			sqlsession = MyBatisUtil.createSqlSession();
+			requirementsList = sqlsession.getMapper(RequirementsDao.class).queryAllRequirementInfo();
+					
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlsession);
+		}
+		return requirementsList;
+	}
+	@Override
+	public int addRequirementsInfo(Requirements requirements) {
+		SqlSession sqlsession = null;
+		int row = 0;
+		try {
+
+			sqlsession = MyBatisUtil.createSqlSession();
+			row = sqlsession.getMapper(RequirementsDao.class).addRequirementsInfo(requirements);
+			sqlsession.commit();
+
+		} catch (Exception e) {
+			sqlsession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlsession);
+		}
+		return row;
+		
+		
+	}
+	@Override
+	public Requirements getRequirementsById(int id) {
+		Requirements requirements = null;
+		SqlSession sqlsession = null;
+		
+		try {
+
+			sqlsession = MyBatisUtil.createSqlSession();
+			requirements = sqlsession.getMapper(RequirementsDao.class).getRequirementsById(id);
+					
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlsession);
+		}
+		return requirements;
+	}
+	@Override
+	public int updateRequirementsInfo(Requirements requirements) {
+		SqlSession sqlsession = null;
+		int row = 0;
+		try {
+
+			sqlsession = MyBatisUtil.createSqlSession();
+			row = sqlsession.getMapper(RequirementsDao.class).updateRequirementsInfo(requirements);
+			sqlsession.commit();
+
+		} catch (Exception e) {
+			sqlsession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlsession);
+		}
+		return row;
+	}
+
+
+}

@@ -1,0 +1,77 @@
+package com.zszd.ai.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.zszd.ai.model.Employee;
+import com.zszd.ai.model.Goods;
+import com.zszd.ai.service.EmployeeService;
+import com.zszd.ai.service.GoodsService;
+import com.zszd.ai.service.WpChangeService;
+import com.zszd.ai.service.impl.EmployeeServiceImpl;
+import com.zszd.ai.service.impl.GoodsServiceImpl;
+import com.zszd.ai.service.impl.WpChangeServiceImpl;
+@WebServlet(urlPatterns = { "/wpChange" }, name = "WpChangeServlet")
+public class WpChangeServlet extends HttpServlet {
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		this.doPost(request, response);
+	}
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+		String opr = request.getParameter("opr");
+		String path = request.getContextPath();
+		String basePath = request.getScheme() + "://" + request.getServerName()
+				+ ":" + request.getServerPort() + path + "/";
+		if (opr.equals("change")) {// 积分兑换功能 积分减少 库存减少
+			String employeeId = request.getParameter("employeeId");
+			String goodsId = request.getParameter("goodsId");
+			// 通过employeeId以及goodsId扣工分updateWorkPoint(employeeId,goodsId);
+			WpChangeService wpChangeService = new WpChangeServiceImpl();
+			EmployeeService employeeService = new EmployeeServiceImpl();
+			GoodsService goodsService = new GoodsServiceImpl();
+			Employee employee = employeeService.queryEmployeeInfoById(Integer
+					.valueOf(employeeId));
+			Goods goods = goodsService.queryGoodsInfoById(Integer
+					.valueOf(goodsId));
+			int wp = employee.getWorkpoints() - goods.getGoodsPrice();
+			int stock = goods.getGoodsStock() - 1;
+			PrintWriter out = response.getWriter();
+			if (wp >= 0 && stock > 0) {
+				employee.setWorkpoints(employee.getWorkpoints()
+						- goods.getGoodsPrice());
+				goods.setGoodsStock(stock);
+				boolean flag = wpChangeService.updateWorkPoint(employee, goods);
+				if (flag) {// 返回积分兑换页面
+					out.print("<script type='text/javascript'>");
+					out.print("alert('兑换成功，点击确认返回工时兑换商品页面！\"');");
+					out.print("location.href=\"" + basePath
+							+ "goods?opr=list\";");
+					out.print("</script>");
+				} else {
+					out.print("<script type='text/javascript'>");
+					out.print("alert('兑换失败，点击确认返回工时兑换商品页面！');");
+					out.print("location.href=\"" + basePath
+							+ "goods?opr=list\";");
+					out.print("</script>");
+				}
+			} else {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('商品库存不足或您的工分不足，请核对后再兑换');");
+				out.print("location.href=\"" + basePath + "goods?opr=list\";");
+				out.print("</script>");
+			}
+		}
+	}
+
+}

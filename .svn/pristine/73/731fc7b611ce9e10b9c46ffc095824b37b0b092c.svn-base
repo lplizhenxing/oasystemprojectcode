@@ -1,0 +1,32 @@
+package com.zszd.ai.service.impl;
+
+import java.sql.Connection;
+import java.util.List;
+
+import com.zszd.ai.dao.SpeechDao;
+import com.zszd.ai.dao.impl.SpeechDaoImpl;
+import com.zszd.ai.model.Schedule;
+import com.zszd.ai.model.Speech;
+import com.zszd.ai.service.SpeechService;
+import com.zszd.ai.utils.DataSourceUtil;
+/**
+ * 演讲接口实现
+ * @author lizx 20180103
+ *
+ */
+public class SpeechServiceImpl implements SpeechService {
+
+	SpeechDao speechDao= new SpeechDaoImpl();
+	@Override
+	public List<Speech> queryAllSpeechInfo() {
+		// TODO Auto-generated method stub
+		return speechDao.queryAllSpeechInfo();
+	}
+	@Override
+	public int updateClickNumberByVideo(Speech speech) {
+		// TODO Auto-generated method stub
+		Connection conn =DataSourceUtil.getConnection();
+		return speechDao.updateClickNumberByVideo(conn,speech);
+	}
+
+}

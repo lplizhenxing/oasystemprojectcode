@@ -1,0 +1,102 @@
+package com.zszd.ai.service.impl;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.zszd.ai.dao.ResourceDao;
+import com.zszd.ai.model.Resource;
+import com.zszd.ai.service.ResourceService;
+import com.zszd.ai.utils.MyBatisUtil;
+
+public class ResourceServiceImpl implements ResourceService {
+
+	@Override
+	public List<Resource> queryPassedResourceInfoByType(int type) {
+		SqlSession sqlSession = null;
+		List<Resource> resources = null;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession(); 
+			resources = sqlSession.getMapper(ResourceDao.class).queryPassedResourceInfoByType(type);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return resources;
+	}
+
+	@Override
+	public List<Resource> queryAllResourceInfoByType(int type) {
+		SqlSession sqlSession = null;
+		List<Resource> resources = null;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession(); 
+			resources = sqlSession.getMapper(ResourceDao.class).queryAllResourceInfoByType(type);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return resources;
+	}
+
+	@Override
+	public int insertResourceRecord(Resource resource) {
+		SqlSession sqlSession = null;
+		int rows =0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(ResourceDao.class)
+					.insertResourceRecord(resource);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+
+	@Override
+	public Resource getResourceById(String id) {
+		SqlSession sqlSession = null;
+		Resource resource = new Resource();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			resource = sqlSession.getMapper(ResourceDao.class)
+					.getResourceById(id);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return resource;
+	}
+
+	@Override
+	public int updateResourceInfo(Resource resource) {
+		SqlSession sqlSession = null;
+		int rows =0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(ResourceDao.class)
+					.updateResourceInfo(resource);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+
+}

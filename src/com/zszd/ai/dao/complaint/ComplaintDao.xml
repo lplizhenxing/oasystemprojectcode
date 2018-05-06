@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zszd.ai.dao.complaint.ComplaintDao">
+
+	<insert id="addComplaint" parameterType="Complaint">
+		insert into complaint (content,userName) values(#{content}, #{userName})
+	</insert>
+	
+	<insert id="updateComplaint" parameterType="Complaint">
+		update complaint 
+			set 
+				feedback=#{feedback}, 
+				feedbackMan=#{feedbackMan}, 
+				feedbackTime=#{feedbackTime}
+			where 
+				id=#{id}
+	</insert>
+	
+	<select id="queryComplaint" resultType="Complaint">
+		select * from complaint  where state = 1  order by creationDate desc
+	</select>
+	
+	<select id="queryComplaintById" resultType="Complaint">
+		select * from complaint where id=#{id}
+	</select>
+	
+		
+	<select id="queryComplaintByName" resultType="Complaint">
+		select * from complaint  where state = 1  and  userName = #{name} order by creationDate desc
+	</select>
+</mapper>

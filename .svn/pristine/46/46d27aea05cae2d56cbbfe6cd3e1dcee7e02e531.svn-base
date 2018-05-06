@@ -1,0 +1,61 @@
+package com.zszd.ai.model;
+
+import java.util.Date;
+
+public class Sign {
+	private String ifSign; //是否签到
+	private int signSum; //累积签到
+	private Date signTime; //签到时间
+	
+	
+
+	public String isIfSign() {
+		return ifSign;
+	}
+
+
+
+	public void setIfSign(String ifSign) {
+		this.ifSign = ifSign;
+	}
+
+
+
+	public int getSignSum() {
+		return signSum;
+	}
+
+
+
+	public void setSignSum(int signSum) {
+		this.signSum = signSum;
+	}
+
+
+
+	public Date getSignTime() {
+		return signTime;
+	}
+
+
+
+	public void setSignTime(Date signTime) {
+		this.signTime = signTime;
+	}
+
+
+
+	public Sign(String ifSign, int signSum, Date signTime) {
+		super();
+		this.ifSign = ifSign;
+		this.signSum = signSum;
+		this.signTime = signTime;
+	}
+
+
+
+	public Sign() {
+		super();
+	}
+	
+}

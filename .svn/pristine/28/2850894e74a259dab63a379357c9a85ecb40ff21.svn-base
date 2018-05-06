@@ -1,0 +1,107 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+<div id="right">
+	<div id="mess">${empty requestScope.message
+		?"":"验证信息:"}${requestScope.message}</div>
+	<form action="<%=basePath%>doregister" method="post">
+		<table>
+			<tr>
+				<td>新员工名称&nbsp;&nbsp;</td>
+				<td style="width:300px"><input type="text" name="username"
+					id="username">&nbsp;<font color="red">*</font></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>新员工证件号码&nbsp;&nbsp;</td>
+				<td style="width:300px"><input type="text"
+					name="validDocuments" id="validDocuments">&nbsp;<font
+					color="red">*</font></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>新员工帐号(登录账号)&nbsp;&nbsp;</td>
+				<td style="width:300px"><input type="text" name="abbr"
+					id="abbr" onblur="validate();" />&nbsp;<font color="red">*</font>
+				</td>
+				<td>
+					<div id="usernameDiv" style="display: inline"></div></td>
+			</tr>
+			<tr>
+				<td>新学员性别&nbsp;&nbsp;</td>
+				<td><input id="man" type="radio" name="sex" value="man" checked><label
+					for="man">男&nbsp;</label>&nbsp;&nbsp; <input id="woman"
+					type="radio" name="sex" value="woman" /><label for="woman">女&nbsp;</label>
+				</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>新员工密码(登录密码)&nbsp;&nbsp;</td>
+				<td><input type="password" name="password"
+					value='<%=request.getParameter("password") == null ? "" : request
+					.getParameter("password")%>'>&nbsp;<font
+					color="red">*</font></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>再次输入密码：&nbsp;&nbsp;</td>
+				<td><input type="password" name="repassword"
+					value='<%=request.getParameter("repassword") == null ? "" : request
+					.getParameter("repassword")%>'>&nbsp;<font
+					color="red">*</font></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>新员工所属公司&nbsp;&nbsp;</td>
+				<td><select name="companyId" id="companyId"></select></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>新员工所属职位&nbsp;&nbsp;</td>
+				<td><select name="roleId" id="roleId">
+						<option value="4">公司总裁</option>
+						<option value="5">公司技术总监</option>
+						<option value="6">普通员工</option>
+				</select></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td colspan="3"><input type="submit" value="提交" id="submit">
+					<input type="reset" value="重置"><br />
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
+</section>
+<%@ include file="../common/footer.jsp"%>
+<script type="text/javascript">
+	$(function() {
+		var role = "opr=query";
+		$.get("company", role, function callback(data) {
+			var jsonObj = eval("(" + data + ")");
+			var optionstring = "";
+			for ( var item in jsonObj) {
+				optionstring += "<option value=\""+ item +"\" >"
+						+ jsonObj[item] + "</option>";
+			}
+			$("#companyId").html(optionstring);
+		});
+	});
+
+	function validate() {
+		var username = $("#abbr").val();
+		if (username == null || username == "") {
+			$("#usernameDiv").html("员工帐号不能为空！");
+		} else {
+			$.post("dologin", "opr=validateUsername&username=" + username,
+					callBack);
+			function callBack(data) {
+				if (data == "true") {
+					$("#usernameDiv").html("员工帐号已被占用，请更换其他昵称！");
+				} else {
+					$("#usernameDiv").html("员工帐号未使用，可以使用！！");
+				}
+			}
+		}
+	}
+</script>

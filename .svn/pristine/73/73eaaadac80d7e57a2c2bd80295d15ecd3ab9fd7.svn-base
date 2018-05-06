@@ -1,0 +1,33 @@
+package com.zszd.ai.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.zszd.ai.dao.OadevDao;
+import com.zszd.ai.model.Oadev;
+import com.zszd.ai.service.OadevService;
+import com.zszd.ai.utils.MyBatisUtil;
+
+public class OadevServiceImpl implements OadevService {
+
+	@Override
+	public List<Oadev> queryAllOadevInfo() {
+		SqlSession sqlSession = null;
+		List<Oadev> oadevs = new ArrayList<Oadev>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			oadevs = sqlSession.getMapper(OadevDao.class)
+					.queryAllOadevInfo();
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return oadevs;
+	}
+
+}

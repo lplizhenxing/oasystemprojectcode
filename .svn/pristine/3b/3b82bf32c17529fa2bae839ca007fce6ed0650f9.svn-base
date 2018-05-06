@@ -1,0 +1,23 @@
+package com.zszd.ai.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.zszd.ai.model.Bugs;
+
+public interface BugsDao {
+
+	List<Bugs> queryAllDebugsInfo();
+
+	int addBugsInfo(Bugs bugs);
+
+	Bugs getBugsById(@Param("id")int id);
+
+	int updateBugsInfo(Bugs bugs);
+
+	List<Bugs> queryAllDebugsInfoByCompanyId(@Param("companyId")int companyId);
+
+	List<Bugs> queryAllDebugsInfoByCompanyIdAndName(@Param("companyId")int companyId, @Param("name")String name);
+
+}

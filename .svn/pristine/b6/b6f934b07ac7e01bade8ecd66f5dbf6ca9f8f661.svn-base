@@ -1,0 +1,94 @@
+package com.zszd.ai.dao.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.zszd.ai.dao.CommentDao;
+import com.zszd.ai.model.Comment;
+import com.zszd.ai.utils.DataSourceUtil;
+/**
+ * 评论DAO实现类
+ * @author lizx 20180103
+ *
+ */
+public class CommentDaoImpl implements CommentDao {
+
+	@Override
+	public int addCommentInfo( Comment comment) {
+		int row =0;
+		PreparedStatement ps=null;
+		String sql = "insert into comment (postId,userName,userIP,content) " +
+				"values (?,?,?,?)";
+		
+		return row;
+	}
+
+	@Override
+	public List<Comment> getAllCommentByPostId( int postId) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Comment comment = null;  
+		List<Comment> comments = new ArrayList<Comment>();
+		String sql = "select * from comment where postId=? order by commentDate desc";
+		
+		return comments;
+	}
+
+	@Override
+	/**public List<Comment> getAllComentInfo(Connection conn) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Comment comment = null;  
+		List<Comment> comments = new ArrayList<Comment>();
+		String sql = "select * from comment order by postId desc";
+		try {
+			Object[] oo = null;
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				comment = new Comment();
+				comment.setId(rs.getInt("id"));
+				comment.setCommentDate(rs.getDate("commentDate"));
+				comment.setContent(rs.getString("content"));
+				comment.setPostId(rs.getInt("postId"));
+				comment.setUserName(rs.getString("userName"));
+				comment.setUserIP(rs.getString("userIP"));
+                comments.add(comment);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return comments;
+	}*/
+
+	
+	public Comment getCommentByCommentId(int commentId) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Comment comment = null;        
+		String sql = "select * from comment where id=?";
+		
+		return comment;
+	}
+
+	@Override
+	public int updateCommentInfo( Comment comment) {
+		int row =0;
+		
+		return row;
+	}
+
+	@Override
+	public int deleteCommentById( int id) {
+		int row =0;
+		
+		return row;
+	}
+
+}

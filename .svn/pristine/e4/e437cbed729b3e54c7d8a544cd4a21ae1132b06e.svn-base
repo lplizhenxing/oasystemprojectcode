@@ -1,0 +1,159 @@
+package com.zszd.ai.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.alibaba.fastjson.JSON;
+import com.zszd.ai.pojo.Company;
+import com.zszd.ai.pojo.Functions;
+import com.zszd.ai.service.CompanyService;
+import com.zszd.ai.service.impl.CompanyServiceImpl;
+
+@WebServlet(urlPatterns = ("/company"), name = ("company"))
+public class CompanyServlet extends HttpServlet {
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		doPost(request, response);
+	}
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+		String path = request.getContextPath();
+		String basePath = request.getScheme() + "://" + request.getServerName()
+				+ ":" + request.getServerPort() + path + "/";
+		CompanyService companyService = new CompanyServiceImpl();
+		String opr = request.getParameter("opr");
+		PrintWriter out = response.getWriter();
+		String companyId = request.getParameter("companyId");
+		if (opr.equals("list")) {
+			List<Company> list = companyService.queryCompanyInfo();
+			request.setAttribute("list", list);
+			request.getRequestDispatcher("jsp/company/company_list.jsp")
+					.forward(request, response);
+		} else if ("modify".equals(opr)) {
+			Company company = companyService.queryCompanyById(Integer
+					.parseInt(companyId));
+			request.setAttribute("company", company);
+			request.getRequestDispatcher("jsp/company/company_modify.jsp")
+					.forward(request, response);
+		} else if ("delete".equals(opr)) {
+			out.print("<script type='text/javascript'>");
+			out.print("alert('确认要删除吗？点击确认删除！');");
+			out.print("location.href=\"" + basePath
+					+ "company?opr=deleteCompany&companyId=" + companyId
+					+ "\";");
+			out.print("</script>");
+		} else if ("submitModify".equals(opr)) {
+			String name = request.getParameter("companyName");
+			String url = request.getParameter("companyUrl");
+			String tel = request.getParameter("companyTel");
+			String fax = request.getParameter("companyFax");
+			String province = request.getParameter("s_province");
+			String city = request.getParameter("s_city");
+			String county = request.getParameter("s_county");
+			String detail = request.getParameter("detail");
+			String address = province+city+county+detail;
+			int classId = Integer.parseInt(request.getParameter("classId"));
+			Company company = companyService.queryCompanyById(Integer
+					.parseInt(companyId));
+			company.setName(name);
+			company.setTelephone(tel);
+			company.setFax(fax);
+			company.setClassId(classId);
+			company.setUrl(url);
+			company.setAddress(address);
+			int row = companyService.updateCompany(company);
+			if (row > 0) {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('当前公司更新成功，点击确认返回公司信息列表！');");
+				out.print("location.href=\"" + basePath + "company?opr=list\";");
+				out.print("</script>");
+			} else {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('当前公司更新失败，点击确认返回公司列表！');");
+				out.print("location.href=\"" + basePath + "company?opr=list\";");
+				out.print("</script>");
+			}
+		} else if ("deleteCompany".equals(opr)) {
+			int id = Integer.parseInt(companyId);
+			int count = companyService.countDepartmentByCompanyId(id);
+			if (count == 0) {
+				int row = companyService.deleteCompanyById(id);
+				if (row > 0) {
+					out.print("<script type='text/javascript'>");
+					out.print("alert('删除成功！');");
+					out.print("location.href=\"" + basePath
+							+ "company?opr=list\";");
+					out.print("</script>");
+				} else {
+					out.print("<script type='text/javascript'>");
+					out.print("alert('删除失败！');");
+					out.print("location.href=\"" + basePath
+							+ "company?opr=list\";");
+					out.print("</script>");
+				}
+			} else {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('该公司下还有部门，不能删除！');");
+				out.print("location.href=\"" + basePath + "company?opr=list\";");
+				out.print("</script>");
+			}
+		} else if ("submitAdd".equals(opr)) {
+			String comname = request.getParameter("comname");
+			String url = request.getParameter("url");
+			String tel = request.getParameter("tel");
+			String fax = request.getParameter("fax");
+			String buildTime = request.getParameter("buildTime");
+			String province = request.getParameter("s_province");
+			String city = request.getParameter("s_city");
+			String county = request.getParameter("s_county");
+			String detail = request.getParameter("detail");
+			String address = province+city+county+detail;
+			int classId = Integer.parseInt(request.getParameter("classId"));
+			Company company = new Company();
+			company.setName(comname);
+			company.setUrl(url);
+			company.setTelephone(tel);
+			company.setFax(fax);
+			company.setBuildTime(buildTime);
+			company.setAddress(address);
+			company.setClassId(classId);
+			int row = companyService.insertCompany(company);
+			if (row > 0) {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('添加公司成功');");
+				out.print("location.href=\"" + basePath + "company?opr=list\";");
+				out.print("</script>");
+			} else {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('添加公司失败');");
+				out.print("location.href=\"" + basePath + "company?opr=list\";");
+				out.print("</script>");
+			}
+		} else if ("query".equals(opr)) {
+			List<Company> list = companyService.queryCompanyInfo();
+			Map<Integer, String> compaMap = new HashMap<Integer, String>();
+			if (list != null) {
+				for (Company company : list) {
+					compaMap.put(company.getId(),
+							company.getName());
+				}
+			}
+			String compaJson = JSON.toJSONString(compaMap);
+			out.print(compaJson);
+		}
+	}
+
+}

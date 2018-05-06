@@ -1,0 +1,24 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+<div id="right">
+	<h1>请增加敏感词</h1>
+	<form action="${pageContext.request.contextPath}/sys/post/toaddSensitiveWords.html" method="post">
+		输入敏感词：<input id="sensitivewords" type="text" name="sensitivewords" />
+		<br /> <input type="submit" value="提交"> <input type="reset"
+			value="重置"> <br />
+	</form>
+</div>
+</section>
+<%@ include file="../common/footer.jsp"%>
+<script type="text/javascript">
+	$(function() {
+		$("form").submit(function() {
+			var sensitivewords = $("#sensitivewords").val();
+			if (sensitivewords.trim() == "") {
+				alert("敏感词不能为空！");
+				return false;
+			}
+			return true;
+		});
+	});
+</script>

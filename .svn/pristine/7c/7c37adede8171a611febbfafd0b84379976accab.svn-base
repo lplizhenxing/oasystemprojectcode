@@ -1,0 +1,55 @@
+package com.zszd.ai.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.zszd.ai.dao.SensitivewordsDao;
+import com.zszd.ai.pojo.Sensitivewords;
+import com.zszd.ai.service.SensitivewordsService;
+import com.zszd.ai.tools.MyBatisUtil;
+/**
+ * 敏感词接口实现
+ * @author lizx 20180103
+ *
+ */
+public class SensitivewordsServiceImpl implements SensitivewordsService {
+
+	@Override
+	public List<Sensitivewords> getAllSensitivewords() {
+		SqlSession sqlSession = null;
+		List<Sensitivewords> sensitivewords = new ArrayList<Sensitivewords>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			sensitivewords = sqlSession.getMapper(SensitivewordsDao.class)
+					.getAllSensitivewords();
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return sensitivewords;
+	}
+
+	@Override
+	public int addSensitiveWordsInfo(Sensitivewords sensitivewords) {
+		SqlSession sqlSession = null;
+		int rows =0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(SensitivewordsDao.class)
+					.addSensitiveWordsInfo(sensitivewords);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+
+}

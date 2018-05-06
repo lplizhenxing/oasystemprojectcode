@@ -1,0 +1,14 @@
+package com.zszd.ai.dao.impl;
+
+import com.zszd.ai.dao.WpChangeDao;
+import com.zszd.ai.model.Employee;
+
+public class WpChangeDaoImpl implements WpChangeDao {
+
+	@Override
+	public int updateWorkPoint(Employee employee) {
+		return 0;
+		
+	}
+
+}

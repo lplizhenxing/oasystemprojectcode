@@ -1,0 +1,159 @@
+package com.zszd.ai.dao.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.zszd.ai.dao.TestresultsDao;
+import com.zszd.ai.model.Testresults;
+import com.zszd.ai.utils.DataSourceUtil;
+/**
+ * 工作日志DAO实现类
+ * @author lizx 20180103
+ *
+ */
+public class TestresultsDaoImpl implements TestresultsDao {
+
+	@Override
+	public int addTestResults(Connection conn, Testresults testresults) {
+		int row =0;
+		PreparedStatement ps=null;
+		String sql = "insert into testresults (questionId,question,username,content) " +
+				"values (?,?,?,?)";
+		Object[] oo={testresults.getQuestionId(),testresults.getQuestion(),testresults.getUsername(),testresults.getContent()};
+		try {	
+			row = DataSourceUtil.executeUpdate(conn, ps, sql, oo);
+		}finally{
+			DataSourceUtil.colseAll(ps, null,null);
+		}
+		return row;
+	}
+
+	@Override
+	public List<Testresults> queryTestResultsByUserName(String name) {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Testresults testresult = null;
+		List<Testresults> testresults = new ArrayList<Testresults>();
+
+		String sql = "select * from testresults where username=? order by testDate desc";
+		try {
+			Object[] oo = {name};
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				testresult = new Testresults();
+				testresult.setId(rs.getInt("id"));
+				testresult.setTestDate(rs.getDate("testDate"));
+				testresult.setQuestion(rs.getString("question"));
+				testresult.setContent(rs.getString("content"));
+				testresult.setUsername(rs.getString("username"));
+				testresult.setQuestionId(rs.getInt("questionId"));
+				testresults.add(testresult);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return testresults;
+	}
+
+	@Override
+	public List<Testresults> queryALLTestResults() {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Testresults testresult = null;
+		List<Testresults> testresults = new ArrayList<Testresults>();
+
+		String sql = "select * from testresults order by testDate desc";
+		try {
+			Object[] oo = null;
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				testresult = new Testresults();
+				testresult.setId(rs.getInt("id"));
+				testresult.setTestDate(rs.getDate("testDate"));
+				testresult.setQuestion(rs.getString("question"));
+				testresult.setContent(rs.getString("content"));
+				testresult.setUsername(rs.getString("username"));
+				testresult.setQuestionId(rs.getInt("questionId"));
+				testresults.add(testresult);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return testresults;
+	}
+
+	@Override
+	public Testresults queryTestResultInfoById(int id) {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Testresults testresult = null;
+
+		String sql = "select * from testresults where id=? order by testDate desc";
+		try {
+			Object[] oo = {id};
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				testresult = new Testresults();
+				testresult.setId(rs.getInt("id"));
+				testresult.setTestDate(rs.getDate("testDate"));
+				testresult.setQuestion(rs.getString("question"));
+				testresult.setContent(rs.getString("content"));
+				testresult.setUsername(rs.getString("username"));
+				testresult.setQuestionId(rs.getInt("questionId"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return testresult;
+	}
+
+	@Override
+	public int deleteTestresultsById(int id) {
+		Connection conn = DataSourceUtil.getConnection();
+		int row =0;
+		PreparedStatement ps=null;
+		String sql = "delete from  testresults where id =?";
+		Object[] oo={id};
+		try {	
+		    row=DataSourceUtil.executeUpdate(conn, ps, sql, oo);
+		}finally{
+			DataSourceUtil.colseAll(ps, conn,null);
+		}
+		return row;
+	}
+
+	@Override
+	public int updateTestResultsInfo(Testresults testresults) {
+		Connection conn = DataSourceUtil.getConnection();
+		int row =0;
+		PreparedStatement ps=null;
+		String sql = "update testresults set content = ?  where id =?";
+		Object[] oo={testresults.getContent(),testresults.getId()};
+		try {	
+		    row=DataSourceUtil.executeUpdate(conn, ps, sql, oo);
+		}finally{
+			DataSourceUtil.colseAll(ps, conn,null);
+		}
+		return row;
+	}
+
+}

@@ -1,0 +1,76 @@
+package com.zszd.ai.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+
+import com.zszd.ai.model.Report;
+import com.zszd.ai.model.ReportType;
+
+public interface ReportDao {
+	/**
+	 * 增加日志
+	 * @param report
+	 * @return
+	 */
+	int addReport(Report report);
+	/**
+	 * 修改日志
+	 * @param report
+	 * @return
+	 */
+	int modifyReport(Report report);
+	/**
+	 * 删除日志通过用户名
+	 * @param username
+	 * @return
+	 */
+	 int deleteUserbyUsername(@Param("username")String username);
+	 /**
+	  * 删除日志通过Id
+	  * @param id
+	  * @return
+	  */
+	 int deleteUserbyId(@Param("id")Integer id);
+	 /**
+	  * 通过用户名查询日志
+	  * @param userName
+	  * @return
+	  */
+	 
+	 
+	 List<Report> getUserbyuserName(String userName);
+	 /**
+	  * 查询日志
+	  * @param typeId
+	  * @return
+	  */
+	List<Report> getReportListByReportType(@Param("typeId")Integer typeId);
+	/**
+	 * 查询所有日志
+	 * @return
+	 */
+	
+	List<Report> getAllReportList();
+	/**
+	 * 查询ID对应的Report
+	 * @param id
+	 * @return
+	 */
+	Report getReportbyId(Integer id);
+	List<ReportType> getAllReportType();
+	ReportType gettypeIdByReportTypename(@Param("typename")String typename);
+	/**
+	 * 
+	 * @Title          getAllReportListByCompanyId
+	 * @Description    根据公司名称查看本公司的报告  总裁和技术总监查看
+	 * @Tags           @param companyId
+	 * @Tags           @return   
+	 * @Return         List<Report>   
+	 * @throws
+	 * @author           lizx
+	 * @date           2018-1-29        上午2:36:09
+	 */
+	List<Report> getAllReportListByCompanyId(@Param("companyId")int companyId);
+}

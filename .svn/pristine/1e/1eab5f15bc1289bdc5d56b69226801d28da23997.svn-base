@@ -1,0 +1,221 @@
+package com.zszd.ai.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.zszd.ai.dao.ReportDao;
+import com.zszd.ai.pojo.Report;
+import com.zszd.ai.pojo.ReportType;
+import com.zszd.ai.tools.MyBatisUtil;
+
+public class ReportServiceImpl {
+
+	public int addReport(Report report) {
+		SqlSession sqlsession = null;
+		int row = 0;
+		try {
+
+			sqlsession = MyBatisUtil.createSqlSession();
+			row = sqlsession.getMapper(ReportDao.class).addReport(report);
+			sqlsession.commit();
+
+		} catch (Exception e) {
+			sqlsession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlsession);
+		}
+		return row;
+	}
+
+	public int modifyReport(Report report) {
+		SqlSession sqlsession = null;
+		int row = 0;
+		try {
+
+			sqlsession = MyBatisUtil.createSqlSession();
+			row = sqlsession.getMapper(ReportDao.class).modifyReport(report);
+			sqlsession.commit();
+
+		} catch (Exception e) {
+			sqlsession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlsession);
+		}
+		return row;
+	}
+
+	public int deleteUserbyUsername(String username) {
+		SqlSession sqlsession = null;
+		int row = 0;
+		try {
+
+			sqlsession = MyBatisUtil.createSqlSession();
+			row = sqlsession.getMapper(ReportDao.class).deleteUserbyUsername(
+					username);
+			sqlsession.commit();
+
+		} catch (Exception e) {
+			sqlsession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlsession);
+		}
+		return row;
+	}
+
+	public int deleteUserbyId(Integer id) {
+		SqlSession sqlsession = null;
+		int row = 0;
+		try {
+
+			sqlsession = MyBatisUtil.createSqlSession();
+			row = sqlsession.getMapper(ReportDao.class).deleteUserbyId(id);
+			sqlsession.commit();
+
+		} catch (Exception e) {
+			sqlsession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlsession);
+		}
+		return row;
+	}
+
+	public List<Report> getAllReportList() {
+		List<Report> reportlist = new ArrayList<Report>();
+		SqlSession sqlsession = null;
+
+		try {
+
+			sqlsession = MyBatisUtil.createSqlSession();
+			reportlist = sqlsession.getMapper(ReportDao.class)
+					.getAllReportList();
+
+		} catch (Exception e) {
+			sqlsession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlsession);
+		}
+		return reportlist;
+
+	}
+
+	public List<Report> getReportListByReportType(Integer typeId) {
+		List<Report> reportlist = new ArrayList<Report>();
+		SqlSession sqlsession = null;
+
+		try {
+
+			sqlsession = MyBatisUtil.createSqlSession();
+			reportlist = sqlsession.getMapper(ReportDao.class)
+					.getReportListByReportType(typeId);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlsession);
+		}
+		return reportlist;
+
+	}
+
+	public List<Report> getUserbyuserName(String userName) {
+		List<Report> reportlist = new ArrayList<Report>();
+		SqlSession sqlsession = null;
+
+		try {
+
+			sqlsession = MyBatisUtil.createSqlSession();
+			reportlist = sqlsession.getMapper(ReportDao.class)
+					.getUserbyuserName(userName);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlsession);
+		}
+		return reportlist;
+
+	}
+
+	public Report getReportbyId(Integer id) {
+
+		Report report = null;
+		SqlSession sqlsession = null;
+
+		try {
+
+			sqlsession = MyBatisUtil.createSqlSession();
+			report = sqlsession.getMapper(ReportDao.class).getReportbyId(id);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlsession);
+		}
+		return report;
+	}
+
+	public List<ReportType> getAllReportType() {
+		List<ReportType> reportTypelist = null;
+		SqlSession sqlsession = null;
+		try {
+			sqlsession = MyBatisUtil.createSqlSession();
+			reportTypelist = sqlsession.getMapper(ReportDao.class)
+					.getAllReportType();
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlsession);
+		}
+		return reportTypelist;
+
+	}
+
+	public ReportType gettypeIdByReportTypename(String typename) {
+		ReportType reporttype = null;
+		SqlSession sqlsession = null;
+
+		try {
+
+			sqlsession = MyBatisUtil.createSqlSession();
+			reporttype = sqlsession.getMapper(ReportDao.class)
+					.gettypeIdByReportTypename(typename);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlsession);
+		}
+
+		return reporttype;
+
+	}
+
+	public List<Report> getAllReportListByCompanyId(int companyId) {
+		List<Report> reportlist = new ArrayList<Report>();
+		SqlSession sqlsession = null;
+		try {
+			sqlsession = MyBatisUtil.createSqlSession();
+			reportlist = sqlsession.getMapper(ReportDao.class)
+					.getAllReportListByCompanyId(companyId);
+		} catch (Exception e) {
+			sqlsession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlsession);
+		}
+		return reportlist;
+	}
+
+}

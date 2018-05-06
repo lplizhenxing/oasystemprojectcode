@@ -1,0 +1,34 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+<div id="right">
+	<a href="jsp/functions/functions_add.jsp"
+		style="color:red; font-size:26px">新增功能</a>
+	<table>
+		<c:if test="${requestScope.list!=null}">
+			<tr>
+				<th>功能序号&nbsp;&nbsp;</th>
+				<th>功能名称&nbsp;&nbsp;</th>
+				<th>功能配置路径&nbsp;&nbsp;</th>
+				<th>功能开发人员&nbsp;&nbsp;</th>
+				<th>操作权限</th>
+			</tr>
+			<c:forEach items="${requestScope.list}" var="functions"
+				varStatus="num">
+				<tr>
+					<td colspan="5"><br />
+					</td>
+				<tr>
+				<tr>
+					<td>${num.count}&nbsp;&nbsp;</td>
+					<td>${functions.functionName}&nbsp;&nbsp;</td>
+					<td>${functions.functionPath}&nbsp;&nbsp;</td>
+					<td>${functions.dev}&nbsp;&nbsp;</td>
+					<td><a href="functions?opr=modify&id=${functions.id}">修改</a></td>
+				</tr>
+			</c:forEach>
+		</c:if>
+	</table>
+</div>
+</section>
+<%@ include file="../common/footer.jsp"%>
+

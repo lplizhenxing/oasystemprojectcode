@@ -1,0 +1,10 @@
+package com.zszd.ai.dao;
+
+import java.util.List;
+
+import com.zszd.ai.model.Oadev;
+
+public interface OadevDao {
+
+	public List<Oadev> queryAllOadevInfo();
+}

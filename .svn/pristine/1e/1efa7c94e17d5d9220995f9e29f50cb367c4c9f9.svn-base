@@ -1,0 +1,179 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/userlogin.jsp"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<base href="<%=basePath%>">
+<title>录入新员工页面</title>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" type="text/css" href="static/css/userindex.css">
+<link rel="stylesheet" type="text/css" href="static/css/register.css">
+</head>
+<body>
+	<%@ include file="../common/userheader.jsp"%>
+	<section id="section"> 
+	<%@ include file="../common/userleft.jsp"%>
+	<div id="right">
+		<div id="mess">${empty requestScope.message
+			?"":"验证信息:"}${requestScope.message}</div>
+		<div id="registerpage">
+			<h1>
+				录入员工信息
+			</h1>
+			<form action="<%=basePath%>doregister" method="post">
+				<table>
+					<tr>
+						<td>新员工名称：</td>
+						<td  style="width:300px"><input type="text" name="username" id="username">&nbsp;<font color="red">*</font>
+						</td>
+						<td>
+						</td>
+					</tr>
+					<tr>
+						<td>新员工昵称：</td>
+						<td style="width:300px">
+						     <input type="text" name="abbr" id="abbr"  onblur="validate();"/>&nbsp;<font color="red">*</font>
+						</td>
+						<td>
+						    <div id="usernameDiv" style="display: inline"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>新员工组名：</td>
+						<td>
+						    <select  name="group">
+						      <option value="未选择"  selected>请选择新员工所属组</option>
+						      <option value="1" >东方不败组</option>
+						      <option value="2">给力组</option>
+						      <option value="3">雄鹰组</option>
+						      <option value="4">创世组</option>
+						      <option value="5">逆战组</option>
+						      <option value="6">王者归来组</option>
+						      <option value="7">教师团队组</option>
+						      <option value="8">测试团队组</option>
+						    </select>&nbsp;<font color="red">*</font>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>是否组长：</td>
+						<td>
+						    <select  name="leader">
+						      <option value="未选择"  selected>请选择新员工是否组长</option>
+						      <option value="0" >组员</option>
+						      <option value="1">组长</option>
+						    </select>&nbsp;<font color="red">*</font>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>新员工密码：</td>
+						<td><input type="password" name="password"
+							value='<%=request.getParameter("password") == null ? "" : request
+					.getParameter("password")%>'>&nbsp;<font
+							color="red">*</font>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>再次输入密码：</td>
+						<td><input type="password" name="repassword"
+							value='<%=request.getParameter("repassword") == null ? "" : request
+					.getParameter("repassword")%>'>&nbsp;<font
+							color="red">*</font>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td colsspan="3"><input type="submit" value="提交" id="submit">
+							<input type="reset" value="重置"><br /></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+	</section>
+	<%@ include file="../common/footer.jsp"%>
+</body>
+<script type="text/javascript" scr="static/js/news.js"></script>
+<script type="text/javascript">
+	function validate() {
+		var username = $("#abbr").val();
+		if (username == null || username == "") {
+			$("#usernameDiv").html("员工昵称不能为空！");
+		} else {
+			$.post("dologin", "opr=validateUsername&username=" + username,
+					callBack);
+			/*
+			$.get("dologin","opr=validateUsername&username=" + username,callBack);
+			$.ajax({
+				"url" : "dologin", 
+				"type" : "GET", 
+				"data" : "opr=validateUsername&username=" + username,
+				"dataType" : "text", 
+				"success" : callBack,
+				"error" : function() { 
+					alert("用户名验证时出现错误，请稍后再试或与管理员联系！");
+				},
+				"beforeSend":function(){
+				   $("#submit").attr("disabled","diabled");
+				},
+				"complete":function(){
+				   $("#submit").removeAttr("disabled");
+				} 
+			});
+			 */
+			//响应成功时的回调函数
+			function callBack(data) {
+				if (data == "true") {
+					$("#usernameDiv").html("员工昵称已被占用，请更换其他昵称！");
+				} else {
+					$("#usernameDiv").html("员工昵称未使用，可以使用！！");
+				}
+			}//end of callBack()
+
+			/*
+			//1.创建XMLHttpRequest对象
+			xmlHttpRequest = createXmlHttpRequest();
+			//2.设置回调函数
+			xmlHttpRequest.onreadystatechange = callBack;
+			//使用POST方式发送请求
+			var url = "dologin";//服务器端URL地址
+			xmlHttpRequest.open("POST", url, true);
+			xmlHttpRequest.setRequestHeader("Content-Type",
+					"application/x-www-form-urlencoded");
+			var data = "opr=validateUsername&username=" + username;//需要发送的数据信息,name为用户名文本框获取的值
+			xmlHttpRequest.send(data);
+			//Ajax 回调函数
+			function callBack() {
+				if (xmlHttpRequest.readyState == 4
+						&& xmlHttpRequest.status == 200) {
+					var data = xmlHttpRequest.responseText;
+					if (data == "true") {
+						$("#usernameDiv").html("用户名已被占用，请更换其他名字！");
+					} else {
+						$("#usernameDiv").html("用户名未注册，可以使用！！");
+					}
+				}
+			}//end of callBack()
+			 */
+		}
+	}
+
+	/*
+	 *创建XMLHttpRequest对象
+
+	function createXmlHttpRequest() {
+		if (window.XMLHttpRequest) {//返回值为true时说明是新版本IE或其他浏览器
+			return new XMLHttpRequest();
+		} else {//返回值为false时说明是老版本IE浏览器（IE5和IE6）
+			return new ActiveXObject("Microsoft.XMLHTTP");
+		}
+	}
+	 */
+</script>
+</html>

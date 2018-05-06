@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zszd.ai.dao.schedule.ScheduleDao">
+	<select id="getScheduleByFinishName" resultType="Schedule">
+		select * from
+		schedule where state=1 and finishName = #{name} order by createDate desc
+	</select>
+
+	<select id="getScheduleByCreateName" resultType="Schedule">
+		select * from
+		schedule where state=1 and createName = #{name} order by createDate desc
+	</select>
+
+	<insert id="addScheduleInfo" parameterType="Schedule">
+		insert into schedule
+		(content,createName,finishName) values (#{content},#{createName},#{finishName})
+	</insert>
+	
+	<update id= "oprScheduleInfo" parameterType="Schedule">
+	    update schedule set finishDate = #{finishDate} ,state=#{state} where id = #{id}
+	</update>
+
+</mapper>

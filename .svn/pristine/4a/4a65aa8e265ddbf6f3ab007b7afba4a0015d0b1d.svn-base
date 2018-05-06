@@ -1,0 +1,52 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/userlogin.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<base href="<%=basePath%>">
+<title>公司列表页面</title>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" type="text/css" href="static/css/userindex.css">
+</head>
+<body>
+	<%@ include file="../common/userheader.jsp"%>
+	<section id="section"> <%@ include
+		file="../common/userleft.jsp"%>
+	<div id="right">
+		<table>
+			<c:if test="${requestScope.list!=null}">
+				<tr>
+					<th>公司名称&nbsp;&nbsp;</th>
+					<th>所属班级&nbsp;&nbsp;</th>
+					<th>成立时间&nbsp;&nbsp;</th>
+					<th>操作权限&nbsp;&nbsp;</th>
+				</tr>
+				<c:forEach items="${requestScope.list}" var="company">
+					<tr>
+						<td colspan="4"><br />
+						</td>
+					</tr>
+					<tr>
+						<td>${company.name}&nbsp;&nbsp;</td>
+						<td>${company.className}&nbsp;&nbsp;</td>
+						<td>${company.buildTime}&nbsp;&nbsp;</td>
+						<td><c:if test="${sessionScope.roleId == 1}">
+								<a href="company?opr=modify&companyId=${company.id}"
+									style="color:red">修改</a>
+								<a href="company?opr=delete&companyId=${company.id}"
+									style="color:red">删除</a>
+							</c:if></td>
+					</tr>
+				</c:forEach>
+			</c:if>
+		</table>
+	</div>
+	</section>
+	<%@ include file="../common/footer.jsp"%>
+</body>
+</html>

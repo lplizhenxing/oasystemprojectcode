@@ -1,0 +1,28 @@
+package com.zszd.ai.dao;
+
+import java.sql.Connection;
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.zszd.ai.model.Comment;
+/**
+ * 评论DAO接口
+ * @author lizx 20180103
+ *
+ */
+public interface CommentDao {
+
+	int addCommentInfo( Comment comment);
+
+	List<Comment> getAllCommentByPostId(@Param("postId")int postId);
+
+	//List<Comment> getAllComentInfo(Connection conn);
+
+	Comment getCommentByCommentId(int commentId);
+
+	int updateCommentInfo( Comment comment);
+
+	int deleteCommentById(int id);
+
+}

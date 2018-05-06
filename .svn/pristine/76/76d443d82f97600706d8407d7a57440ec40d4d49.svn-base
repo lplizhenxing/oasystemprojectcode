@@ -1,0 +1,133 @@
+package com.zszd.ai.service.impl;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
+
+import com.zszd.ai.dao.TestDao;
+import com.zszd.ai.dao.TestresultsDao;
+import com.zszd.ai.dao.impl.TestDaoImpl;
+import com.zszd.ai.dao.impl.TestresultsDaoImpl;
+import com.zszd.ai.model.Test;
+import com.zszd.ai.model.Testresults;
+import com.zszd.ai.service.TestService;
+import com.zszd.ai.utils.DataSourceUtil;
+
+public class TestServiceImpl implements TestService {
+
+	TestDao testDao = new TestDaoImpl();
+	TestresultsDao testresultsDao = new TestresultsDaoImpl();
+
+	@Override
+	public List<Test> getTestByToday() {
+		// TODO Auto-generated method stub
+		return testDao.getTestByToday();
+	}
+
+	@Override
+	public boolean addTestResults(Testresults testresults) {
+		Connection conn = null;
+
+		boolean flag = false;
+
+		conn = DataSourceUtil.getConnection();
+		try {
+			conn.setAutoCommit(false);
+			int rows = testresultsDao.addTestResults(conn, testresults);
+			flag = true;
+			conn.commit();
+
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(null, conn, null);
+		}
+		return flag;
+	}
+
+	@Override
+	public List<Testresults> queryTestResultsByUserName(String name) {
+		// TODO Auto-generated method stub
+		return testresultsDao.queryTestResultsByUserName(name);
+	}
+
+	@Override
+	public List<Testresults> queryALLTestResults() {
+		// TODO Auto-generated method stub
+		return testresultsDao.queryALLTestResults();
+	}
+
+	@Override
+	public List<Test> queryALLTestInfo() {
+		// TODO Auto-generated method stub
+		return testDao.queryALLTestInfo();
+	}
+
+	@Override
+	public boolean addTestInfo(Test test) {
+		Connection conn = null;
+
+		boolean flag = false;
+
+		conn = DataSourceUtil.getConnection();
+		try {
+			conn.setAutoCommit(false);
+			int rows = testDao.addTestInfo(conn, test);
+			flag = true;
+			conn.commit();
+
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(null, conn, null);
+		}
+		return flag;
+	}
+
+	@Override
+	public int deleteTestById(int id) {
+		// TODO Auto-generated method stub
+		return testDao.deleteTestById(id);
+	}
+
+	@Override
+	public Testresults queryTestResultInfoById(int id) {
+		// TODO Auto-generated method stub
+		return testresultsDao.queryTestResultInfoById(id);
+	}
+
+	@Override
+	public int deleteTestresultsById(int id) {
+		// TODO Auto-generated method stub
+		return testresultsDao.deleteTestresultsById(id);
+	}
+
+	@Override
+	public int updateTestResultsInfo(Testresults testresults) {
+		// TODO Auto-generated method stub
+		return testresultsDao.updateTestResultsInfo(testresults);
+	}
+
+	@Override
+	public Test queryTestInfoById(int id) {
+		// TODO Auto-generated method stub
+		return testDao.queryTestInfoById(id);
+	}
+
+	@Override
+	public int updateTestInfo(Test test) {
+		// TODO Auto-generated method stub
+		return testDao.updateTestInfo(test);
+	}
+
+}

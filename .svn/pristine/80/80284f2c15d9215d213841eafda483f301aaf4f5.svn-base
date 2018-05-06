@@ -1,0 +1,55 @@
+package com.zszd.ai.service.impl;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.zszd.ai.dao.GoodsDao;
+import com.zszd.ai.dao.WorkPointDao;
+import com.zszd.ai.dao.WpChangeDao;
+import com.zszd.ai.dao.impl.WorkPointDaoImpl;
+import com.zszd.ai.dao.impl.WpChangeDaoImpl;
+import com.zszd.ai.model.Employee;
+import com.zszd.ai.model.Goods;
+import com.zszd.ai.model.Workpoint;
+import com.zszd.ai.service.GoodsService;
+import com.zszd.ai.service.WpChangeService;
+import com.zszd.ai.utils.DataSourceUtil;
+import com.zszd.ai.utils.MyBatisUtil;
+
+public class WpChangeServiceImpl implements WpChangeService {
+	WpChangeDao wpChangeDao = new WpChangeDaoImpl();
+	GoodsService goodsService = new GoodsServiceImpl();
+	WorkPointDao workPointDao = new WorkPointDaoImpl();
+
+	@Override
+	public boolean updateWorkPoint(Employee employee, Goods goods) {
+		SqlSession sqlSession = null;
+		boolean flag = false;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			int row1 = sqlSession.getMapper(WpChangeDao.class).updateWorkPoint(
+					employee);
+			int row2 = sqlSession.getMapper(GoodsDao.class).updateGoodsStock(
+					goods);
+			Workpoint wp = new Workpoint();
+			wp.setEmployeeId(employee.getId());
+			wp.setRemarks("兑换" + goods.getGoodsName() + ",消耗工分："
+					+ goods.getGoodsPrice());
+			wp.setWorkpoint(-goods.getGoodsPrice());
+			int row3 = sqlSession.getMapper(WorkPointDao.class).addWorkPointRecord(wp);
+			//如何进行事务控制
+			flag = true;
+			sqlSession.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			sqlSession.rollback();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return flag;	 
+	}
+}

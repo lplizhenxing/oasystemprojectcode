@@ -1,0 +1,60 @@
+package com.zszd.ai.model;
+
+public class Department {
+	private int id;
+	private String name;
+	private int companyId;
+	private String telephone;
+	private String fax;
+	private String buildTime;
+	private String address;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getCompanyId() {
+		return companyId;
+	}
+	public void setCompanyId(int companyId) {
+		this.companyId = companyId;
+	}
+	public String getTelephone() {
+		return telephone;
+	}
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
+	}
+	public String getFax() {
+		return fax;
+	}
+	public void setFax(String fax) {
+		this.fax = fax;
+	}
+	public String getBuildTime() {
+		return buildTime;
+	}
+	public void setBuildTime(String buildTime) {
+		this.buildTime = buildTime;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	@Override
+	public String toString() {
+		return "Department [id=" + id + ", name=" + name + ", companyId="
+				+ companyId + ", telephone=" + telephone + ", fax=" + fax
+				+ ", buildTime=" + buildTime + ", address=" + address + "]";
+	}
+	
+}

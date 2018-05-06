@@ -1,0 +1,111 @@
+package com.zszd.ai.service.impl;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
+
+import com.zszd.ai.dao.EmployeeDao;
+import com.zszd.ai.dao.SysUserDao;
+import com.zszd.ai.dao.WorkPointDao;
+import com.zszd.ai.dao.impl.EmployeeDaoImpl;
+import com.zszd.ai.dao.impl.SysUserDaoImpl;
+import com.zszd.ai.dao.impl.WorkPointDaoImpl;
+import com.zszd.ai.model.Employee;
+import com.zszd.ai.model.SysUser;
+import com.zszd.ai.service.SysUserService;
+import com.zszd.ai.utils.DataSourceUtil;
+/**
+ * 系统用户接口实现
+ * @author lizx 20180103
+ *
+ */
+public class SysUserServiceImpl implements SysUserService {
+	SysUserDao sysUserDao = new SysUserDaoImpl();
+
+	@Override
+	public int insert(SysUser sysUser) {
+		return sysUserDao.insert(sysUser);
+	}
+
+	@Override
+	public int query(SysUser sysUser) {
+		// TODO Auto-generated method stub
+		return sysUserDao.query(sysUser);
+	}
+
+	@Override
+	public int updateLoginRecord(SysUser sysUser) {
+		// TODO Auto-generated method stub
+		return sysUserDao.updateLoginRecord(sysUser);
+	}
+
+	@Override
+	public int queryLoginCountsByName(String name) {
+		// TODO Auto-generated method stub
+		return sysUserDao.queryLoginCountsByName(name);
+	}
+
+	@Override
+	public int getUserIdByUserName(String name) {
+		// TODO Auto-generated method stub
+		return sysUserDao.getUserIdByUserName(name);
+	}
+
+	@Override
+	public SysUser getUserInfoByUserName(String name) {
+		return sysUserDao.getUserInfoByUserName(name);
+	}
+
+	@Override
+	public int updateUserPasswordInfo(SysUser sysUser) {
+		// TODO Auto-generated method stub
+		return sysUserDao.updateUserPasswordInfo(sysUser);
+	}
+
+	@Override
+	public int updateSysUser(SysUser sysUser) {
+		Connection conn = DataSourceUtil.getConnection();
+		return sysUserDao.updateSysUser(conn,sysUser);
+	}
+
+	@Override
+	public List<SysUser> getAllUserInfo() {
+		Connection conn = DataSourceUtil.getConnection();
+		return sysUserDao.getAllUserInfo(conn);
+	}
+
+	@Override
+	public List<SysUser> getAllOnLineUserInfo() {
+		Connection conn = DataSourceUtil.getConnection();
+		return sysUserDao.getAllOnLineUserInfo(conn);
+	}
+
+	public boolean insertNewEmployee(SysUser sysUser, Employee employee) {
+		// TODO Auto-generated method stub
+		Connection conn = null;
+		boolean flag = false;
+		conn = DataSourceUtil.getConnection();
+		try {
+			conn.setAutoCommit(false);
+			EmployeeDao  employeeDao = new EmployeeDaoImpl();
+			
+			int rows =  sysUserDao.insert(sysUser);
+			int rows2 = employeeDao.insert(employee);
+			
+			flag = true;
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(null, conn, null);
+		}
+		return flag;
+	}
+	
+
+}

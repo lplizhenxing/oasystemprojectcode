@@ -1,0 +1,17 @@
+#videoplayid {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+
+#videoplayid {
+  position: relative;
+  width: 900px;
+  height: 550px;
+  top: -110;
+  left: -130;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}

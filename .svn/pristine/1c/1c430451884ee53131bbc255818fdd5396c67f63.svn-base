@@ -1,0 +1,66 @@
+<%@page import="com.zszd.ai.service.impl.ComplaintServiceImpl"%>
+<%@page import="com.zszd.ai.model.Complaint"%>
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ include file="../common/userlogin.jsp"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<%
+	Complaint comp = new Complaint();
+	if(request.getParameter("id") != null) {
+		int id = Integer.parseInt(request.getParameter("id"));
+		comp = new ComplaintServiceImpl().queryComplaintById(id);
+	}
+%>
+<html>
+<head>
+<base href="<%=basePath%>">
+<title>提交反馈</title>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" type="text/css" href="static/css/userindex.css">
+</head>
+<body>
+    <%@ include file="../common/userheader.jsp"%>
+	<section id="section">
+    <%@ include file="../common/userleft.jsp"%>
+	<div id="right">
+	    <h3>反馈</h3>
+		<form action="complaint?opr=feedbackComplaint&id=<%=comp.getId() %>" method="post">
+			<table>
+				<tr>
+					<td style="width:80px">投诉内容：</td>
+					<td><textarea rows="20" cols="70"><%=comp.getContent() %></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td style="width:80px">反馈内容：</td>
+					<td><textarea id="feedbackContent" name="feedbackContent" rows="20" cols="70"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td style="width:80px"><input type="submit" value="提交"></td>
+					<td><input type="reset" value="重置"></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	</section>
+	<%@ include file="../common/footer.jsp"%>
+</body>
+<script type="text/javascript">
+	$(function() {
+		$("form").submit(function() {
+			var postContent = $("#feedbackContent").val();
+			if (postContent.trim() == "") {
+				alert("内容不能为空！");
+				return false;
+			}
+			return true;
+		});
+	});
+</script>
+</html>
+

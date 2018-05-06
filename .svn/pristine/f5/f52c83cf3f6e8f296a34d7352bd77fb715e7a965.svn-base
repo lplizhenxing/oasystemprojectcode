@@ -1,0 +1,9 @@
+package com.zszd.ai.dao;
+
+import com.zszd.ai.model.Sign;
+
+public interface SignDao {
+	public Sign findById(String name);
+	public int upDateSign(Sign sign,String name);
+	
+} 

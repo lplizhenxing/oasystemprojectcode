@@ -1,0 +1,28 @@
+@CHARSET "UTF-8";
+
+#modify {
+	padding:30px;
+}
+
+#modify a {
+	text-decoration: none;
+	color: red;
+	font-size: 26px;
+}
+
+#modify table {
+	border: 1px solid red;
+}
+
+#modify td, #modify th{
+	border: 1px solid red;
+}
+
+#modify input{
+    width:300px;
+}
+
+
+#modify span{
+	font-size: 26px;
+}

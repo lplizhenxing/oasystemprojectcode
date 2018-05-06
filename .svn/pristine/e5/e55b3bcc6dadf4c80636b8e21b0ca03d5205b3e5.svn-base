@@ -1,0 +1,43 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+	<div id="right">
+		<form action="requirements?opr=submitCheck" method="post">
+			<input type="hidden" value="${requestScope.requirements.id}"
+				name="id"><br />
+			<table>
+				<tr>
+					<td style="width:80px">修改需求标题：&nbsp;&nbsp;</td>
+					<td><input id="bugsTitle" type="text" name="requirementsTitle"
+						value="${requestScope.requirements.title}" />
+					</td>
+				</tr>
+				<tr>
+					<td style="width:80px">修改需求内容：&nbsp;&nbsp;</td>
+					<td><textarea id="bugsContent" name="requirementsContent" rows="20"
+							cols="70">${requestScope.requirements.content}</textarea>
+					</td>
+				</tr>
+				<tr>
+					<td style="width:80px">分派人员：&nbsp;&nbsp;</td>
+					<td><input id="resolveDevName" type="text"
+						name="resolveDevName" /></td>
+				</tr>
+
+				<tr>
+					<td style="width:80px"><input type="submit" value="发放 ">
+					</td>
+					<td><input type="reset" value="重置"></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	</section>
+	<%@ include file="../common/footer.jsp"%>
+<script type="text/javascript">
+	$(function() {
+		$("form").submit(function() {
+
+		});
+	});
+</script>
+

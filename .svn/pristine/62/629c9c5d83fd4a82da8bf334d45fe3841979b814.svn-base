@@ -1,0 +1,40 @@
+package com.zszd.ai.service.impl;
+
+import java.sql.Connection;
+import java.util.List;
+
+import com.zszd.ai.dao.BugsDao;
+import com.zszd.ai.dao.impl.BugsDaoImpl;
+import com.zszd.ai.model.Bugs;
+import com.zszd.ai.service.BugsService;
+import com.zszd.ai.utils.DataSourceUtil;
+
+public class BugsServiceImpl implements BugsService {
+
+	BugsDao bugsDao = new BugsDaoImpl();
+	
+	@Override
+	public List<Bugs> queryAllDebugsInfo() {
+		// TODO Auto-generated method stub
+		return bugsDao.queryAllDebugsInfo();
+	}
+
+	@Override
+	public int addBugsInfo(Bugs bugs) {
+		Connection conn = DataSourceUtil.getConnection();
+		return bugsDao.addBugsInfo(conn,bugs);
+	}
+
+	@Override
+	public Bugs getBugsById(int id) {
+		Connection conn = DataSourceUtil.getConnection();
+		return bugsDao.getBugsById(conn,id);
+	}
+
+	@Override
+	public int updateBugsInfo(Bugs bugs) {
+		Connection conn = DataSourceUtil.getConnection();
+		return bugsDao.updateBugsInfo(conn,bugs);
+	}
+
+}

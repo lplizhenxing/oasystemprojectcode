@@ -1,0 +1,22 @@
+@CHARSET "UTF-8";
+#add {
+	padding: 30px;
+}
+
+#add a {
+	text-decoration: none;
+	color: red;
+	font-size: 26px;
+}
+
+#add table {
+	border: 1px solid red;
+}
+
+#add td,#add th {
+	border: 1px solid red;
+}
+
+#add input{
+    width:300px;
+}

@@ -1,0 +1,44 @@
+package com.zszd.ai.model;
+
+import java.util.Date;
+
+public class SignRecord {
+
+	private int id;
+	private String userName;
+	private Date signTime;
+	private Date signOutTime;
+	private int state;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public Date getSignTime() {
+		return signTime;
+	}
+	public void setSignTime(Date signTime) {
+		this.signTime = signTime;
+	}
+	public Date getSignOutTime() {
+		return signOutTime;
+	}
+	public void setSignOutTime(Date signOutTime) {
+		this.signOutTime = signOutTime;
+	}
+	public int getState() {
+		return state;
+	}
+	public void setState(int state) {
+		this.state = state;
+	}
+	
+	
+}

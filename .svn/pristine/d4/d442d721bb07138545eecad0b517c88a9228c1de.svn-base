@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zszd.ai.dao.employee.EmployeeDao">
+	<select id="getEmployeeInfoByLoginName" resultType="Employee">
+		select
+		a.*,b.name as companyName ,c.name as departmentName,d.name as
+		devgroupName , r.roleName,cc.classLeader,cc.classTeacher
+		from employee
+		a
+		left join classes cc on a.classId = cc.id
+		left join role r on a.roleId
+		= r.id
+		left join company b on a.companyId = b.id
+		left join department c
+		on
+		a.departmentId = c.id
+		left join devgroup d on a.devgroupId = d.id
+		where a.abbr =#{name}
+	</select>
+
+	<select id="queryAllEmployeeInfo" resultType="Employee">
+		select a.*,b.name
+		as companyName ,c.name as departmentName,d.name as
+		devgroupName,
+		r.roleName,cc.classLeader,cc.classTeacher
+		from employee a
+		left join
+		classes cc on a.classId = cc.id
+		left join role r on a.roleId
+		= r.id
+		left
+		join company b on a.companyId = b.id
+		left join department c on
+		a.departmentId = c.id
+		left join devgroup d on a.devgroupId = d.id
+		order
+		by a.devgroupId asc
+	</select>
+
+	<select id="queryAllEmployeeInfoByCompanyId" resultType="Employee">
+		select
+		a.*,b.name as companyName ,c.name as departmentName,d.name as
+		devgroupName, r.roleName,cc.classLeader,cc.classTeacher
+		from employee a
+		left join classes cc on a.classId = cc.id
+		left join role r on a.roleId
+		= r.id
+		left join company b on a.companyId = b.id
+		left join department c
+		on
+		a.departmentId = c.id
+		left join devgroup d on a.devgroupId = d.id
+		where
+		a.companyId = #{companyId} order by a.devgroupId asc
+	</select>
+
+	<select id="queryWorkPointByName" resultType="int">
+		select workpoints
+		from employee where name = #{name}
+	</select>
+
+	<select id="queryIdByName" resultType="int">
+		select id from employee
+		where name = #{name}
+	</select>
+
+	<select id="queryWorkPointById" resultType="int">
+		select workpoints
+		from employee where id =#{id}
+	</select>
+
+	<select id="queryNameById" resultType="string">
+		select name from employee
+		where id =#{id}
+	</select>
+
+	<select id="getEmployeeCountByGroupId" resultType="int">
+		select
+		count(*) from employee where devgroupId =#{devgroupId}
+	</select>
+
+
+	<select id="queryEmployeeInfoById" resultType="Employee">
+		select * from
+		employee where id = #{id}
+	</select>
+
+
+	<select id="getEmployeeNameByLoginName" resultType="string">
+		select name
+		from employee where abbr = #{name}
+	</select>
+
+	<select id="queryIdLikeName" resultType="int">
+		select id from employee
+		where name like CONCAT('%',#{name},'%')
+	</select>
+
+
+
+	<select id="queryWorkPointByAbbr" resultType="int">
+		select workpoints
+		from employee where abbr =#{name}
+	</select>
+
+	<insert id="insert" parameterType="Employee">
+		insert into employee
+		(name,abbr,sex,validDocuments,companyId,roleId,classId) values
+		(#{name},#{abbr},#{sex},#{validDocuments},#{companyId},#{roleId},#{classId})
+	</insert>
+
+	<update id="updateEmployeeInfo" parameterType="Employee">
+		update employee
+		set name = #{name}
+		,companyId=#{companyId},workpoints=#{workpoints},validDocuments=#{validDocuments},roleId=#{roleId},classId
+		= #{classId}
+		where
+		id =#{id}
+	</update>
+
+	<update id="updateAllInfo" parameterType="Employee">
+		update
+		employee set
+		workType=#{workType},workUnit=#{workUnit},workState=#{workState},major=#{major},endSchool=#{endSchool},
+		education=#{education},endTime=#{endTime},postalcode=#{postalcode},phone=#{phone},address=#{address},intentionalCity=#{intentionalCity},
+		intentionalPost=#{intentionalPost},email=#{email},birthday=#{birthday}
+		where id=#{id}
+	</update>
+
+	<update id="updateEmployeeWorkPoint" parameterType="Employee">
+		update
+		employee set workpoints = #{workpoints} where id =#{id}
+	</update>
+
+	<select id="queryAllEmployeeInfoByClassLeader" resultType="Employee">
+		select a.*,b.name as companyName ,c.name as departmentName,d.name as
+		devgroupName, r.roleName,cc.classLeader,cc.classTeacher
+		from employee a
+		left join classes cc on a.classId = cc.id
+		left join role r on a.roleId
+		= r.id
+		left join company b on a.companyId = b.id
+		left join department c
+		on
+		a.departmentId = c.id
+		left join devgroup d on a.devgroupId = d.id
+		where cc.classLeader = #{name}
+		order by a.companyId asc, a.departmentId
+		desc
+	</select>
+
+	<select id="queryAllClassLeader" resultType="Employee">
+		select *
+		from
+		employee where roleId = 2
+	</select>
+
+	<select id="queryAllClassTeacher" resultType="Employee">
+		select *
+		from
+		employee where roleId = 3
+	</select>
+
+
+	<!-- 分页查询 -->
+	<select id="getEmployeeCount" resultType="int">
+		select count(1)
+		from employee a
+		left join classes cc on a.classId =
+		cc.id
+		left join role r on a.roleId
+		= r.id
+		left join company b on
+		a.companyId = b.id
+		left join department c
+		on
+		a.departmentId = c.id
+		left
+		join devgroup d on a.devgroupId = d.id
+		where 1=1
+		<if test="queryEmployeeName!=null">
+			and a.name like CONCAT('%',#{queryEmployeeName},'%')
+		</if>
+		<if test="
+			queryDevgroupName !=null ">
+			and d.name like
+			CONCAT('%',#{queryDevgroupName},'%')
+		</if>
+		<if test="queryDepartmentName != null">
+			and c.name like CONCAT('%',#{queryDepartmentName},'%')
+		</if>
+		<if test="queryCompanyName != null">
+			and b.name like CONCAT('%',#{queryCompanyName},'%')
+		</if>
+		<if test="_queryUserRole != 0">
+			and a.roleId like CONCAT('%',#{_queryUserRole},'%')
+		</if>
+	</select>
+
+	<select id="getEmployeeCountByClassLeader" resultType="int">
+		select count(1)
+		from employee a
+		left join classes cc on a.classId =
+		cc.id
+		left join role r on a.roleId
+		= r.id
+		left join company b on
+		a.companyId = b.id
+		left join department c
+		on
+		a.departmentId = c.id
+		left
+		join devgroup d on a.devgroupId = d.id
+		where cc.classLeader = #{name}
+		<if test="queryEmployeeName!=null">
+			and a.name like CONCAT('%',#{queryEmployeeName},'%')
+		</if>
+		<if test="queryDevgroupName != null">
+			and d.name like CONCAT('%',#{queryDevgroupName},'%')
+		</if>
+		<if test="queryDepartmentName != null">
+			and c.name like CONCAT('%',#{queryDepartmentName},'%')
+		</if>
+		<if test="queryCompanyName != null">
+			and b.name like CONCAT('%',#{queryCompanyName},'%')
+		</if>
+		<if test="_queryUserRole != 0">
+			and a.roleId like CONCAT('%',#{_queryUserRole},'%')
+		</if>
+	</select>
+
+	<select id="getEmployeeListBy" resultType="Employee">
+		select a.*,b.name as companyName ,c.name as departmentName,d.name as
+		devgroupName, r.roleName,cc.classLeader,cc.classTeacher
+		from employee a
+		left join classes cc on a.classId = cc.id
+		left join role r on a.roleId
+		= r.id
+		left join company b on a.companyId = b.id
+		left join department c
+		on
+		a.departmentId = c.id
+		left join devgroup d on a.devgroupId = d.id
+		where 1=1
+		<if test="queryEmployeeName!=null">
+			and a.name like CONCAT('%',#{queryEmployeeName},'%')
+		</if>
+		<if test="queryDevgroupName != null">
+			and d.name like CONCAT('%',#{queryDevgroupName},'%')
+		</if>
+		<if test="queryDepartmentName != null">
+			and c.name like CONCAT('%',#{queryDepartmentName},'%')
+		</if>
+		<if test="queryCompanyName != null">
+			and b.name like CONCAT('%',#{queryCompanyName},'%')
+		</if>
+		<if test="_queryUserRole != 0">
+			and a.roleId like CONCAT('%',#{_queryUserRole},'%')
+		</if>
+		order by a.workpoints ${sort}
+		limit
+		#{currentPage},#{pageSize}
+	</select>
+
+	<select id="getEmployeeListByClassLeader" resultType="Employee">
+		select a.*,b.name as companyName ,c.name as departmentName,d.name as
+		devgroupName, r.roleName,cc.classLeader,cc.classTeacher
+		from employee a
+		left join classes cc on a.classId = cc.id
+		left join role r on a.roleId
+		= r.id
+		left join company b on a.companyId = b.id
+		left join department c
+		on
+		a.departmentId = c.id
+		left join devgroup d on a.devgroupId = d.id
+		where cc.classLeader = #{name}
+		<if test="queryEmployeeName!=null">
+			and a.name like CONCAT('%',#{queryEmployeeName},'%')
+		</if>
+		<if test="queryDevgroupName != null">
+			and d.name like CONCAT('%',#{queryDevgroupName},'%')
+		</if>
+		<if test="queryDepartmentName != null">
+			and c.name like CONCAT('%',#{queryDepartmentName},'%')
+		</if>
+		<if test="queryCompanyName != null">
+			and b.name like CONCAT('%',#{queryCompanyName},'%')
+		</if>
+		<if test="_queryUserRole != 0">
+			and a.roleId like CONCAT('%',#{_queryUserRole},'%')
+		</if>
+		order by a.workpoints ${sort}
+		limit
+		#{currentPage},#{pageSize}
+	</select>
+	
+	<select id="checkabbrExist" resultType="Employee" >
+	     select  *  from  employee a  where a.abbr = #{abbr}
+	</select>
+</mapper>

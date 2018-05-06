@@ -1,0 +1,61 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+<div id="right">
+	<div id="view">
+		<div class="location">
+			<a><strong>你现在所在的位置是:</strong> <span>公司管理</span> </a>
+		</div>
+		<br />
+		<div class="search">
+			<form method="post"
+				action="${pageContext.request.contextPath }/sys/company/view.html">
+				<input name="method" value="query" class="input-text" type="hidden">
+				<span>公司名称：</span> <input name="queryCompanyName" class="input-text"
+					type="text" value="${queryCompanyName}"> <span>班级名称：</span> <input
+					name="queryClassName" class="input-text" type="text"
+					value="${queryClassName}"> <input type="hidden"
+					name="pageIndex" value="1" /> <input value="查 询" type="submit"
+					id="searchbutton">
+			</form>
+		</div>
+		<div id="content">
+			<a href="/zszd/sys/company/addCompany.html">成立新公司</a>
+			<table>
+				<c:if test="${requestScope.list!=null}">
+					<tr>
+						<th>序号&nbsp;&nbsp;</th>
+						<th>公司名称&nbsp;&nbsp;&nbsp;&nbsp;</th>
+						<th>所属班级&nbsp;&nbsp;&nbsp;&nbsp;</th>
+						<th>成立时间&nbsp;&nbsp;&nbsp;&nbsp;</th>
+						<th>操作权限&nbsp;&nbsp;&nbsp;&nbsp;</th>
+					</tr>
+					<c:forEach items="${requestScope.list}" var="company"
+						varStatus="num">
+						<tr>
+							<td>${num.count}&nbsp;&nbsp;</td>
+							<td>${company.name}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							<td>${company.className}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							<td>${company.buildTime}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							<td><c:if
+									test="${sessionScope.employee_Session.roleId eq 1}">
+									<a href="/zszd/sys/company/viewcompany.html?id=${company.id}">查看</a>
+									<a href="/zszd/sys/company/modifycompany.html?id=${company.id}">修改</a>
+									<a href="/zszd/sys/company/deletecompany.html?id=${company.id}">删除</a>
+								</c:if>
+			               </td>
+						</tr>
+					</c:forEach>
+				</c:if>
+			</table>
+			
+			<input type="hidden" id="totalPageCount" value="${totalPageCount}" />
+			<c:import url="/sys/rollPage/rollPage.html">
+				<c:param name="totalCount" value="${totalCount}" />
+				<c:param name="currentPageNo" value="${currentPageNo}" />
+				<c:param name="totalPageCount" value="${totalPageCount}" />
+			</c:import>
+		</div>
+	</div>
+</div>
+</section>
+<%@ include file="../common/footer.jsp"%>

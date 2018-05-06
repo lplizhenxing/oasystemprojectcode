@@ -1,0 +1,33 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+<div id="right">
+	<form action="leave?opr=add" method="post">
+		<table>
+			<tr>
+				<td style="width:80px">请假理由：&nbsp;&nbsp;</td>
+				<td><textarea rows="20" cols="40" id="leaveReason"
+						name="leaveReason"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td style="width:80px"><input type="submit" value="提交">
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
+</section>
+<%@ include file="../common/footer.jsp"%>
+<script type="text/javascript">
+	$(function() {
+		$("form").submit(function() {
+			var postTitle = $("#leaveReason").val();
+			if (postTitle.trim() == "") {
+				alert("请假理由不能为空！");
+				return false;
+			}
+			return true;
+		});
+	});
+</script>
+

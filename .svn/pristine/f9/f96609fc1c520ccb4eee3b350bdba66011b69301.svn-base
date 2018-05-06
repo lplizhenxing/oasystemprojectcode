@@ -1,0 +1,312 @@
+package com.zszd.ai.controller;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.zszd.ai.pojo.Company;
+import com.zszd.ai.pojo.Employee;
+import com.zszd.ai.pojo.Role;
+import com.zszd.ai.pojo.SysUser;
+import com.zszd.ai.service.company.CompanyService;
+import com.zszd.ai.service.company.CompanyServiceImpl;
+import com.zszd.ai.service.employee.EmployeeService;
+import com.zszd.ai.service.employee.EmployeeServiceImpl;
+import com.zszd.ai.service.sysfunctions.RoleService;
+import com.zszd.ai.service.sysfunctions.RoleServiceImpl;
+import com.zszd.ai.service.sysuser.SysUserService;
+import com.zszd.ai.service.sysuser.SysUserServiceImpl;
+import com.zszd.ai.tools.Constants;
+import com.zszd.ai.tools.MakeMD5;
+
+@Controller
+@RequestMapping("/sys/user")
+public class UserController {
+	private Logger logger = Logger.getLogger(UserController.class);
+
+	@Resource
+	SysUserService sysUserService = new SysUserServiceImpl();
+
+	@Resource
+	EmployeeService employeeService = new EmployeeServiceImpl();
+
+	@Resource
+	CompanyService companyService = new CompanyServiceImpl();
+
+	@Resource
+	RoleService roleService = new RoleServiceImpl();
+
+	// 实现跳转到修改密码页
+	@RequestMapping(value = "/modifypassword.html")
+	public String modifypassword() {
+		return "/sysuser/user_modify";
+	}
+
+	@RequestMapping(value = "/tomodifypassword.html", method = RequestMethod.POST)
+	public String modifypassword(@RequestParam String oldPassword,
+			@RequestParam String newPassword, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response) {
+		SysUser sysUser = (SysUser) session
+				.getAttribute(Constants.SYSUSER_SESSION);
+		if (null == oldPassword || "".equals(oldPassword)) {
+			request.setAttribute("error", "旧密码不能为空");
+			return "/sysuser/user_modify";
+		}
+		if (null == newPassword || "".equals(newPassword)) {
+			request.setAttribute("error", "新密码不能为空");
+			return "/sysuser/user_modify";
+		}
+		oldPassword = MakeMD5.getMD5(oldPassword); // 采用MD5算法加密
+		newPassword = MakeMD5.getMD5(newPassword); // 采用MD5算法加密
+		if (sysUser.getPassword().equals(oldPassword)) {
+			sysUser.setPassword(newPassword);
+			int row = sysUserService.updateUserPasswordInfo(sysUser);
+			if (row > 0) {
+				Cookie[] cookies = request.getCookies();
+				if (cookies != null) {
+					for (Cookie cookie : cookies) {
+						if (cookie.getName().equals("name")) {
+							cookie.setValue("");
+							cookie.setMaxAge(0);
+							response.addCookie(cookie);
+						} else if (cookie.getName().equals("password")) {
+							cookie.setValue("");
+							cookie.setMaxAge(0);
+							response.addCookie(cookie);
+						}
+					}
+				}
+				session.invalidate();
+				return "login";
+			} else {
+				request.setAttribute("error", "密码更新失败，请联系管理员！");
+				return "/sysuser/user_modify";
+			}
+
+		} else {
+			request.setAttribute("error", "旧密码不正确");
+			return "/sysuser/user_modify";
+		}
+
+	}
+
+	@RequestMapping(value = "employeeview.html")
+	public String employeeview(HttpServletRequest request, HttpSession session) {
+		int roleId = ((Employee) session
+				.getAttribute(Constants.EMPlOYEE_SESSION)).getRoleId();
+		String name = ((Employee) session
+				.getAttribute(Constants.EMPlOYEE_SESSION)).getName();
+		List<Employee> list = null;
+		if (roleId == Constants.MANAGER) {
+			list = employeeService.queryAllEmployeeInfo();
+		} else if (roleId == Constants.CLASSLEADER) {
+			list = employeeService.queryAllEmployeeInfoByClassLeader(name);
+		}
+
+		request.setAttribute("list", list);
+		return "employee/employee_list";
+	}
+
+	@RequestMapping(value = "sysUserview.html")
+	public String sysUserview(HttpServletRequest request) {
+		List<SysUser> list = sysUserService.queryAllSysUserInfo();
+		request.setAttribute("list", list);
+		return "sysuser/sysUser_list";
+	}
+
+	// 查看个人信息
+	@RequestMapping(value = "personInfo.html")
+	public String personInfo(HttpServletRequest request, HttpSession session) {
+		Employee employee = (Employee) session
+				.getAttribute(Constants.EMPlOYEE_SESSION);
+		SysUser sUser = (SysUser) session
+				.getAttribute(Constants.SYSUSER_SESSION);
+		request.setAttribute("employee", employee);
+		request.setAttribute("sUser", sUser);
+		return "employee/employee_info";
+	}
+
+	// 修改后 保存个人信息
+	@RequestMapping(value = "modifypersonInfo.html")
+	public String modifypersonInfo(HttpSession session,
+			HttpServletRequest request) throws ParseException {
+		String birthday = request.getParameter("birthday");
+		Date date = new SimpleDateFormat("yyyy-MM-dd").parse(birthday);
+		Employee employee = (Employee) session
+				.getAttribute(Constants.EMPlOYEE_SESSION);
+		employee.setWorkType(request.getParameter("workType"));
+		employee.setWorkUnit(request.getParameter("workUnit"));
+		employee.setWorkState(request.getParameter("workState"));
+		employee.setMajor(request.getParameter("major"));
+		employee.setEndSchool(request.getParameter("endSchool"));
+		employee.setEducation(request.getParameter("education"));
+		employee.setEndTime(request.getParameter("endTime"));
+		employee.setPostalcode(request.getParameter("postalcode"));
+		employee.setPhone(request.getParameter("phone"));
+		employee.setAddress(request.getParameter("address"));
+		employee.setIntentionalCity(request.getParameter("intentionalCity"));
+		employee.setIntentionalPost(request.getParameter("intentionalPost"));
+		employee.setEmail(request.getParameter("email"));
+		employee.setBirthday(date);
+		int row = employeeService.updateAllInfo(employee);
+		if (row > 0) {
+			request.setAttribute("msg", "修改成功");
+			session.setAttribute("employee", employee);
+			return "redirect:/sys/user/personInfo.html";
+		} else {
+			request.setAttribute("msg", "修改失败");
+			return "redirect:/sys/user/personInfo.html";
+		}
+	}
+
+	// 实现跳转到添加班级页
+	@RequestMapping(value = "/addEmployee.html")
+	public String addEmployee(HttpSession session, HttpServletRequest request) {
+		String name = ((Employee) session
+				.getAttribute(Constants.EMPlOYEE_SESSION)).getName();
+		List<Company> companies = companyService
+				.queryCompanyInfoByClassLeader(name);
+		request.setAttribute("companies", companies);
+		
+		List<Role> roles = roleService.queryAllRoleInfo();
+		request.setAttribute("roles", roles);
+		
+		return "employee/employee_add";
+	}
+
+	@RequestMapping(value = "toaddEmployee.html")
+	public String toaddEmployee(HttpServletRequest request, HttpSession session) {
+		String name = request.getParameter("username");
+		String abbr = request.getParameter("abbr");
+		String pwd = request.getParameter("password");
+		String repwd = request.getParameter("repassword");
+		String sex = request.getParameter("sex");
+		String companyId = request.getParameter("companyId");
+		String validDocuments = request.getParameter("validDocuments");
+		String roleId = request.getParameter("roleId");
+		String ipaddress = request.getRemoteAddr();
+		if (name == null || name.equals("")) {
+			request.setAttribute("message", "员工名称不能为空");
+			return "employee/employee_add";
+		} else if (abbr == null || abbr.equals("")) {
+			request.setAttribute("message", "昵称不能为空");
+			return "employee/employee_add";
+		} else if (pwd == null || pwd.equals("")) {
+			request.setAttribute("message", "密码不能为空");
+			return "employee/employee_add";
+		} else if (!repwd.equals(pwd)) {
+			request.setAttribute("message", "两次输入的密码不一致");
+			return "employee/employee_add";
+		} else if (validDocuments == null || validDocuments.equals("")) {
+			request.setAttribute("message", "证件号码不能为空");
+			return "employee/employee_add";
+		} else {
+			String md5pwd = MakeMD5.getMD5(pwd); // 采用MD5算法加密
+			SysUser sysUser = new SysUser();
+			sysUser.setName(abbr);
+			sysUser.setPassword(md5pwd);
+			sysUser.setLoginIPaddress(ipaddress);
+
+			int companyId2 = Integer.parseInt(companyId);
+			int classesId = companyService.queryCompanyById(companyId2)
+					.getClassId();
+
+			Employee employee = new Employee();
+			employee.setAbbr(abbr);
+			employee.setName(name);
+			employee.setRoleId(Integer.parseInt(roleId));
+			if (sex.equals("man")) {
+				employee.setSex("男");
+			} else {
+				employee.setSex("女");
+			}
+			employee.setCompanyId(companyId2);
+			employee.setClassId(classesId);
+			employee.setValidDocuments(validDocuments);
+			boolean result = sysUserService
+					.insertNewEmployee(sysUser, employee);
+			if (result) {
+				return "redirect:/sys/user/employeeview.html";
+			} else {
+				request.setAttribute("message", "录入新员工失败，请重新注册！");
+				return "employee/employee_add";
+			}
+		}
+	}
+
+	@RequestMapping(value = "modifyEmployee.html")
+	public String modifyEmployee(HttpServletRequest request, HttpSession session) {
+		String name = ((Employee) session
+				.getAttribute(Constants.EMPlOYEE_SESSION)).getName();
+		List<Company> companies = companyService
+				.queryCompanyInfoByClassLeader(name);
+		request.setAttribute("companies", companies);
+
+		List<Role> roles = roleService.queryAllRoleInfo();
+		request.setAttribute("roles", roles);
+
+		String employeeId = request.getParameter("id");
+		Employee employee = employeeService.queryEmployeeInfoById(Integer
+				.parseInt(employeeId));
+		request.setAttribute("employee", employee);
+		return "employee/employee_modify";
+	}
+
+	@RequestMapping(value = "tomodifyEmployee.html")
+	public String tomodifyEmployee(HttpServletRequest request,
+			HttpSession session) {
+		String employeename = request.getParameter("employeename");
+		String validDocuments = request.getParameter("validDocuments");
+		String comId = request.getParameter("companyId");
+		String roleId = request.getParameter("roleId");
+		String workpoints = request.getParameter("workpoints");
+		String id = request.getParameter("employeeId");
+
+		int companyId = Integer.parseInt(comId);
+		int classesId = companyService.queryCompanyById(companyId).getClassId();
+
+		Employee employee = employeeService.queryEmployeeInfoById(Integer
+				.parseInt(id));
+		employee.setId(Integer.parseInt(id));
+		employee.setName(employeename);
+		employee.setValidDocuments(validDocuments);
+		employee.setCompanyId(companyId);
+		employee.setWorkpoints(Integer.parseInt(workpoints));
+		employee.setRoleId(Integer.parseInt(roleId));
+		employee.setClassId(classesId);
+		int row = employeeService.updateEmployeeInfo(employee);
+		if (row > 0) {
+			return "redirect:/sys/user/employeeview.html";
+		} else {
+			return "redirect:/sys/user/employeeview.html";
+		}
+	}
+
+	// ajax获取班主任信息
+	@RequestMapping(value = "/queryAllClassLeader.html", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Employee> queryAllClassLeader(HttpSession session) {
+		return employeeService.queryAllClassLeader();
+	}
+
+	// ajax获取学术老师信息
+	@RequestMapping(value = "/queryAllClassTeacher.html", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Employee> queryAllClassTeacher(HttpSession session) {
+		return employeeService.queryAllClassTeacher();
+	}
+}

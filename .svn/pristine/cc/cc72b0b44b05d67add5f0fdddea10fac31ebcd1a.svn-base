@@ -1,0 +1,61 @@
+package com.zszd.ai.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.zszd.ai.dao.GoodsDao;
+import com.zszd.ai.model.Goods;
+import com.zszd.ai.service.GoodsService;
+import com.zszd.ai.utils.MyBatisUtil;
+
+public class GoodsServiceImpl implements GoodsService {
+
+	@Override
+	public List<Goods> getAllGoodsInfo() {
+		SqlSession sqlSession = null;
+		List<Goods> goodsList = new ArrayList<Goods>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			goodsList = sqlSession.getMapper(GoodsDao.class).getAllGoodsInfo();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return goodsList;
+
+	}
+
+	@Override
+	public Goods queryGoodsInfoById(int goodsId) {
+		SqlSession sqlSession = null;
+		Goods goods=new Goods();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			goods=sqlSession.getMapper(GoodsDao.class).queryGoodsInfoById(goodsId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return goods;
+	}
+
+	@Override
+	public int updateGoodsStock(Goods goods) {
+		SqlSession sqlSession = null;
+		int count=0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			count=sqlSession.getMapper(GoodsDao.class).updateGoodsStock(goods);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return count;
+	}
+
+}

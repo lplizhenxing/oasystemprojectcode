@@ -1,0 +1,35 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+<div id="right">
+	<table>
+		<c:if test="${requestScope.list!=null}">
+			<tr>
+				<th>投诉编号&nbsp;&nbsp;</th>
+				<th>投诉内容&nbsp;&nbsp;</th>
+				<th>投诉时间&nbsp;&nbsp;</th>
+				<th>反馈内容&nbsp;&nbsp;</th>
+				<th>反馈人&nbsp;&nbsp;</th>
+				<th>反馈时间&nbsp;&nbsp;</th>
+				<th>操作</th>
+			</tr>
+			<c:forEach items="${requestScope.list}" var="complaint">
+				<tr>
+					<td colspan="7"><br /></td>
+				</tr>
+				<tr>
+					<td>${complaint.id}&nbsp;&nbsp;</td>
+					<td>${complaint.content}&nbsp;&nbsp;</td>
+					<td>${complaint.creationDate}&nbsp;&nbsp;</td>
+					<td>${complaint.feedback}&nbsp;&nbsp;</td>
+					<td>${complaint.feedbackMan}&nbsp;&nbsp;</td>
+					<td>${complaint.feedbackTime}&nbsp;&nbsp;</td>
+					<td><c:if test="${sessionScope.roleId == 1}">
+							<a href="<%=basePath%>complaint?opr=modify&id=${complaint.id}">反馈</a>
+						</c:if></td>
+				</tr>
+			</c:forEach>
+		</c:if>
+	</table>
+</div>
+</section>
+<%@ include file="../common/footer.jsp"%>

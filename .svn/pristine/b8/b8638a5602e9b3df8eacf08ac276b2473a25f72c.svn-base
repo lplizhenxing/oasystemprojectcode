@@ -1,0 +1,234 @@
+package com.zszd.ai.dao.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.zszd.ai.dao.SysUserDao;
+import com.zszd.ai.model.SysUser;
+import com.zszd.ai.utils.DataSourceUtil;
+/**
+ * 系统用户DAO实现类
+ * @author lizx 20180103
+ *
+ */
+public class SysUserDaoImpl implements SysUserDao {
+
+	@Override
+	public int insert(SysUser sysUser) {
+		int row =0;
+		Connection conn = DataSourceUtil.getConnection();
+		PreparedStatement ps=null;
+		String sql = "insert into sys_user (username,password,loginIPaddress,roleId) " +
+				"values (?,?,?,?)";
+		Object[] oo={sysUser.getName(),sysUser.getPassword(),sysUser.getLoginIPaddress(),sysUser.getRoleId()};
+		try {	
+		    row=DataSourceUtil.executeUpdate(conn, ps, sql, oo);
+		}finally{
+			DataSourceUtil.colseAll(ps, conn,null);
+		}
+		return row;
+	}
+
+	@Override
+	public int query(SysUser sysUser) {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		String sql = "select count(1) from sys_user where state=1 and username =? and password=?";
+		try {
+			Object[] oo = { sysUser.getName(),sysUser.getPassword() };
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return 0;
+	}
+
+	@Override
+	public int updateLoginRecord(SysUser sysUser) {
+		Connection conn = DataSourceUtil.getConnection();
+		int row =0;
+		PreparedStatement ps=null;
+		String sql = "update sys_user set lastloginDate = Now(),logincount = ?,loginIPaddress=?,isOnline=? where username=?";
+		Object[] oo={sysUser.getLogincount(),sysUser.getLoginIPaddress(),sysUser.getIsOnline(),sysUser.getName()};
+		try {	
+		 row=DataSourceUtil.executeUpdate(conn, ps, sql, oo);
+		}finally{
+			DataSourceUtil.colseAll(ps, null,null);
+		}
+		return row;
+	}
+
+	@Override
+	public int queryLoginCountsByName(String name) {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		String sql = "select logincount from sys_user where state=1 and username =?";
+		try {
+			Object[] oo = { name};
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return 0;
+	}
+
+	@Override
+	public int getUserIdByUserName(String name) {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		String sql = "select id from sys_user where state=1 and username =? ";
+		try {
+			Object[] oo = { name};
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+		return 0;
+	}
+
+	@Override
+	public SysUser getUserInfoByUserName(String name) {
+		Connection conn = DataSourceUtil.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+        SysUser sysUser = null;
+		String sql = "select * from sys_user where state=1 and username =? ";
+		try {
+			Object[] oo = { name};
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				sysUser = new SysUser();
+				sysUser.setId(rs.getInt("id"));
+				sysUser.setName(rs.getString("username"));
+				sysUser.setPassword(rs.getString("password"));
+				sysUser.setHeadPath(rs.getString("headPath"));
+			    sysUser.setIsOnline(rs.getString("isOnline"));
+				sysUser.setLoginIPaddress(rs.getString("loginIPaddress"));
+				sysUser.setState(rs.getInt("state"));
+				sysUser.setRoleId(rs.getInt("roleId"));
+				sysUser.setLogincount(rs.getInt("logincount"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+		return sysUser;
+	}
+
+	@Override
+	public int updateUserPasswordInfo(SysUser sysUser) {
+		Connection conn = DataSourceUtil.getConnection();
+		int row =0;
+		PreparedStatement ps=null;
+		String sql = "update sys_user set password=? where id=?";
+		Object[] oo={sysUser.getPassword(),sysUser.getId()};
+		try {	
+		 row=DataSourceUtil.executeUpdate(conn, ps, sql, oo);
+		}finally{
+			DataSourceUtil.colseAll(ps, null,null);
+		}
+		return row;
+	}
+
+	@Override
+	public int updateSysUser(Connection conn, SysUser sysUser) {
+		int row =0;
+		PreparedStatement ps=null;
+		String sql = "update sys_user set headPath=? where username=?";
+		Object[] oo={sysUser.getHeadPath(),sysUser.getName()};
+		try {	
+		 row=DataSourceUtil.executeUpdate(conn, ps, sql, oo);
+		}finally{
+			DataSourceUtil.colseAll(ps, conn,null);
+		}
+		return row;
+	}
+
+	@Override
+	public List<SysUser> getAllUserInfo(Connection conn) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+        SysUser sysUser = null;
+        List<SysUser> sysUsers = new ArrayList<SysUser>();
+		String sql = "select * from sys_user  where state = 1";
+		try {
+			Object[] oo = null;
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				sysUser = new SysUser();
+				sysUser.setId(rs.getInt("id"));
+				sysUser.setName(rs.getString("username"));
+				sysUser.setPassword(rs.getString("password"));
+				sysUser.setHeadPath(rs.getString("headPath"));
+			    sysUser.setIsOnline(rs.getString("isOnline"));
+				sysUser.setLoginIPaddress(rs.getString("loginIPaddress"));
+				sysUsers.add(sysUser);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+		return sysUsers;
+	}
+
+	@Override
+	public List<SysUser> getAllOnLineUserInfo(Connection conn) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+        SysUser sysUser = null;
+        List<SysUser> sysUsers = new ArrayList<SysUser>();
+		String sql = "select * from sys_user where state = 1 and isOnline ='Y'";
+		try {
+			Object[] oo = null;
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				sysUser = new SysUser();
+				sysUser.setId(rs.getInt("id"));
+				sysUser.setName(rs.getString("username"));
+				sysUser.setPassword(rs.getString("password"));
+				sysUser.setHeadPath(rs.getString("headPath"));
+			    sysUser.setIsOnline(rs.getString("isOnline"));
+				sysUser.setLoginIPaddress(rs.getString("loginIPaddress"));
+				sysUsers.add(sysUser);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+		return sysUsers;
+	}
+
+}

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zszd.ai.dao.DevgroupDao">
+	<select id="queryNameById">
+		select name from devgroup where id=#{id}
+	</select>
+	<select id="queryAllDevGroupInfo" resultMap="devgroup">
+		select *,(select name from department where id=departmentId)as departmentName from devgroup
+	</select>
+	<select id="queryDevGroupInfoById" resultMap="devgroup">
+		select *,(select name from department where id=departmentId)as departmentName from devgroup where id=#{id}
+	</select>
+	<resultMap id="devgroup" type="devgroup">
+		<result property="property" column="property"/>
+	</resultMap>
+	<select id="getDevGroupCountByDepartmentId" resultType="int">
+		select count(*) from devgroup where departmentId =#{id}
+	</select>
+	<update id="updateDevGroupInfo" parameterType="devgroup">
+		update devgroup set
+		name=#{name},watchword=#{watchword},departmentId=#{departmentId} where
+		id=#{id}
+	</update>
+	<delete id="deleteDevGroupById">
+		delete from devgroup where id=#{id}
+	</delete>
+	<insert id="insertDevGroup">
+		insert into devgroup (name,watchword,departmentId)
+		values(#{name},#{watchword},#{departmentId})
+	</insert>
+
+</mapper>

@@ -1,0 +1,38 @@
+package com.zszd.ai.service;
+
+import java.util.List;
+
+import com.zszd.ai.model.Speech;
+/**
+ * 
+ * @ClassName       SpeechService
+ * @Description    演讲接口（作废）
+ * @author            lizx
+ * @date           2018-1-21        上午11:45:19
+ */
+public interface SpeechService {
+    /**
+     * 
+     * @Title          queryAllSpeechInfo
+     * @Description    查看所有的演讲者信息
+     * @Tags           @return   
+     * @Return         List<Speech>   
+     * @throws
+     * @author           lizx
+     * @date           2018-1-21        上午11:45:28
+     */
+	List<Speech> queryAllSpeechInfo();
+	/**
+	 * 
+	 * @Title          updateClickNumberByVideo
+	 * @Description    更新演讲者点击数
+	 * @Tags           @param speech
+	 * @Tags           @return   
+	 * @Return         int   
+	 * @throws
+	 * @author           lizx
+	 * @date           2018-1-21        上午11:45:36
+	 */
+	int updateClickNumberByVideo(Speech speech);
+	
+}

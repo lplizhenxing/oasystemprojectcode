@@ -1,0 +1,15 @@
+package com.zszd.ai.service;
+
+import java.util.List;
+
+import com.zszd.ai.pojo.Complaint;
+
+public interface ComplaintService {
+	public int addComplaint(Complaint comp);
+	
+	public int addFeedback(Complaint comp);
+	
+	public List<Complaint> queryComplaint();
+	
+	public Complaint queryComplaintById(Integer id);
+}

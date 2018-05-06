@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zszd.ai.dao.LeaveDao">
+	<select id="queryAllLeaveInfo" resultType="Leave">
+		select * from
+		leaveRecord order by leaveTime desc
+	</select>
+
+	<select id="queryAllLeaveInfoByName" resultType="Leave">
+		select * from
+		leaveRecord where userName = #{name} order by leaveTime desc
+	</select>
+
+	<insert id="addLeaveInfo" parameterType="Leave">
+		insert into leaveRecord
+		(userName,leaveReason) values (#{userName},#{leaveReason})
+	</insert>
+
+	<update id="approveLeaveInfo" parameterType="Leave">
+		update leaveRecord
+		set state=#{state},approvalName=#{approvalName} ,
+		approvalTime
+		=#{approvalTime} where id=#{id}
+	</update>
+
+	<update id="rejectLeaveInfo" parameterType="Leave">
+		update leaveRecord
+		set state=#{state},approvalName=#{approvalName} ,
+		approvalTime
+		=#{approvalTime} where id=#{id}
+	</update>
+
+	<update id="cancelLeaveByLeaveId" parameterType="Leave">
+		update
+		leaveRecord set state="已取消" where id=#{leaveId}
+	</update>
+
+	<select id="queryAllLeaveInfoByCompanyId" resultType="Leave">
+		select * from
+		leaveRecord a,employee b where a.userName = b.abbr and b.companyId = #{companyId}  order by a.leaveTime desc
+	</select>
+	
+	<select id="queryAllLeaveInfoByCompanyIdAndName" resultType="Leave">
+		select * from
+		leaveRecord a,employee b where a.userName = b.abbr and b.companyId = #{companyId}
+		and a.userName = #{name}  order by a.leaveTime desc
+	</select>
+
+</mapper>

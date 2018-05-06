@@ -1,0 +1,47 @@
+package com.zszd.ai.dao.impl;
+
+import java.util.List;
+
+import com.zszd.ai.dao.WorkPointDao;
+import com.zszd.ai.model.Page;
+import com.zszd.ai.model.Workpoint;
+/**
+ * 工分DAO实现类
+ * @author lizx 20180103
+ *
+ */
+public class WorkPointDaoImpl implements WorkPointDao {
+
+	@Override
+	public List<Workpoint> queryAllWorkPointInfo() {
+		return null;
+
+	}
+
+	@Override
+	public List queryWorkPointRecordByEmployeeId(int employeeId) {
+		return null;
+	}
+
+	@Override
+	public int addWorkPointRecord(Workpoint wp) {
+		return 0;
+	}
+
+	@Override
+	public int getWorkPointRecordCountByEmployeeId(int employeeId) {
+		return 0;
+	}
+
+	@Override
+	public List<Workpoint> queryWorkPointRecordPageLikeEmployeeName(String name,
+			int currPageNum,int pageSize) {
+		return null;
+	}
+
+	@Override
+	public List<Workpoint> queryWorkPointInfoByEmployeeId(int employeeId) {
+		return null;
+	}
+
+}

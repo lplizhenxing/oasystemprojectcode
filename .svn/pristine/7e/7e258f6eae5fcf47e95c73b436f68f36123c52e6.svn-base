@@ -1,0 +1,39 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<footer id="footer">
+	<p>
+		公司产品：<a href="http://192.168.5.121:8080/SnacksProject" target="_blank">豪哥哥零食系统</a>
+		<a href="http://192.168.5.116:8080/EasyRent/index.jsp" target="_blank">杭租租房系统</a>
+		<a href="http://192.168.1.223/projectU2/" target="_blank">七仔租车系统</a> <a
+			href="http://192.168.5.113:8080/ShareBike/jsp/menu.jsp"
+			target="_blank">共享单车系统</a> <a href="#" target="_blank">啄木鸟家庭医生系统</a>
+	</p>
+	<p>
+		常用链接： <a href="http://www.w3school.com.cn/" target="_blank">w3school</a>
+		<a href="http://tool.oschina.net/apidocs/" target="_blank">API文档集合</a>
+		<a href="http://s.bdqn.cn/" target="_blank">北大青鸟云课堂</a> <a
+			href="http://www.baidu.com" target="_blank">百度</a> <a
+			href="https://www.csdn.net/" target="_blank">CSDN</a> <a
+			href="https://www.cnblogs.com/" target="_blank">博客园</a>
+	</p>
+</footer>
+</body>
+</html>
+<script type='text/javascript' src="statics/js/jquery-1.12.4.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$.ajax({
+			type : "GET",
+			url : "/zszd/sys/functionRole/queryFunctionRoleByRoleId.html",
+			dataType : "json",
+			success : function(data) {
+				var obj = eval(data);
+				var optionstring = "";
+				$(obj).each(function(index) {
+					var val = obj[index];
+                    optionstring += "<li><a href =\""+ val.functionPath +"\" >" + val.functionName + "</a></li>";
+				});
+				$("#functions").html(optionstring);
+			}
+		});
+	});
+</script>

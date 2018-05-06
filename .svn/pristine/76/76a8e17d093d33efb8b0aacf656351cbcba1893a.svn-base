@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   <mapper namespace="com.zszd.ai.dao.company.CompanyDao">
+   	
+   	<select id="queryCompanyInfo" resultMap="company">
+   		select *,(select className from classes where id=classId) as className from company where state = 1
+   	</select>
+   	<select id="queryCompanyById" resultMap="company" parameterType="company">
+   		select *,(select className from classes where id=classId) as className from company where state = 1 and id=#{id}
+   	</select>
+   	<resultMap type="company" id="company">
+   		<result property="className" column="className"/>
+   	</resultMap>
+   	<insert id="insertCompany"  parameterType="company">
+   		insert into company (name,address,telephone,url,fax,buildTime,classId) values (#{name},#{address},#{telephone},#{url},#{fax},#{buildTime},#{classId})
+   	</insert>
+   	<update id="updateCompany" parameterType="company">
+   		update company set name=#{name},address=#{address},telephone=#{telephone},url=#{url},fax=#{fax},buildTime=#{buildTime},classId=#{classId}  where id=#{id}
+   	</update>
+   	<select id="countDepartmentByCompanyId" resultType="int">
+   		select count(*) from department where companyId=#{companyId}
+   	</select>
+   	<update id="deleteCompanyById">
+   		update company set state = 0  where id=#{id}
+   	</update>
+   	
+   	<select id="queryCompanyInfoByClassLeader" resultType="company">
+   	    select a.*,b.className as className
+   	    from company a ,classes b
+   	    where a.classId  = b.id
+   	    and b.classLeader = #{name}
+   	</select>
+   	
+   	<select id="getCompanyCount" resultType="int">
+		select count(1)
+		from
+		company a ,classes b
+		where a.classId  = b.id
+		<if test="queryClassName != null">
+			and b.className like CONCAT('%',#{queryClassName},'%')
+		</if>
+		<if test="queryCompanyName != null">
+			and a.name like CONCAT('%',#{queryCompanyName},'%')
+		</if>
+	</select>
+
+	<select id="getCompanyListBy" resultType="company">
+		select a.*,b.className as className
+		from
+		company a ,classes b
+		where a.classId  = b.id
+		<if test="queryClassName != null">
+			and b.className like CONCAT('%',#{queryClassName},'%')
+		</if>
+		<if test="queryCompanyName != null">
+			and a.name like CONCAT('%',#{queryCompanyName},'%')
+		</if>
+		limit #{currentPage},#{pageSize}
+	</select>
+   	
+   	
+   </mapper>

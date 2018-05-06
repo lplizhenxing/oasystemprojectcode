@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zszd.ai.dao.bugs.BugsDao">
+	<select id="queryAllDebugsInfo" resultType="Bugs">
+		select * from bugs
+		order by submitTime desc
+	</select>
+	<insert id="addBugsInfo" parameterType="Bugs">
+		insert into bugs
+		(title,content,userName) values
+		(#{title},#{content},#{userName})
+	</insert>
+	<select id="getBugsById" resultType="Bugs">
+		select * from bugs where id=#{id}
+	</select>
+	<update id="updateBugsInfo">
+		update bugs set
+		title=#{title},content=#{content},state=#{state},resolveDevName=#{resolveDevName}
+		where id=#{id}
+	</update>
+	<select id="queryAllDebugsInfoByCompanyId" resultType="Bugs">
+		select a.*
+		from bugs a , employee b where a.userName = b.name and b.companyId
+		=#{companyId} order by a.submitTime desc
+	</select>
+	<select id="queryAllDebugsInfoByCompanyIdAndName" resultType="Bugs">
+		select a.*
+		from bugs a , employee b where a.userName = b.name and b.companyId = #{companyId} and
+		(a.resolveDevName = #{name} or a.userName = #{name}) order by a.submitTime desc
+	</select>
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zszd.ai.dao.sysfunctions.FunctionsDao">
+	<select id="queryAllFunctionsInfo" resultType="Functions">
+		select * from functions where state=1 
+	</select>
+	
+	<select id="queryFunctionsInfoById" resultType="Functions">
+		select * from functions where state=1 and  id = #{id} 
+	</select>
+	
+	<insert id="addFunctionsInfo" parameterType="Functions">
+		insert into functions (dev,functionName,functionPath)
+		values (#{dev},#{functionName},#{functionPath})
+	</insert>
+	
+    <update id="updateFunctionsInfo" parameterType="Functions">
+		update functions set dev=#{dev},functionName=#{functionName},functionPath=#{functionPath}
+		where id=${id}
+	</update>
+	
+	<update id="delFunctionInfoById" parameterType="int">
+		update functions set state = 0
+		where id=${id}
+	</update>
+	
+	
+	<select id="getFunctionCount" resultType="int">
+		select count(1) from functions  where state =1
+		<if test="queryFunctionName != null">
+			and functionName like CONCAT('%',#{queryFunctionName},'%')
+		</if>
+		<if test="queryFunctionPath != null">
+			and functionPath like CONCAT('%',#{queryFunctionPath},'%')
+		</if>
+	</select>
+
+
+	<select id="getFunctionListBy" resultType="Functions">
+		select * from functions where state =1
+		<if test="queryFunctionName != null">
+			and functionName like CONCAT('%',#{queryFunctionName},'%')
+		</if>
+		<if test="queryFunctionPath != null">
+			and functionPath like CONCAT('%',#{queryFunctionPath},'%')
+		</if>
+		limit #{currentPageNo},#{pageSize}
+	</select>
+</mapper>

@@ -1,0 +1,251 @@
+package com.zszd.ai.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URLEncoder;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.zszd.ai.listener.OnlineUser;
+import com.zszd.ai.model.Employee;
+import com.zszd.ai.model.SysUser;
+import com.zszd.ai.service.EmployeeService;
+import com.zszd.ai.service.SysUserService;
+import com.zszd.ai.service.impl.CompanyServiceImpl;
+import com.zszd.ai.service.impl.EmployeeServiceImpl;
+import com.zszd.ai.service.impl.RoleServiceImpl;
+import com.zszd.ai.service.impl.SysUserServiceImpl;
+import com.zszd.ai.utils.MakeMD5;
+
+/**
+ * 登录处理 包括登入，登出，重新登录，验证用户名等
+ * 
+ * @author lizx 20180103
+ * 
+ */
+@WebServlet(urlPatterns = { "/dologin" }, name = "dologin")
+public class DologinServlet extends HttpServlet {
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		this.doPost(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+		String path = request.getContextPath();
+		String basePath = request.getScheme() + "://" + request.getServerName()
+				+ ":" + request.getServerPort() + path + "/";
+		HttpSession session = request.getSession();// 获取session
+		String name = (String) session.getAttribute("login");
+		String opr = request.getParameter("opr");
+		PrintWriter out = response.getWriter();
+		SysUserService sysUserService = new SysUserServiceImpl();
+		EmployeeService employeeService = new EmployeeServiceImpl();
+		// 登入功能设计 add by lizx
+		if ("loginnew".equals(opr)) {
+			String logname = request.getParameter("logname");// 登录名称
+			String pwd = request.getParameter("logpass");// 登录密码
+			String nologin = request.getParameter("nologin");// 是否10分钟免登陆
+			String ipaddress = request.getRemoteAddr();// 获取登录的IP地址
+			int cookTime = 0;
+			if (nologin == null) {
+				cookTime = -1; // 正值表示有效时间 0的时候表示立即失效 负值或者不设置表示关闭窗口就失效
+			} else {
+				cookTime = 600;
+			}
+			if (logname == null || logname.equals("")) {
+				request.setAttribute("message", "用户名不能为空");
+				request.getRequestDispatcher("loginnew.jsp").forward(request,
+						response);
+			} else if (pwd == null || pwd.equals("")) {
+				request.setAttribute("message", "密码不能为空");
+				request.getRequestDispatcher("loginnew.jsp").forward(request,
+						response);
+			} else {
+				// 采用MD5算法加密
+				String md5pwd = MakeMD5.getMD5(pwd);
+				SysUser sysUser = new SysUser();
+				sysUser.setName(logname);
+				sysUser.setPassword(md5pwd);
+
+				// 根据用户名和密码 查询是否有这个用户
+				int result = sysUserService.query(sysUser);
+				if (result > 0) {
+					// 根据登录名称，获取用户对象
+					SysUser sUser = sysUserService
+							.getUserInfoByUserName(logname);
+					int loginCount = sUser.getLogincount();
+					int roleId = sUser.getRoleId();
+					String roleName = new RoleServiceImpl().queryRoleNameByRoleId(roleId);
+
+					sysUser.setLogincount(loginCount + 1);// 登录次数+1
+					sysUser.setIsOnline("Y");// 设置登录状态
+					sysUser.setLoginIPaddress(ipaddress);// 设置登录IP地址
+
+					// 更新登录记录 包括最后登录时间，登录次数，是否登录，登录IP地址
+					int rows = sysUserService.updateLoginRecord(sysUser);
+
+					URLEncoder.encode(logname, "UTF-8");
+					// 存入cookie对象属性
+					Cookie namecookie = new Cookie("name", logname);// 登录名称
+					Cookie passwordcookie = new Cookie("password", md5pwd);// 登录名称
+					namecookie.setMaxAge(cookTime);
+					passwordcookie.setMaxAge(cookTime);
+					response.setCharacterEncoding("UTF-8");
+					response.addCookie(namecookie);
+					response.addCookie(passwordcookie);
+
+					Employee employee=employeeService.getEmployeeInfoByLoginName(logname);
+					int companyId =  employee.getCompanyId();
+					String companyName =  new CompanyServiceImpl().queryCompanyById(companyId).getName();
+					session.setAttribute("sUser", sUser);
+					session.setAttribute("employee",employee);
+					session.setAttribute("login", logname);
+					session.setAttribute("logincount", (loginCount + 1) + "");
+					session.setAttribute("roleId", roleId);
+					session.setAttribute("roleName", roleName);
+					session.setAttribute("companyId", companyId);
+					session.setAttribute("companyName", companyName);
+					session.setMaxInactiveInterval(6000);
+					
+                    //监听器 上线员工
+					OnlineUser onlineUser = new OnlineUser();
+					onlineUser.setSysUser(sysUser);
+					request.getSession().setAttribute("online", onlineUser);
+					
+					switch (roleId) {
+					case 1:
+					case 2:
+					case 3:
+					case 4:
+					case 5:
+					case 6:
+						out.print("<script type='text/javascript'>");
+						out.print("location.href=\"" + basePath
+								+ "jsp/user/userindex.jsp\";");
+						out.print("</script>");
+						break;
+					default:
+						request.setAttribute("message", "没有配置权限，请联系管理员添加权限！");
+						request.getRequestDispatcher("loginnew.jsp").forward(
+								request, response);
+						break;
+					}
+				} else {
+					request.setAttribute("message", "登陆失败，请重新登陆！");
+					request.getRequestDispatcher("loginnew.jsp").forward(
+							request, response);
+				}
+
+			}
+		} else if ("mianloginnew".equals(opr)) {
+			String logname = request.getParameter("username");// 登录名称
+			String pwd = request.getParameter("password");// 登录密码
+			String ipaddress = request.getRemoteAddr();// 获取登录的IP地址
+
+			// 根据登录名称，获取用户对象
+			SysUser sUser = sysUserService.getUserInfoByUserName(logname);
+			int loginCount = sUser.getLogincount();
+			// 根据用户名称查询到对应的权限，根据权限进入不同的主页
+			// 1 经理
+			// 2 班主任
+			// 3 教员
+			// 4 公司总裁
+			// 5 公司技术总监
+			// 6 普通员工
+			// 7 校长
+			int roleId = sUser.getRoleId();
+			String roleName = new RoleServiceImpl().queryRoleNameByRoleId(roleId);
+
+			SysUser sysUser = new SysUser();
+			sysUser.setName(logname);
+			sysUser.setLogincount(loginCount + 1);// 登录次数+1
+			sysUser.setIsOnline("Y");// 设置登录状态
+			sysUser.setLoginIPaddress(ipaddress);// 设置登录IP地址
+
+			// 更新登录记录 包括最后登录时间，登录次数，是否登录，登录IP地址
+			int rows = sysUserService.updateLoginRecord(sysUser);
+			
+			Employee employee=employeeService.getEmployeeInfoByLoginName(logname);
+			int companyId =  employee.getCompanyId();
+			String companyName =  new CompanyServiceImpl().queryCompanyById(companyId).getName();
+			session.setAttribute("login", logname);
+			session.setAttribute("logincount", (loginCount + 1) + "");
+			session.setAttribute("roleId", roleId);
+			session.setAttribute("roleName", roleName);
+			session.setAttribute("companyId", companyId);
+			session.setAttribute("companyName", companyName);
+			session.setMaxInactiveInterval(6000);
+
+			switch (roleId) {
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+			case 6:
+				out.print("<script type='text/javascript'>");
+				out.print("location.href=\"" + basePath
+						+ "jsp/user/userindex.jsp\";");
+				out.print("</script>");
+				break;
+			default:
+				request.setAttribute("message", "没有配置权限，请联系管理员添加权限！");
+				request.getRequestDispatcher("loginnew.jsp").forward(
+						request, response);
+				break;
+			}
+		} else if ("logout".equals(opr)) {
+			int loginCount = sysUserService.queryLoginCountsByName(name);
+			SysUser sysUser = new SysUser();
+			// 设置登录状态
+			sysUser.setLoginIPaddress("null");
+			sysUser.setName(name);
+			sysUser.setIsOnline("N");
+			sysUser.setLogincount(loginCount);
+			int rows = sysUserService.updateLoginRecord(sysUser);
+			
+			Cookie[] cookies = request.getCookies();
+			if (cookies != null) {
+				for (Cookie cookie : cookies) {
+					if (cookie.getName().equals("name")) {
+						cookie.setValue("");
+						cookie.setMaxAge(0);
+						response.addCookie(cookie);
+
+					} else if (cookie.getName().equals("password")) {
+						cookie.setValue("");
+						cookie.setMaxAge(0);
+						response.addCookie(cookie);
+
+					}
+				}
+			}
+			session.invalidate();
+			request.getRequestDispatcher("loginnew.jsp").forward(request,
+					response);
+		} else if ("validateUsername".equals(opr)) {
+			String username = request.getParameter("username");
+			boolean used = false;
+			SysUser sysUser = new SysUserServiceImpl()
+					.getUserInfoByUserName(username);
+			if (sysUser != null) {
+				used = true;
+			}
+			out.print(used);
+			out.flush();
+			out.close();
+		}
+	}
+}

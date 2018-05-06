@@ -1,0 +1,94 @@
+package com.zszd.ai.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.zszd.ai.model.Complaint;
+import com.zszd.ai.service.impl.ComplaintServiceImpl;
+
+@WebServlet(urlPatterns = { "/complaint" }, name = "complaint")
+public class ComplaintServlet extends HttpServlet {
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		this.doPost(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+
+		HttpSession session = request.getSession();// 获取session
+		String path = request.getContextPath();
+		String basePath = request.getScheme() + "://" + request.getServerName()
+				+ ":" + request.getServerPort() + path + "/";
+		PrintWriter out = response.getWriter();
+		String opr = request.getParameter("opr");
+		if ("list".equals(opr)) {
+			List<Complaint> list = new ComplaintServiceImpl().queryComplaint();
+			request.setAttribute("list", list);
+			request.getRequestDispatcher("jsp/complaint/complaint_search.jsp").forward(
+					request, response);
+		} else if(opr.equals("addComplaint")) {
+			String content = request.getParameter("complaintContent");
+			Date creationDate = new Date();
+			Complaint comp = new Complaint();
+			comp.setContent(content);
+			comp.setCreationDate(creationDate);
+			
+			int result = new ComplaintServiceImpl().addComplaint(comp);
+			if (result > 0) {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('投诉提交成功，等待反馈，点击确认回到投诉信息页面！');");
+				out.print("location.href=\"" + basePath + "complaint?opr=list\";");
+				out.print("</script>");
+			} else {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('投诉已反馈，请查看投诉信息！');");
+				out.print("location.href=\"" + basePath
+						+ "complaint?opr=list\";");
+				out.print("</script>");
+			}
+		} else if(opr.equals("feedbackComplaint")) {
+			String content = request.getParameter("feedbackContent");
+			Date feedbackTime = new Date();
+			Complaint comp = new Complaint();
+			comp.setFeedback(content);
+			String loginName = (String) session.getAttribute("login");
+			comp.setFeedbackMan(loginName);
+			int id = Integer.parseInt(request.getParameter("id"));
+			comp.setId(id);
+			comp.setFeedbackTime(feedbackTime);
+			int result = new ComplaintServiceImpl().addFeedback(comp);
+			if (result > 0) {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('投诉反馈成功，点击确认回到投诉信息页面！');");
+				out.print("location.href=\"" + basePath + "complaint?opr=list\";");
+				out.print("</script>");
+			} else {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('投诉已反馈，请查看投诉信息！');");
+				out.print("location.href=\"" + basePath
+						+ "complaint?opr=list\";");
+				out.print("</script>");
+			}
+		} else if ("modify".equals(opr)) {			
+			int id = Integer.parseInt(request.getParameter("id"));
+			Complaint comp = new ComplaintServiceImpl().queryComplaintById(id);
+			request.setAttribute("comp", comp);
+			request.getRequestDispatcher("jsp/complaint/complaint_feedback.jsp").forward(
+					request, response);
+		}
+	}
+
+}

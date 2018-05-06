@@ -1,0 +1,36 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+<div id="right">
+	<form action="functions?opr=submitModify" method="post">
+		<table>
+			<tr>
+				<td style="width:500px;"><input type="hidden"
+					value="${requestScope.functions.id}" name="id">
+				</td>
+			</tr>
+			<tr>
+				<td style="width:500px;">修改功能名称：<input type="text"
+					value="${requestScope.functions.functionName}" name="functionName">
+				</td>
+			</tr>
+			<tr>
+				<td style="width:500px;">修改功能路径：<input type="text"
+					value="${requestScope.functions.functionPath}" name="functionPath">
+				</td>
+			</tr>
+			<tr>
+				<td style="width:500px;">修改研发人员：<input type="text"
+					value="${requestScope.functions.dev}" name="dev">
+				</td>
+			</tr>
+			<tr>
+				<td><input type="submit" value="提交修改 ">
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
+</section>
+<%@ include file="../common/footer.jsp"%>
+
+

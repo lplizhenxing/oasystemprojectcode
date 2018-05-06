@@ -1,0 +1,65 @@
+ul,ol {
+	list-style-type: none;
+}
+
+select,input,img,select {
+	vertical-align: middle;
+}
+
+input {
+	font-size: 12px;
+}
+
+a {
+	text-decoration: none;
+	color: #000;
+}
+
+a:hover {
+	color: #c00;
+	text-decoration: none;
+}
+
+.clear {
+	clear: both;
+}
+
+#imgsd {
+	height: 50px;
+}
+
+h2 {
+	font-size: 20px;
+	text-align: center;
+}
+
+h2 span {
+	color: red
+}
+/* 大转盘样式 */
+.banner {
+	display: inline-block;
+	width: 55%;
+	margin-right: 320px;
+	float: right;
+	margin-right : 320px;
+	float: right;
+}
+
+.banner .turnplate {
+	display: block;
+	width: 100%;
+	position: relative;
+}
+
+.banner .turnplate canvas.item {
+	width: 100%;
+}
+
+.banner .turnplate img.pointer {
+	position: absolute;
+	width: 31.5%;
+	height: 42.5%;
+	left: 34.6%;
+	top: 23%;
+}

@@ -1,0 +1,156 @@
+package com.zszd.ai.service.report;
+
+import java.util.List;
+
+import com.zszd.ai.pojo.Report;
+import com.zszd.ai.pojo.ReportType;
+/**
+ * 
+ * @ClassName       ReportService
+ * @Description    员工报告接口
+ * @author            jinwj
+ * @date           2018-1-23        下午2:41:06
+ */
+public interface ReportService {
+    /**
+     * 
+     * @Title          addReport
+     * @Description    添加报告
+     * @Tags           @param report
+     * @Tags           @return   
+     * @Return         int   
+     * @throws
+     * @author           jinwj
+     * @date           2018-1-23        下午2:41:31
+     */
+	public int addReport(Report report);
+	/**
+	 * 
+	 * @Title          modifyReport
+	 * @Description    修改报告
+	 * @Tags           @param report
+	 * @Tags           @return   
+	 * @Return         int   
+	 * @throws
+	 * @author           jinwj
+	 * @date           2018-1-23        下午2:42:31
+	 */
+	public int modifyReport(Report report);
+	/**
+	 * 
+	 * @Title          deleteUserbyUsername
+	 * @Description    通过名字删报告
+	 * @Tags           @param username
+	 * @Tags           @return   
+	 * @Return         int   
+	 * @throws
+	 * @author           jinwj
+	 * @date           2018-1-23        下午2:43:06
+	 */
+	public int deleteReportbyUsername(String username);
+	/**
+	 * 
+	 * @Title          deleteUserbyId
+	 * @Description    通过id删报告
+	 * @Tags           @param id
+	 * @Tags           @return   
+	 * @Return         int   
+	 * @throws
+	 * @author           jinwj
+	 * @date           2018-1-23        下午2:43:27
+	 */
+	public int deleteReportbyId(Integer id) ;
+	/**
+	 * 
+	 * @param createDate 
+	 * @param queryReporttype 
+	 * @param queryEmployeeName 
+	 * @Title          getAllReportList
+	 * @Description    获得所以的报告
+	 * @Tags           @return   
+	 * @Return         List<Report>   
+	 * @throws
+	 * @author           jinwj
+	 * @date           2018-1-23        下午2:47:47
+	 */
+	public List<Report> getAllReportList() ;
+	/**
+	 * 
+	 * @Title          getReportListByReportType
+	 * @Description    通过报告类型来获得报告
+	 * @Tags           @param typeId
+	 * @Tags           @return   
+	 * @Return         List<Report>   
+	 * @throws
+	 * @author           jinwj
+	 * @date           2018-1-23        下午2:48:12
+	 */
+	public List<Report> getReportListByReportType(Integer typeId) ;
+	/**
+	 * 
+	 * @Title          getReportbyuserName
+	 * @Description    通过用户名获得报告
+	 * @Tags           @param userName
+	 * @Tags           @return   
+	 * @Return         List<Report>   
+	 * @throws
+	 * @author           jinwj
+	 * @date           2018-1-23        下午2:49:22
+	 */
+	public List<Report> getReportbyuserName(String userName) ;
+	/**
+	 * 
+	 * @Title          getReportbyId
+	 * @Description    通过id查询报告
+	 * @Tags           @param id
+	 * @Tags           @return   
+	 * @Return         Report   
+	 * @throws
+	 * @author           jinwj
+	 * @date           2018-1-23        下午2:49:43
+	 */
+	public Report getReportbyId(Integer id) ;
+	/**
+	 * 
+	 * @Title          getAllReportType
+	 * @Description    获得所以报告类型
+	 * @Tags           @return   
+	 * @Return         List<ReportType>   
+	 * @throws
+	 * @author           jinwj
+	 * @date           2018-1-23        下午2:50:02
+	 */
+	public List<ReportType> getAllReportType() ;
+	/**
+	 * 
+	 * @Title          gettypeIdByReportTypename
+	 * @Description    通过报告类型查typeId
+	 * @Tags           @param typename
+	 * @Tags           @return   
+	 * @Return         ReportType   
+	 * @throws
+	 * @author           jinwj
+	 * @date           2018-1-23        下午2:50:20
+	 */
+	public ReportType gettypeIdByReportTypename(String typename) ;
+	List<Report> getAllReportListByCompanyId(int companyId);
+	List<Report> getUserbyuserName(String userName);
+	int deleteUserbyId(Integer id);
+	int deleteUserbyUsername(String username);
+    //分页
+	public int getAllReportCountByUserNameBy(String queryEmployeeName,
+			String queryReporttype, String createDate, String name);
+	public int getAllReportCountByCompanyIdBy(String queryEmployeeName,
+			String queryReporttype, String createDate, int companyId);
+	public int getAllReportCountBy(String queryEmployeeName,
+			String queryReporttype, String createDate);
+	public List<Report> getAllReportListByCompanyIdBy(String queryEmployeeName,
+			String queryReporttype, String createDate, int companyId,
+			int currentPage, int pageSize);
+	public List<Report> getAllReportListBy(String queryEmployeeName,
+			String queryReporttype, String createDate, int currentPage,
+			int pageSize);
+	public List<Report> getAllReportListByUserNameBy(String queryEmployeeName,
+			String queryReporttype, String createDate, String name,
+			int currentPage, int pageSize);
+}

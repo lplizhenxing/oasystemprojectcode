@@ -1,0 +1,29 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../../common/userlogin.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<base href="<%=basePath%>">
+<title>娱乐小游戏</title>
+<link rel="stylesheet" type="text/css" href="static/css/userindex.css">
+<style>
+    #canvas{
+       margin-left:80px;
+       margin-top:80px;
+    }
+</style>
+</head>
+<body>
+	<%@ include file="../../common/userheader.jsp"%>
+	<section id="section">
+    <%@ include file="../../common/userleft.jsp"%>
+	<div id="right">
+		<canvas id="canvas" width="408" height="250"></canvas>
+	</div>
+	</section>
+	<%@ include file="../../common/footer.jsp"%>
+</body>
+<script type="text/javascript" src="static/js/game.js">
+</script>
+</html>

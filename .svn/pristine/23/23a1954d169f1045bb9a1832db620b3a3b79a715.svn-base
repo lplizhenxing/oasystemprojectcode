@@ -1,0 +1,60 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/userlogin.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<base href="<%=basePath%>">
+<title>文件显示页面</title>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" type="text/css" href="static/css/userindex.css">
+</head>
+<body>
+	<%@ include file="../common/userheader.jsp"%>
+	<section id="section"> <%@ include
+		file="../common/userleft.jsp"%>
+	<div id="right">
+		<table>
+			<c:if test="${requestScope.list!=null}">
+				<tr>
+					<th>文件名称&nbsp;&nbsp;</th>
+					<th>文件路径&nbsp;&nbsp;</th>
+					<th>文件创建时间&nbsp;&nbsp;</th>
+					<th>文件创建者&nbsp;&nbsp;</th>
+					<c:if test="${sessionScope.roleId != 6}">
+					    <th>文件类型&nbsp;&nbsp;</th>
+						<th>文件状态&nbsp;&nbsp;</th>
+						<th>操作权限</th>
+					</c:if>			
+				</tr>
+				<c:forEach items="${requestScope.list}" var="file">
+					<tr>
+						<td colspan="7"><br /></td>
+					<tr>
+					<tr>
+						<td>${file.name}&nbsp;&nbsp;</td>
+						<td>
+						  <a href="${file.path}" target="_blank">${file.name}</a>&nbsp;&nbsp;
+						</td>
+						<td>${file.createTime}&nbsp;&nbsp;</td>
+						<td>${file.createBy}&nbsp;&nbsp;</td>
+						<c:if test="${sessionScope.roleId != 6}">
+						    <td>${file.showType}&nbsp;&nbsp;</td>
+							<td>${file.stateName}&nbsp;&nbsp;</td>
+							<c:if test="${file.stateName eq '待审核'}">
+							<td><a href="resource?opr=modify&id=${file.id}&type=${file.type}">审核</a></td>
+							</c:if>
+						</c:if>
+					</tr>
+				</c:forEach>
+			</c:if>
+		</table>
+	</div>
+	</section>
+	<%@ include file="../common/footer.jsp"%>
+</body>
+</html>

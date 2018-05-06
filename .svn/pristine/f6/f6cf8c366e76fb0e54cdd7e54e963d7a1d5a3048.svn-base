@@ -1,0 +1,38 @@
+package com.zszd.ai.servlet;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet(urlPatterns = { "/upload" }, name = "upload")
+public class UploadFileServlet extends HttpServlet {
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		this.doPost(request, response);
+	}
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+//		request.setCharacterEncoding("UTF-8");
+//		response.setContentType("text/html;charset=UTF-8");
+//		String path = request.getContextPath();
+//		String basePath = request.getScheme() + "://" + request.getServerName()
+//				+ ":" + request.getServerPort() + path + "/";
+//		String opr = request.getParameter("opr");
+//		String employeeId = request.getParameter("employeeId");
+//		UploadFileService uploadLoadFileService = new UploadFileServiceImpl();
+//		HttpSession session = request.getSession();// 获取session
+//		if (opr.equals("list")) {
+//			List<UploadFile> list = uploadLoadFileService
+//					.queryAllUploadFileInfo();
+//			request.setAttribute("list", list);
+//			request.getRequestDispatcher("jsp/uploadFile/uploadFile_list.jsp")
+//					.forward(request, response);
+//		}
+	}
+
+}

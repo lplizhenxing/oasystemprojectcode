@@ -1,0 +1,127 @@
+package com.zszd.ai.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.zszd.ai.model.Employee;
+import com.zszd.ai.model.SysUser;
+import com.zszd.ai.service.EmployeeService;
+import com.zszd.ai.service.SysUserService;
+import com.zszd.ai.service.impl.EmployeeServiceImpl;
+import com.zszd.ai.service.impl.SysUserServiceImpl;
+/**
+ * 员工
+ * @author lizx 20180103
+ *
+ */
+@WebServlet(urlPatterns = { "/employee" }, name = "employee")
+public class EmployeeServlet extends HttpServlet {
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		this.doPost(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+		String path = request.getContextPath();
+		String basePath = request.getScheme() + "://"
+				+ request.getServerName() + ":" + request.getServerPort()
+				+ path + "/";
+		String opr = request.getParameter("opr");
+		String employeeId = request.getParameter("employeeId");
+		HttpSession session = request.getSession();// 获取session
+		String name = (String) session.getAttribute("login");
+		EmployeeService employeeService = new EmployeeServiceImpl();
+		SysUserService sysUserService = new SysUserServiceImpl();
+		PrintWriter out = response.getWriter();
+        if ("list".equals(opr)) {
+			List<Employee> list = employeeService.queryAllEmployeeInfo();
+			request.setAttribute("list", list);
+			request.getRequestDispatcher("jsp/employee/employee_list.jsp")
+					.forward(request, response);
+		} else if ("modify".equals(opr)) {
+			Employee employee = employeeService.queryEmployeeInfoById(Integer
+					.valueOf(employeeId));
+			request.setAttribute("employee", employee);
+			request.getRequestDispatcher("jsp/employee/employee_modify.jsp")
+					.forward(request, response);
+		} else if ("submitModify".equals(opr)) {
+			String employeename = request.getParameter("employeename");
+			String isLeader = request.getParameter("isLeader");
+			String groupId = request.getParameter("groupId");
+			String workpoints = request.getParameter("workpoints");
+			String id = request.getParameter("employeeId");
+			Employee employee=employeeService.queryEmployeeInfoById(Integer.valueOf(id));
+			employee.setId(Integer.valueOf(id));
+			employee.setName(employeename);
+			employee.setGroupId(Integer.valueOf(groupId));
+			employee.setIsLeader(Integer.valueOf(isLeader));
+			employee.setWorkpoints(Integer.valueOf(workpoints));
+			int row = employeeService.updateEmployeeInfo(employee);
+			if (row > 0) {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('当前研发成员更新成功，点击确认返回研发成员信息列表！');");
+				out.print("location.href=\"" + basePath
+						+ "employee?opr=list\";");
+				out.print("</script>");
+			} else {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('当前研发成员更新失败，点击确认返回研发成员列表！');");
+				out.print("location.href=\"" + basePath
+						+ "employee?opr=list\";");
+				out.print("</script>");
+			}
+		} else if ("query".equals(opr)) {
+			int workpoint = employeeService.queryWorkPointByAbbr(name);
+			if (workpoint >=200) {//大于200分 可以参与工时抽奖
+				out.print("true");
+			} else {
+				out.print("false");
+			}
+		}else if("info".equals(opr)){
+			Employee employee=employeeService.getEmployeeInfoByLoginName(name);
+			SysUser sUser=sysUserService.getUserInfoByUserName(name);
+			session.setAttribute("employee",employee);
+			session.setAttribute("sUser", sUser);
+			response.sendRedirect("/zszd/jsp/sysuser/user_info.jsp");
+		}else if("revise".equals(opr)){
+			Employee employee=(Employee)session.getAttribute("employee");
+			employee.setWorkType(request.getParameter("workType"));
+			employee.setWorkUnit(request.getParameter("workUnit"));
+			employee.setWorkState(request.getParameter("workState"));
+			employee.setMajor(request.getParameter("major"));
+			employee.setEndSchool(request.getParameter("endSchool"));
+			employee.setEducation(request.getParameter("education"));
+			employee.setEndTime(request.getParameter("endTime"));
+			employee.setPostalcode(request.getParameter("postalcode"));
+			employee.setPhone(request.getParameter("phone"));
+			employee.setAddress(request.getParameter("address"));
+			employee.setIntentionalCity(request.getParameter("intentionalCity"));
+			employee.setIntentionalPost(request.getParameter("intentionalPost"));
+			employee.setE_mail(request.getParameter("e_mail"));
+			int row=employeeService.updateAllInfo(employee);
+			if(row>0){
+				request.setAttribute("msg", "修改成功");
+				session.setAttribute("employee", employee);
+			}else{
+				request.setAttribute("msg", "修改失败");
+			}
+			request.getRequestDispatcher("employee?opr=info")
+			.forward(request, response);
+		}
+	}
+
+}

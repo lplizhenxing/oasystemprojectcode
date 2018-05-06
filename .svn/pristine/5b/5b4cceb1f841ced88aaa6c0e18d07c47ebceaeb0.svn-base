@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zszd.ai.dao.employee.EmployeeDao">
+
+
+	<select id="getEmployeeInfoByLoginName" resultType="Employee">
+		select a.*,b.name as companyName ,c.name as departmentName,d.name  as devgroupName
+		from  employee a 
+		left join company b on a.companyId = b.id
+		left join department c on a.departmentId = c.id
+		left join devgroup  d  on  a.devgroupId =  d.id 
+		where  a.abbr =#{name}
+	</select>
+
+	<select id="queryAllEmployeeInfo" resultType="Employee">
+        select a.*,b.name as companyName ,c.name as departmentName,d.name  as devgroupName
+		from  employee a 
+		left join company b on a.companyId = b.id
+		left join department c on a.departmentId = c.id
+		left join devgroup  d  on  a.devgroupId =  d.id 
+		order by a.devgroupId asc
+	</select>
+
+	<select id="queryAllEmployeeInfoByCompanyId" resultType="Employee">
+		select a.*,b.name as companyName ,c.name as departmentName,d.name  as devgroupName
+		from  employee a 
+		left join company b on a.companyId = b.id
+		left join department c on a.departmentId = c.id
+		left join devgroup  d  on  a.devgroupId =  d.id
+		where a.companyId = #{companyId} order by a.devgroupId asc
+	</select>
+
+	<select id="queryWorkPointByName" resultType="int">
+		select workpoints
+		from employee where name = #{name}
+	</select>
+
+	<select id="queryIdByName" resultType="int">
+		select id from employee
+		where name = #{name}
+	</select>
+
+	<select id="queryWorkPointById" resultType="int">
+		select workpoints
+		from employee where id =#{id}
+	</select>
+
+	<select id="queryNameById" resultType="string">
+		select name from employee
+		where id =#{id}
+	</select>
+
+	<select id="getEmployeeCountByGroupId" resultType="int">
+		select
+		count(*) from employee where devgroupId =#{devgroupId}
+	</select>
+
+
+	<select id="queryEmployeeInfoById" resultType="Employee">
+		select * from
+		employee where id = #{id}
+	</select>
+
+
+	<select id="getEmployeeNameByLoginName" resultType="string">
+		select name
+		from employee where abbr = #{name}
+	</select>
+
+	<select id="queryIdLikeName" resultType="int">
+		select id from employee
+		where name like CONCAT('%',#{name},'%')
+	</select>
+
+
+
+	<select id="queryWorkPointByAbbr" resultType="int">
+		select workpoints
+		from employee where abbr =#{name}
+	</select>
+
+	<insert id="insert" parameterType="Employee">
+		insert into employee
+		(name,abbr,sex,validDocuments,companyId) values
+		(#{name},#{abbr},#{sex},#{validDocuments},#{companyId})
+	</insert>
+
+	<update id="updateEmployeeInfo" parameterType="Employee">
+		update employee
+		set name = #{name}
+		,companyId=#{companyId},workpoints=#{workpoints},validDocuments=#{validDocuments}
+		where
+		id =#{id}
+	</update>
+
+	<update id="updateAllInfo" parameterType="Employee">
+		update
+		employee set
+		workType=#{workType},workUnit=#{workUnit},workState=#{workState},major=#{major},endSchool=#{endSchool},
+		education=#{education},endTime=#{endTime},postalcode=#{postalcode},phone=#{phone},address=#{address},intentionalCity=#{intentionalCity},
+		intentionalPost=#{intentionalPost},e_mail=#{e_mail},sex=#{sex},validDocuments=#{validDocuments},classId=#{classId}
+		where id=#{id}
+	</update>
+
+	<update id="updateEmployeeWorkPoint" parameterType="Employee">
+		update
+		employee set workpoints = #{workpoints} where id =#{id}
+	</update>
+
+</mapper>

@@ -1,0 +1,163 @@
+package com.zszd.ai.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.zszd.ai.constans.ScheduleTitle;
+import com.zszd.ai.model.Test;
+import com.zszd.ai.model.Testresults;
+import com.zszd.ai.service.EmployeeService;
+import com.zszd.ai.service.ScheduleService;
+import com.zszd.ai.service.TestService;
+import com.zszd.ai.service.impl.EmployeeServiceImpl;
+import com.zszd.ai.service.impl.ScheduleServiceImpl;
+import com.zszd.ai.service.impl.TestServiceImpl;
+
+/**
+ * 工作日志
+ * 
+ * @author lizx 20180103
+ * 
+ */
+@WebServlet(urlPatterns = { "/testresults" }, name = "testresults")
+public class TestresultsServlet extends HttpServlet {
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		this.doPost(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+		String path = request.getContextPath();
+		String basePath = request.getScheme() + "://" + request.getServerName()
+				+ ":" + request.getServerPort() + path + "/";
+		String opr = request.getParameter("opr");
+		HttpSession session = request.getSession();// 获取session
+		String name = (String) session.getAttribute("login");
+		int roleId = (Integer) session.getAttribute("roleId");
+
+		PrintWriter out = response.getWriter();
+		String testresultId = request.getParameter("testresultId");
+		TestService testService = new TestServiceImpl();
+		if ("toadd".equals(opr)) {
+			List<Test> testlist = testService.getTestByToday();
+			request.setAttribute("testlist", testlist);
+			request.getRequestDispatcher("jsp/testresults/testresults_add.jsp")
+					.forward(request, response);
+		} else if ("add".equals(opr)) {
+			String questionId = request.getParameter("questionId");
+			String question = request.getParameter("question");
+			String answer = request.getParameter("answer");
+
+			EmployeeService employeeService = new EmployeeServiceImpl();
+			String employeeName = employeeService
+					.getEmployeeNameByLoginName(name);
+
+			Testresults testresults = new Testresults();
+			testresults.setUsername(employeeName);
+			testresults.setQuestion(question);
+			testresults.setContent(answer);
+			testresults.setQuestionId(Integer.parseInt(questionId));
+			try {
+				boolean row = testService.addTestResults(testresults);
+				if (row) {
+					String testId = request.getParameter("testId");
+					out.print("<script type='text/javascript'>");
+					out.print("alert('工作日志提交成功，点击确认返回工作日志列表！');");
+					out.print("location.href=\"" + basePath
+							+ "testresults?opr=list&loginname=" + name + "\";");
+					out.print("</script>");
+				} else {
+					out.print("<script type='text/javascript'>");
+					out.print("alert('工作日志提交失败，请重新添加！');");
+					out.print("location.href=\"" + basePath
+							+ "jsp/testresults/testresults_add.jsp\";");
+					out.print("</script>");
+				}
+			} catch (Exception e) {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('工作日志提交失败，请重新添加！');");
+				out.print("location.href=\"" + basePath
+						+ "jsp/testresults/testresults_add.jsp\";");
+				out.print("</script>");
+			}
+
+		} else if ("list".equals(opr)) {
+			EmployeeService employeeService = new EmployeeServiceImpl();
+			String employeeName = employeeService
+					.getEmployeeNameByLoginName(name);
+
+			List<Testresults> list = null;
+			if (roleId != 6) {
+				list = testService.queryALLTestResults();
+			} else {
+				list = testService.queryTestResultsByUserName(employeeName);
+			}
+			request.setAttribute("list", list);
+			request.getRequestDispatcher("jsp/testresults/testresults_list.jsp")
+					.forward(request, response);
+		} else if ("modify".equals(opr)) {
+			Testresults testresults = testService
+					.queryTestResultInfoById(Integer.valueOf(testresultId));
+			request.setAttribute("testresults", testresults);
+			request.getRequestDispatcher(
+					"jsp/testresults/testresults_modify.jsp").forward(request,
+					response);
+		} else if ("delete".equals(opr)) {
+			out.print("<script type='text/javascript'>");
+			out.print("alert('确认要删除吗？点击确认删除！');");
+			out.print("location.href=\"" + basePath
+					+ "testresults?opr=deleteTestresults&testresultId="
+					+ testresultId + "\";");
+			out.print("</script>");
+		} else if ("submitModify".equals(opr)) {
+			String content = request.getParameter("content");
+			String testresultsId = request.getParameter("testresultsId");
+			Testresults testresults = new Testresults();
+			testresults.setId(Integer.valueOf(testresultsId));
+			testresults.setContent(content);
+			int row = testService.updateTestResultsInfo(testresults);
+			if (row > 0) {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('工作日志更新成功，点击确认返回工作日志信息列表！');");
+				out.print("location.href=\"" + basePath
+						+ "testresults?opr=list&loginname=" + name + "\";");
+				out.print("</script>");
+			} else {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('工作日志更新失败，点击确认返回工作日志信息列表！');");
+				out.print("location.href=\"" + basePath
+						+ "testresults?opr=list&loginname=" + name + "\";");
+				out.print("</script>");
+			}
+		} else if ("deleteTestresults".equals(opr)) {
+			if (testService
+					.deleteTestresultsById(Integer.valueOf(testresultId)) > 0) {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('成功删除该工作日志，点击确认返回工作日志信息列表！');");
+				out.print("location.href=\"" + basePath
+						+ "testresults?opr=list&loginname=admin\";");
+				out.print("</script>");
+			} else {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('删除工作日志失败，请联系管理员！点击确认返回工作日志信息列表！');");
+				out.print("location.href=\"" + basePath
+						+ "testresults?opr=list&loginname=admin\";");
+				out.print("</script>");
+			}
+		}
+	}
+}

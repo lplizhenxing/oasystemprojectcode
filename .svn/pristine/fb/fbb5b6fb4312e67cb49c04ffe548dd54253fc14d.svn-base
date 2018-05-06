@@ -1,0 +1,94 @@
+package com.zszd.ai.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.zszd.ai.dao.SignDao;
+import com.zszd.ai.dao.impl.SignDaoImpl;
+import com.zszd.ai.model.Sign;
+
+@WebServlet(urlPatterns={"/SignServlet"},name="SignServlet")
+public class SignServletOld extends HttpServlet {
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		
+		HttpSession session = req.getSession();
+		String userName=(String) session.getAttribute("login");
+		SignDao sign=new SignDaoImpl();
+		Sign s=sign.findById(userName);
+		Date date=new Date();
+		if(s.isIfSign()==null){
+			s.setIfSign("false");
+		}
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd"); 
+		String time1=sdf.format(date);
+		String time2=sdf.format(s.getSignTime());
+		if(!time1.equals(time2)){
+			s.setIfSign("false");	
+		}
+		PrintWriter  out = resp.getWriter();
+		String s1=s.isIfSign();
+		out.write(s1+"");
+		out.flush();
+		out.close();
+		
+		
+		
+		
+	}
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+		HttpSession session = request.getSession();
+		String userName=(String) session.getAttribute("login");
+		System.out.println(userName);
+		Date date=new Date();
+		SignDao sign=new SignDaoImpl();
+		Sign s=sign.findById(userName);	
+		
+		
+		
+		if(s.getSignTime() ==null){
+			s.setSignTime(date);
+			s.setIfSign("true");
+			s.setSignSum(1);
+			sign.upDateSign(s, userName);
+		}else{
+			if((date.getTime()-s.getSignTime().getTime())/(1000*60*60*24)>0){
+				s.setSignTime(date);
+				s.setIfSign("true");
+				s.setSignSum(s.getSignSum()+1);
+				sign.upDateSign(s, userName);
+			}else{
+				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd"); 
+				String time1=sdf.format(date);
+				String time2=sdf.format(s.getSignTime());
+
+				
+			
+				
+				if(!time1.equals(time2)){//今日首次签到
+					s.setIfSign("true");
+					s.setSignSum(s.getSignSum()+1);
+					s.setSignTime(date);
+					sign.upDateSign(s, userName);				
+				}
+			}	
+		}
+		
+		
+		session.setAttribute("sign",s);
+		
+	
+	}
+}

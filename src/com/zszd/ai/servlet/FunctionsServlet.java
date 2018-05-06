@@ -1,0 +1,120 @@
+package com.zszd.ai.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.alibaba.fastjson.JSON;
+import com.zszd.ai.pojo.Functions;
+import com.zszd.ai.service.sysfunctions.FunctionsService;
+import com.zszd.ai.service.sysfunctions.FunctionsServiceImpl;
+
+/**
+ * 
+ * @ClassName: FunctionsServlet
+ * @Description: 功能配置 以及配置对应的角色
+ * @author: lizx
+ * @date: 2018-1-20 下午8:38:40
+ */
+@WebServlet(urlPatterns = { "/functions" }, name = "FunctionsServlet")
+public class FunctionsServlet extends HttpServlet {
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		this.doPost(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+		HttpSession session = request.getSession();// 获取session
+		String name = (String) session.getAttribute("login");
+		String path = request.getContextPath();
+		String basePath = request.getScheme() + "://" + request.getServerName()
+				+ ":" + request.getServerPort() + path + "/";
+		PrintWriter out = response.getWriter();
+
+		FunctionsService functionsService = new FunctionsServiceImpl();
+		String opr = request.getParameter("opr");
+		if ("list".equals(opr)) {
+			List<Functions> list = functionsService.queryAllFunctionsInfo();
+			request.setAttribute("list", list);
+			request.getRequestDispatcher("jsp/functions/functions_list.jsp")
+					.forward(request, response);
+		} else if ("query".equals(opr)) {
+			List<Functions> list = functionsService.queryAllFunctionsInfo();
+			Map<Integer, String> functionsMap = new HashMap<Integer, String>();
+			if (list != null) {
+				for (Functions functions : list) {
+					functionsMap.put(functions.getId(),
+							functions.getFunctionName());
+				}
+			}
+			String functionsJson = JSON.toJSONString(functionsMap);
+			out.print(functionsJson);
+		} else if ("add".equals(opr)) {
+			String functionName = request.getParameter("functionsName");
+			String functionPath = request.getParameter("functionsPath");
+			Functions functions = new Functions();
+			functions.setDev(name);
+			functions.setFunctionName(functionName);
+			functions.setFunctionPath(functionPath);
+			int rows = functionsService.addFunctionsInfo(functions);
+			if (rows > 0) {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('功能配置成功，点击确认返回功能配置列表！');");
+				out.print("location.href=\"" + basePath
+						+ "functions?opr=list\";");
+				out.print("</script>");
+			} else {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('功能配置已存在，无需添加！');");
+				out.print("location.href=\"" + basePath
+						+ "functions?opr=list\";");
+				out.print("</script>");
+			}
+		} else if ("modify".equals(opr)) {	
+			int  functionId = Integer.parseInt(request.getParameter("id"));
+			Functions functions = functionsService.queryFunctionsInfoById(functionId);
+			request.setAttribute("functions", functions);
+			request.getRequestDispatcher("jsp/functions/functions_modify.jsp").forward(
+			request, response);
+		} else if("submitModify".equals(opr)){
+			   String functionName = request.getParameter("functionName");
+			   String functionPath = request.getParameter("functionPath");
+			   String dev = request.getParameter("dev");
+			   int id = Integer.parseInt(request.getParameter("id"));
+			   Functions functions = new Functions();
+			   functions.setId(id);
+			   functions.setDev(dev);
+			   functions.setFunctionName(functionName);
+			   functions.setFunctionPath(functionPath);
+			   int row = functionsService.updateFunctionsInfo(functions);
+			   if(row>0){
+					out.print("<script type='text/javascript'>");
+					out.print("alert('功能更新成功，点击确认返回功能信息列表！');");
+					out.print("location.href=\"" + basePath
+							+ "functions?opr=list\";");
+					out.print("</script>");
+			   }else{
+				   out.print("<script type='text/javascript'>");
+					out.print("alert('功能更新失败，点击确认返回功能列表！');");
+					out.print("location.href=\"" + basePath
+							+ "functions?opr=list\";");
+					out.print("</script>");
+			   }
+			}
+	}
+}

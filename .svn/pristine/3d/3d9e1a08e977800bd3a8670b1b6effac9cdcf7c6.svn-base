@@ -1,0 +1,106 @@
+package com.zszd.ai.dao.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.zszd.ai.dao.BugsDao;
+import com.zszd.ai.model.Bugs;
+import com.zszd.ai.utils.DataSourceUtil;
+
+public class BugsDaoImpl implements BugsDao {
+
+	@Override
+	public List<Bugs> queryAllDebugsInfo() {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Bugs bugs = null;
+		List<Bugs> bugses = new ArrayList<Bugs>();
+
+		String sql = "select * from bugs order by submitTime desc";
+		try {
+			Object[] oo = null;
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				bugs = new Bugs();
+				bugs.setId(rs.getInt("id"));
+				bugs.setContent(rs.getString("content"));
+				bugs.setProjectId(rs.getInt("projectId"));
+				bugs.setResolveDevName(rs.getString("resolveDevName"));
+				bugs.setResolveTime(rs.getDate("resolveTime"));
+				bugs.setState(rs.getString("state"));
+				bugs.setSubmitTime(rs.getDate("submitTime"));
+				bugs.setTitle(rs.getString("title"));
+				bugs.setUserName(rs.getString("userName"));
+				bugses.add(bugs);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return bugses;
+	}
+
+	@Override
+	public int addBugsInfo(Connection conn, Bugs bugs) {
+		int row = 0;
+		PreparedStatement ps = null;
+		String sql = "insert into bugs (title,content,userName) "
+				+ "values (?,?,?)";
+		Object[] oo = { bugs.getTitle(), bugs.getContent(), bugs.getUserName() };
+		try {
+			row = DataSourceUtil.executeUpdate(conn, ps, sql, oo);
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, null);
+		}
+		return row;
+	}
+
+	@Override
+	public Bugs getBugsById(Connection conn, int id) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Bugs bugs = null;
+		String sql = "select * from bugs where id=?";
+		try {
+			Object[] oo = { id };
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				bugs = new Bugs();
+				bugs.setId(rs.getInt("id"));
+				bugs.setTitle(rs.getString("title"));
+				bugs.setContent(rs.getString("content"));
+				bugs.setSubmitTime(rs.getDate("submitTime"));
+				bugs.setUserName(rs.getString("userName"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, null, rs);
+		}
+
+		return bugs;
+	}
+
+	@Override
+	public int updateBugsInfo(Connection conn, Bugs bugs) {
+		int row = 0;
+		PreparedStatement ps = null;
+		String sql = "update bugs set title = ?,content=?  where id =?";
+		Object[] oo = { bugs.getTitle(),bugs.getContent(), bugs.getId() };
+		try {
+			row = DataSourceUtil.executeUpdate(conn, ps, sql, oo);
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, null);
+		}
+		return row;
+	}
+
+}

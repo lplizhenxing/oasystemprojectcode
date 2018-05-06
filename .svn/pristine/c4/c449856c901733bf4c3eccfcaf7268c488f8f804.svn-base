@@ -1,0 +1,57 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/userlogin.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<base href="<%=basePath%>">
+<title>员工信息页面</title>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" type="text/css" href="static/css/userindex.css">
+</head>
+<body>
+	<%@ include file="../common/userheader.jsp"%>
+	<section id="section"> <%@ include
+		file="../common/userleft.jsp"%>
+	<div id="right">
+		<table>
+			<c:if test="${requestScope.list!=null}">
+				<tr>
+					<th>所属公司&nbsp;&nbsp;</th>
+					<th>所属部门&nbsp;&nbsp;</th>
+					<th>所属研发组&nbsp;&nbsp;</th>
+					<th>员工名称&nbsp;&nbsp;</th>
+					<th>员工登录账号&nbsp;&nbsp;</th>
+					<th>员工工分&nbsp;&nbsp;</th>
+					<th>操作权限</th>
+				</tr>
+				<c:forEach items="${requestScope.list}" var="employee">
+					<tr>
+						<td colspan="7"><br />
+						</td>
+					<tr>
+					<tr>
+						<td>${employee.companyId}&nbsp;&nbsp;</td>
+						<td>${employee.departmentId}&nbsp;&nbsp;</td>
+						<td>${employee.devgroupId}&nbsp;&nbsp;</td>
+						<td>${employee.name}&nbsp;&nbsp;</td>
+						<td>${employee.abbr}&nbsp;&nbsp;</td>
+						<td><a href="workpoint?opr=view&employeeId=${employee.id}">${employee.workpoints}</a>
+						</td>
+						<td><c:if test="${sessionScope.roleId eq '2'}">
+								<a href='employee?opr=modify&employeeId=${employee.id}'
+									style="color:red">修改</a>
+							</c:if></td>
+					</tr>
+				</c:forEach>
+			</c:if>
+		</table>
+	</div>
+	</section>
+	<%@ include file="../common/footer.jsp"%>
+</body>
+</html>

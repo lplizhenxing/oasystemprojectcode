@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zszd.ai.dao.report.ReportDao">
+	<insert id="addReport" parameterType="Report">
+		insert into report_record
+		(typeId,username,question,finishwork,plan,remark) values
+		(#{typeId},#{username},#{question},#{finishwork},#{plan},#{remark})
+	</insert>
+	<update id="modifyReport" parameterType="Report">
+		update report_record
+		<set>
+			<if test="typeId !=null">
+				typeId=#{typeId},
+			</if>
+			<if test="question !=null">
+				question=#{question},
+			</if>
+			<if test="finishwork !=null">finishwork=#{finishwork},</if>
+			<if test="plan !=null">plan=#{plan},</if>
+			<if test="remark !=null">
+				remark=#{remark},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	<select id="getReportListByReportType" resultMap="typenames">
+		select
+		re.username,re.question,re.finishwork,re.plan,re.remark,re.createDate,tp.typename
+		from report_record re,report_type tp
+		where re.typeId=#{typeId} and
+		tp.id=re.typeId
+
+	</select>
+	<resultMap type="Report" id="typenames">
+		<result property="username" column="username" />
+		<result property="question" column="question" />
+		<result property="finishwork" column="finishwork" />
+		<result property="plan" column="plan" />
+		<result property="remark" column="remark" />
+		<association property="reportType" javaType="ReportType">
+			<id property="id" column="id" />
+			<result property="typename" column="typename" />
+		</association>
+	</resultMap>
+	<update id="deleteUserbyUsername">
+		update report_record
+		<set>state=0</set>
+		where username=#{username}
+
+	</update>
+	<select id="getAllReportList" resultMap="Report" resultType="Report">
+		select id,(select typename from report_type where id=typeId) as
+		typename,typeId,username,question,finishwork,plan,remark,createDate
+		from
+		report_record
+		order by createDate DESC
+
+	</select>
+	<resultMap type="Report" id="Report">
+		<result property="typename" column="typename" />
+	</resultMap>
+
+	<select id="getUserbyuserName" resultMap="Report" parameterType="string">
+		select *,(select typename from report_type where id=typeId) as
+		typename from report_record where userName like
+		CONCAT('%',#{userName},'%')
+	</select>
+	<select id="getReportbyId" resultMap="Report">
+		select *,(select typename
+		from report_type where id=typeId) as typename from
+		report_record where
+		id=#{id}
+	</select>
+	<delete id="deleteUserbyId">
+
+		delete from report_record where id=#{id}
+	</delete>
+
+	<select id="getAllReportType" resultType="ReportType">
+		select id,typename from
+		report_type
+	</select>
+	<select id="gettypeIdByReportTypename" resultType="ReportType">
+		select id from
+		report_type re where typename=#{typename}
+	</select>
+	
+	<select id="getAllReportListByCompanyId" resultType="Report">
+		select a.* from report_record a, employee b where a.username = b.name and b.companyId =#{companyId} 
+	</select>
+
+</mapper>

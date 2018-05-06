@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zszd.ai.dao.GoodsDao">
+	<select id="getAllGoodsInfo" resultMap="goods">
+		select * from goods
+	</select>
+	<resultMap type="Goods" id="goods">
+		<!-- <result property="goodsId" column="goodsId"/> <result property="goodsName" 
+			column="goodsName"/> <result property="goodsPrice" column="goodsPrice"/> -->
+	</resultMap>
+	<select id="queryGoodsInfoById" resultType="Goods">
+		select * from goods
+		where goodsId =#{goodsId}
+	</select>
+	<update id="updateGoodsStock" parameterType="Goods">
+		update goods set
+		goodsStock =#{goodsStock} where goodsId =#{goodsId}
+	</update>
+	<insert id="addGoodsInfo" parameterType="Goods">
+		insert into  goods (goodsName,goodsImagesPath,goodsPrice,goodsStock) values(#{goodsName},#{goodsImagesPath},
+		#{goodsPrice},#{goodsStock})
+	</insert>
+	<select id="getAllGoodsInfoByDate" resultMap="goods">
+		select * from goods where year(addGoodsTime)=#{year} and month(addGoodsTime)=#{month}
+	</select>
+</mapper>

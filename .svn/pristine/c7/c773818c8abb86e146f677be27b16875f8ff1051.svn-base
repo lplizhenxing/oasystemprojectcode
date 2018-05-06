@@ -1,0 +1,226 @@
+@CHARSET "UTF-8";
+
+* {
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	font-family: '楷体';
+	background: #f7f0a0;
+}
+
+#header,#section,#footer {
+	width: 1300px;
+	margin: 0 auto;
+}
+
+#header {
+	margin-top: 30px;
+	text-align: center;
+	border-bottom: 1px solid white;
+}
+
+#header:after {
+	content: "";
+	display: block;
+	clear: both;
+}
+
+#section:after {
+	content: "";
+	display: block;
+	clear: both;
+}
+
+#footer:after {
+	content: "";
+	display: block;
+	clear: both;
+}
+
+#header p {
+	font-size: 25px;
+	color: black;
+	margin: 0px;
+}
+
+#header span {
+	color: red;
+}
+
+#header img {
+	vertical-align: middle;
+}
+
+#header  a {
+	text-decoration: none;
+	color: red;
+}
+
+#header  a:hover {
+	text-decoration: underline;
+	color: blue;
+}
+
+#header ol {
+	padding-top: 10px;
+}
+
+#header li:first-child {
+	margin-left: 50px;
+}
+
+#header li {
+	padding-left: 50px;
+	width: 100px;
+	float: left;
+	list-style: none;
+}
+
+#header ol a {
+	text-decoration: none;
+	font-size: 18px;
+	color: black;
+	font-weight: bolder;
+}
+
+#left {
+	color: black;
+	padding-left: 40px;
+	width: 150px;
+	text-align: left;
+	float: left;
+}
+
+#left:after {
+	content: "";
+	display: block;
+	clear: both;
+}
+
+#left  ol {
+	list-style: square;
+	line-height: 40px;
+}
+
+#left  ol a {
+	text-decoration: none;
+	font-size: 18px;
+	color: black;
+}
+
+#right {
+	width: 900px;
+	padding-left: 100px;
+	text-align: left;
+	float: left;
+	color: black;
+}
+
+#right th {
+	text-align: left;
+	line-height: 20px;
+	width: 300px;
+	color: black;
+}
+
+#right td {
+	text-align: left;
+	line-height: 20px;
+	width: 300px;
+	color: black;
+}
+
+#right:after {
+	content: "";
+	display: block;
+	clear: both;
+}
+
+#right h3 {
+	padding-top: 20px;
+}
+
+/*wangpp
+#right img {
+    width: 600px;
+    height: 600px;
+}
+*/
+
+#right ol {
+	line-height: 30px;
+}
+
+/*
+wangpp
+*/
+#right tr {
+	line-height: 100px;
+}
+
+#right a {
+	text-decoration: none;
+	font-size: 18px;
+	color: black;
+	font-weight: bolder;
+}
+
+#right a:hover {
+	text-decoration: underline;
+	font-size: 20px;
+	color: black;
+}
+
+#right  ol span {
+	font-size: 10px;
+	color: black;
+}
+
+#right p {
+	width: 900px;
+}
+
+#right p img {
+	width: 800px;
+}
+
+/*gongxg
+#right a img {
+	width: 300px;
+	height: 300px
+}
+*/
+
+#right input {
+	font-weight: bolder;
+	font-size: 16px;
+	color: blue;
+}
+
+#commentContent {
+	font-weight: bolder;
+	font-size: 16px;
+	color: red;
+}
+
+#postContent {
+	width: 500px;
+}
+
+#footer {
+	color: black;
+}
+
+#footer p {
+	font-size: 16px;
+	padding-left: 10px;
+}
+
+#footer p a {
+	font-weight: bolder;
+	color: red;
+	padding-left: 12px;
+	text-decoration: none;
+}

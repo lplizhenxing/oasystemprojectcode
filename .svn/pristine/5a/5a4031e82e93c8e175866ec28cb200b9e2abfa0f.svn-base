@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zszd.ai.dao.sysfunctions.FunctionRoleDao">
+
+	<select id="queryAllFunctionRoleInfoByRoleId" resultMap="FunctionRoleMap" >
+		select
+		a.id,b.roleName,c.functionName,c.functionPath,a.state from
+		functionRole a ,role b, functions c
+		where a.state = 1 and a.roleId =
+		b.id and a.functionId =c.id and a.roleId = #{roleId}
+		order by c.id
+	</select>
+
+	<select id="queryAllFunctionRoleInfo" resultMap="FunctionRoleMap">
+		select
+		a.id,b.roleName,c.functionName,c.functionPath,a.state from
+		functionRole a ,role b, functions c
+		where a.state = 1 and a.roleId =
+		b.id and a.functionId =c.id
+		order by roleId
+	</select>
+	
+	<resultMap type="FunctionRole" id="FunctionRoleMap">
+		<result property="id" column="id" />
+		<result property="roleName" column="roleName" />
+		<result property="functionName" column="functionName" />
+		<result property="functionPath" column="functionPath" />
+		<result property="state" column="state" />
+	</resultMap>
+
+
+
+	<insert id="addFunctionRoleInfo" parameterType="FunctionRole">
+		insert into
+		functionRole (roleId,functionId)
+		values (#{roleId},#{functionId})
+	</insert>
+
+	<delete id="delFunctionRoleConfigInfoById" parameterType="FunctionRole">
+		delete
+		from functionRole where id = #{id}
+	</delete>
+
+
+</mapper>

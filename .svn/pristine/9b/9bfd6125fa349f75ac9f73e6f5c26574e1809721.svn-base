@@ -1,0 +1,140 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ include file="../common/userlogin.jsp"%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<base href="<%=basePath%>">
+
+<title>帖子页面</title>
+
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" type="text/css" href="static/css/userindex.css">
+</head>
+<body>
+	<%@ include file="../common/userheader.jsp"%>
+	<section id="section"> <%@ include
+		file="../common/userleft.jsp"%>
+	<div id="right">
+		<h3>${requestScope.post.postTitle}</h3>
+		<hr />
+		<p style="font-size:10px">类型：${requestScope.post.postType}
+			日期：${requestScope.post.postDate} 作者：${requestScope.post.userName}
+			评论数：${requestScope.post.commentCount}
+			访问量：${requestScope.post.clickCount}</p>
+		<hr />
+		<div id="postContent"
+			style="white-space:pre-wrap;width:600px;WORD-WRAP: break-word;">
+			${requestScope.post.postContent}</div>
+		<hr />
+		<div id="comment">
+			<ul class="classlist">
+				<table width="80%">
+					<c:choose>
+						<c:when test="${empty post.comments}">
+							<tr>
+								<td colspan="6">暂无评论！</td>
+							</tr>
+							<tr>
+								<td colspan="6"><hr /></td>
+							</tr>
+						</c:when>
+						<c:otherwise>
+							<c:forEach items="${post.comments}" var="comment">
+								<tr>
+									<td>留言人:</td>
+									<td>${comment.userName}</td>
+									<td>IP:</td>
+									<td>${comment.userIP}</td>
+									<td>留言时间:</td>
+									<td>${comment.commentDate}</td>
+								</tr>
+								<tr>
+									<td colspan="6">${comment.content}</td>
+								</tr>
+								<tr>
+									<td colspan="6"><hr /></td>
+								</tr>
+							</c:forEach>
+						</c:otherwise>
+					</c:choose>
+				</table>
+			</ul>
+			<ul class="classList">
+				<form action="" method="post">
+					<input type="hidden" id="postId" name="postId"
+						value="${requestScope.post.id}" />
+					<table>
+						<tr>
+							<td>用户名：<input type="text" id="cname" name="cname"
+								value="${sessionScope.login}" disabled /></td>
+							<td>IP：<input type="text" id="cip" name="cip"
+								value=<%=request.getRemoteAddr()%> disabled /></td>
+						</tr>
+						<tr>
+							<td colspan="2"><textarea name="content" rows="20" cols="60"></textarea>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2"><input type="button" value="发 表"
+								id="commentSubmit" name="submit"></td>
+						</tr>
+					</table>
+				</form>
+			</ul>
+		</div>
+	</div>
+	</section>
+	<%@ include file="../common/footer.jsp"%>
+</body>
+<script type="text/javascript" src="static/js/jquery-1.12.4.js"></script>
+<script type="text/javascript">
+	$(document)
+			.ready(
+					function() {
+
+						var $formArea = $("ul.classList").eq(1);
+						var $commentInputs = $formArea.find(":input");
+						var $commentArea = $("#commentList");
+
+						$("#commentSubmit")
+								.click(
+										function() {
+											var paramsArray = $commentInputs
+													.serializeArray();
+											var query = $.param(paramsArray);
+											$.post("comment?opr=add", query,
+													callBack, "JSON");
+											function callBack(data) {
+												if (data[0].result == "success") {
+													var $postComment = $("<tr><td>留言人：</td><td>cname</td></tr>");
+													$(paramsArray)
+															.each(
+																	function() {
+																		$postComment
+																				.find(
+																						"td:contains('"
+																								+ this.name
+																								+ "')")
+																				.text(
+																						this.value);
+																	});
+													$commentArea
+															.prepend($postComment);
+													alert("评论发表成功，点击确认查看发表评论！");
+													location.reload();
+												} else {
+													alert(data[0].result);
+												}
+											}
+											//alert("评论发表成功，点击确认查看发表评论！");
+											//location.reload();
+										});
+					});
+</script>
+</html>

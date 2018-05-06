@@ -1,0 +1,86 @@
+package com.zszd.ai.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.zszd.ai.dao.FunctionsDao;
+import com.zszd.ai.model.Functions;
+import com.zszd.ai.service.FunctionsService;
+import com.zszd.ai.utils.MyBatisUtil;
+
+public class FunctionsServiceImpl implements FunctionsService {
+
+	@Override
+	public List<Functions> queryAllFunctionsInfo() {
+		SqlSession sqlSession = null;
+		List<Functions> functions = new ArrayList<Functions>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			functions = sqlSession.getMapper(FunctionsDao.class)
+					.queryAllFunctionsInfo();
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return functions;
+	}
+
+	@Override
+	public int addFunctionsInfo(Functions functions) {
+		SqlSession sqlSession = null;
+		int rows =0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(FunctionsDao.class)
+					.addFunctionsInfo(functions);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+
+	@Override
+	public Functions queryFunctionsInfoById(int functionId) {
+		SqlSession sqlSession = null;
+		Functions functions = null;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			functions = sqlSession.getMapper(FunctionsDao.class)
+					.queryFunctionsInfoById(functionId);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return functions;
+	}
+
+	@Override
+	public int updateFunctionsInfo(Functions functions) {
+		SqlSession sqlSession = null;
+		int rows =0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(FunctionsDao.class)
+					.updateFunctionsInfo(functions);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+}

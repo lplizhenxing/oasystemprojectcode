@@ -1,0 +1,60 @@
+package com.zszd.ai.service;
+
+import java.util.List;
+
+import com.zszd.ai.model.Department;
+
+public interface DepartmentService {
+	/**
+	 * 
+	 * @Title          insertDepartment
+	 * @Description    添加部门信息
+	 * @Tags           @param department
+	 * @Tags           @return   
+	 * @Return         int   
+	 * @throws
+	 * @author           lvjc
+	 * @date           2018-1-21        下午8:32:36
+	 */
+	int insertDepartment(Department department);
+
+	/**
+	 * 
+	 * @Title          updateDepartment
+	 * @Description     修改部门信息
+	 * @Tags           @param department
+	 * @Tags           @return   
+	 * @Return         int   
+	 * @throws
+	 * @author           lvjc
+	 * @date           2018-1-21        下午8:32:55
+	 */
+	int updateDepartment(Department department);
+
+	//  删除状态为0的部门
+	// int deleteDepartmentByState();
+	/**
+	 * 
+	 * @Title          queryDepartmentById
+	 * @Description    通过id查询部门信息
+	 * @Tags           @param id
+	 * @Tags           @return   
+	 * @Return         Department   
+	 * @throws
+	 * @author           lvjc
+	 * @date           2018-1-21        下午8:33:10
+	 */
+	Department queryDepartmentById(int id);
+
+	/**
+	 * 
+	 * @Title          queryDepartmentInfo
+	 * @Description    查询所有部门信息
+	 * @Tags           @return   
+	 * @Return         List<Department>   
+	 * @throws
+	 * @author           lvjc
+	 * @date           2018-1-21        下午8:33:19
+	 */
+	List<Department> queryDepartmentInfo();
+}

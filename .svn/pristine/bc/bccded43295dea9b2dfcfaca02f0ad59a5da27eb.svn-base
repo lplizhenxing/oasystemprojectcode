@@ -1,0 +1,24 @@
+package com.zszd.ai.dao.impl;
+
+import java.util.List;
+
+import com.zszd.ai.dao.GoodsDao;
+import com.zszd.ai.model.Goods;
+
+public class GoodsDaoImpl implements GoodsDao {
+	@Override
+	public List<Goods> getAllGoodsInfo() {
+		return null;
+	}
+
+	@Override
+	public Goods queryGoodsInfoById(int goodsId) {
+		return null;
+		
+	}
+
+	@Override
+	public int updateGoodsStock(Goods goods) {
+		return 0;
+	}
+}

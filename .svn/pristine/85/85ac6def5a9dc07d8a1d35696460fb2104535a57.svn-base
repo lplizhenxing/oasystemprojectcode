@@ -1,0 +1,78 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/userlogin.jsp"%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<base href="<%=basePath%>">
+<title>帖子修改页面</title>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" type="text/css" href="static/css/userindex.css">
+</head>
+<body>
+	<%@ include file="../common/userheader.jsp"%>
+	<section id="section">
+    <%@ include file="../common/userleft.jsp"%>
+	<div id="right">		
+		<h1>修改bugs信息</h1>
+		<form action="bugs?opr=submitModify" method="post">
+		   <input type="hidden" value="${requestScope.bugs.id}"  name="id"><br />
+		   <table>
+				<tr>
+					<td style="width:80px">修改bug标题：</td>
+					<td><input id="bugsTitle" type="text" name="bugsTitle" value="${requestScope.bugs.title}" />
+					</td>
+				</tr>
+				<tr>
+					<td style="width:80px">修改bug内容：</td>
+					<td><textarea id="bugsContent" name="bugsContent" rows="20" cols="70">${requestScope.bugs.content}</textarea>
+					</td>
+				</tr>
+				<tr>
+					<td style="width:80px"><input type="submit" value="提交修改 ">
+					</td>
+					<td><input type="reset" value="重置">
+					</td>
+				</tr>
+			</table>	
+		</form>
+	</div>
+	</section>
+<%@ include file="../common/footer.jsp"%>
+</body>
+<script type="text/javascript">
+	$(function() {
+		$("form").submit(function() {
+			var postTitle = $("#bugsTitle").val();
+			if (postTitle.trim() == "") {
+				alert("标题不能为空！");
+				return false;
+			}
+			
+			var postContent = $("#bugsContent").val();
+			if (postContent.trim() == "") {
+				alert("内容不能为空！");
+				return false;
+			}
+			
+			if (postContent.indexOf("<") != -1 ) {
+				alert("内容不能包含<符合，为了不非法注入代码！");
+				return false;
+			}
+			
+			if (postContent.indexOf(">") != -1 ) {
+				alert("内容不能包含>符合，为了不非法注入代码！");
+				return false;
+			}
+			
+			return true;
+		});
+	});
+</script>
+
+</html>

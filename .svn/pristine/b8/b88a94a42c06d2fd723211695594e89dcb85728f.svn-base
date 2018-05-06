@@ -1,0 +1,9 @@
+package com.zszd.ai.dao;
+
+import java.sql.Connection;
+
+import com.zszd.ai.model.Order;
+
+public interface OrderDao {
+	int addOrderInfo(Connection conn, Order order);
+}

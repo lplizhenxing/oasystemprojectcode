@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   <mapper namespace="com.zszd.ai.dao.ClassesDao">
+   		<select id="queryAllClasses" resultType="classes">
+   			select * from classes
+   		</select>
+   		<insert id="insertClasses" parameterType="classes">
+   			insert into classes (className) values (#{className})
+   		
+   		</insert>
+   		<update id="updateClassesById" parameterType="classes">
+   			update classes set className=#{className} where id=#{id}
+   		</update>
+   
+   </mapper>

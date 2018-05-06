@@ -1,0 +1,41 @@
+package com.zszd.ai.dao;
+
+import java.util.List;
+
+import com.zszd.ai.model.Classes;
+
+public interface ClassesDao {
+	/**
+	 * 
+	 * @Title          queryAllClasses
+	 * @Description    查询所有班级
+	 * @Tags           @return   
+	 * @Return         List<Classes>   
+	 * @throws
+	 * @author           lvjc
+	 * @date           Jan 28, 2018        3:52:09 PM
+	 */
+	List<Classes> queryAllClasses();
+	/**
+	 * 
+	 * @Title          insertClasses
+	 * @Description    添加班级
+	 * @Tags           @return   
+	 * @Return         int   
+	 * @throws
+	 * @author           lvjc
+	 * @date           Jan 28, 2018        3:53:13 PM
+	 */
+	int insertClasses(Classes classes);
+	/**
+	 * 
+	 * @Title          updateClassesById
+	 * @Description    通过id修改班级名称
+	 * @Tags           @return   
+	 * @Return         int   
+	 * @throws
+	 * @author           lvjc
+	 * @date           Jan 28, 2018        3:54:10 PM
+	 */
+	int updateClassesById(Classes classes);
+}

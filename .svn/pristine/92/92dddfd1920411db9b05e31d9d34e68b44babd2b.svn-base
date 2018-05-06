@@ -1,0 +1,70 @@
+package com.zszd.ai.dao.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+
+import com.zszd.ai.dao.SignDao;
+import com.zszd.ai.model.Sign;
+import com.zszd.ai.utils.DataSourceUtil;
+
+public class SignDaoImpl implements SignDao {
+
+	@Override
+	public Sign findById(String name) {
+		
+		Connection conn = DataSourceUtil.getConnection();
+		PreparedStatement ps=null;
+		ResultSet rs = null;
+		Sign signs=new Sign();
+		String sql="select signTime,ifSign,signSum from sys_user where username=?";
+		
+		try {
+			Object[] oo = { name };
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				
+				 String time=rs.getString("signTime");
+				 SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+				 if(time!=null){
+				 signs.setSignTime(sdf.parse(time));
+				 }
+				signs.setIfSign(rs.getString("ifSign"));
+				signs.setSignSum(rs.getInt("signSum"));
+				
+			}
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		} catch (ParseException e) {
+			
+			e.printStackTrace();
+		}finally{
+			DataSourceUtil.colseAll(ps, conn,null);
+		}
+		return signs;
+	}
+
+	@Override
+	public int upDateSign(Sign sign,String name) {
+		int row=0;
+		Connection conn = DataSourceUtil.getConnection();
+		PreparedStatement ps=null;
+		
+		String sql="update  sys_user set  signTime=?,ifSign=?,signSum=? where username=?";
+		Object[] oo = {sign.getSignTime(),sign.isIfSign(),sign.getSignSum(), name };
+		try{
+		row = DataSourceUtil.executeUpdate(conn, ps, sql, oo);
+		}finally{
+			DataSourceUtil.colseAll(ps, conn,null);
+		}
+		return row;
+	}
+
+}

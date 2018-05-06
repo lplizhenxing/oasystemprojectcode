@@ -1,0 +1,43 @@
+package com.zszd.ai.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.zszd.ai.model.Employee;
+
+public interface EmployeeDao {
+
+	List<Employee> queryAllEmployeeInfo();
+
+	int queryWorkPointByName(@Param("name")String name);
+
+	int queryIdByName(@Param("name")String name);
+
+	int updateEmployeeWorkPoint(Employee employee);
+
+	int updateALLEmployee(Employee employee);
+	
+	int queryWorkPointById(@Param("id")int id);
+
+	String queryNameById(@Param("id")int id);
+
+	int getEmployeeCountByGroupId(@Param("groupId")int groupId);
+	
+	Employee queryEmployeeInfoById(@Param("id")int id);
+
+	int updateEmployeeInfo(Employee employee);
+
+	String getEmployeeNameByLoginName(@Param("name")String loginname);
+
+	List<Integer> queryIdLikeName(@Param("name")String name);
+
+	Employee getEmployeeInfoByLoginName(@Param("name")String name);
+
+	int insert(Employee employee);
+
+	int queryWorkPointByAbbr(@Param("name")String name);
+
+	int updateAllInfo(Employee employee);
+
+}

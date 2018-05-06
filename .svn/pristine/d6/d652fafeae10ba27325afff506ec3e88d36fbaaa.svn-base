@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   <mapper namespace="com.zszd.ai.dao.DepartmentDao">
+   	
+   	<select id="queryDepartmentInfo" resultType="department">
+   		select *,(select name from company where id=companyId) as companyName from department
+   	</select>
+   	<select id="queryDepartmentById" resultMap="department"  >
+   		select *,(select name from company where id=companyId) as companyName from department where id=#{id}
+   	</select>
+   	<resultMap type="department" id="department">
+   		<result property="companyName" column="companyName"></result>
+   	</resultMap>
+   	<insert id="insertDepartment"  parameterType="department">
+   		insert into department (name,companyId,telephone,fax,buildTime,address) values (#{name},#{companyId},#{telephone},#{fax},#{buildTime},#{address})
+   	</insert>
+   	<update id="updateDepartment" parameterType="department">
+   		update department set name=#{name},companyId=#{companyId},telephone=#{telephone},fax=#{fax},buildTime=#{buildTime},address=#{address} where id=#{id}
+   	</update>
+   	<select id="countDevByDepartmentId" resultType="int">
+   		select count(*) from devgroup where departmentId=#{departmentId}
+   	</select>
+   	<delete id="deleteDepartmentById" >
+   		DELETE FROM department where id=#{id}
+   	</delete> 
+   </mapper>

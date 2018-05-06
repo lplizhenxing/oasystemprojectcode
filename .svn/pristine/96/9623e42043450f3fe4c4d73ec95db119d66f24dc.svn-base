@@ -1,0 +1,48 @@
+package com.zszd.ai.model;
+
+import java.util.Date;
+
+public class Complaint {
+	private Integer id;
+	private String content;
+	private Date createionDate;
+	private String feedback;
+	private String feedbackMan;
+	private Date feedbackTime;
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	public Date getCreateionDate() {
+		return createionDate;
+	}
+	public void setCreateionDate(Date createionDate) {
+		this.createionDate = createionDate;
+	}
+	public String getFeedback() {
+		return feedback;
+	}
+	public void setFeedback(String feedback) {
+		this.feedback = feedback;
+	}
+	public String getFeedbackMan() {
+		return feedbackMan;
+	}
+	public void setFeedbackMan(String feedbackMan) {
+		this.feedbackMan = feedbackMan;
+	}
+	public Date getFeedbackTime() {
+		return feedbackTime;
+	}
+	public void setFeedbackTime(Date feedbackTime) {
+		this.feedbackTime = feedbackTime;
+	}
+}

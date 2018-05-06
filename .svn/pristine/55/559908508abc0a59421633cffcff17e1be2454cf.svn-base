@@ -1,0 +1,58 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/userlogin.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<base href="<%=basePath%>">
+<title>研发组修改页面</title>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" type="text/css" href="static/css/userindex.css">
+</head>
+<body>
+	<%@ include file="../common/userheader.jsp"%>
+	<section id="section">
+    <%@ include file="../common/userleft.jsp"%>
+	<div id="right">
+		<form action="devgroup?opr=submitModify" method="post">
+			<table>
+				<tr>
+					<td style="width:500px;"><input type="hidden" value="${requestScope.devgroup.id}" name="groupId"></td>
+				</tr>
+				<tr>
+					<td style="width:500px;">修改组名：<input type="text" value="${requestScope.devgroup.name}" name="groupname"></td>
+				</tr>
+				<tr>
+					<td style="width:500px;">修改口号：<input type="text" value="${requestScope.devgroup.watchword}" name="watch"></td>
+				</tr>
+				<tr>
+					<td style="width:500px;">修改部门：<select name="deId" id="departmentId"></td>
+				</tr>
+				<tr>
+					<td><input type="submit" value="提交修改 "></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	</section>
+	<%@ include file="../common/footer.jsp"%>
+</body>
+</html>
+<script type="text/javascript">
+	$(function() {
+		var devgroup = "opr=query&level=devgroup";
+		$.get("classes", devgroup, function callabck(data) {
+			var jsonObj = eval("(" + data + ")");
+			var optionStr = "";
+			for ( var item in jsonObj) {
+				optionStr += "<option value=\""+item+"\">" + jsonObj[item]
+						+ "<option>";
+			}
+			$("#departmentId").html(optionStr);
+		});
+	});
+</script>

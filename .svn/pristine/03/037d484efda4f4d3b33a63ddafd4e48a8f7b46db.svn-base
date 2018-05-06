@@ -1,0 +1,32 @@
+package com.zszd.ai.service.impl;
+
+import java.sql.Connection;
+import java.util.List;
+
+import com.zszd.ai.dao.SensitivewordsDao;
+import com.zszd.ai.dao.impl.SensitivewordsDaoImpl;
+import com.zszd.ai.model.Sensitivewords;
+import com.zszd.ai.service.SensitivewordsService;
+import com.zszd.ai.utils.DataSourceUtil;
+/**
+ * 敏感词接口实现
+ * @author lizx 20180103
+ *
+ */
+public class SensitivewordsServiceImpl implements SensitivewordsService {
+
+	SensitivewordsDao sensitivewordsDao = new SensitivewordsDaoImpl();
+
+	@Override
+	public List<Sensitivewords> getAllSensitivewords() {
+		Connection conn = DataSourceUtil.getConnection();
+		return sensitivewordsDao.getAllSensitivewords(conn);
+	}
+
+	@Override
+	public int addSensitiveWordsInfo(Sensitivewords sensitivewords) {
+		Connection conn = DataSourceUtil.getConnection();
+		return sensitivewordsDao.addSensitiveWordsInfo(conn,sensitivewords);
+	}
+
+}

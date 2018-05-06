@@ -1,0 +1,26 @@
+package com.zszd.ai.service;
+
+import java.util.List;
+
+import com.zszd.ai.model.Role;
+/**
+ * 
+ * @ClassName       RoleService
+ * @Description    角色模块
+ * @author            lizx
+ * @date           2018-1-21        上午11:44:00
+ */
+public interface RoleService {
+    /**
+     * 
+     * @Title          queryAllRoleInfo
+     * @Description    查询系统所有角色信息
+     * @Tags           @return   
+     * @Return         List<Role>   
+     * @throws
+     * @author           lizx
+     * @date           2018-1-21        上午11:44:07
+     */
+	List<Role> queryAllRoleInfo();
+
+}

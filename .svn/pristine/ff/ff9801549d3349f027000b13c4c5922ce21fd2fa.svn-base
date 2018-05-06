@@ -1,0 +1,28 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+<div id="right">
+	<table>
+		<c:if test="${requestScope.list!=null}">
+			<tr>
+				<th>角色名称&nbsp;&nbsp;</th>
+				<th>角色职责&nbsp;&nbsp;</th>
+				<th>角色状态&nbsp;&nbsp;</th>
+				<th>操作权限&nbsp;&nbsp;</th>
+			</tr>
+			<c:forEach items="${requestScope.list}" var="role">
+				<tr>
+					<td colspan="4"><br />
+					</td>
+				<tr>
+				<tr>
+					<td>${role.roleName}&nbsp;&nbsp;</td>
+					<td>${role.responsibility}&nbsp;&nbsp;</td>
+					<td>${role.state}&nbsp;&nbsp;</td>
+					<td>暂不开放</td>
+				</tr>
+			</c:forEach>
+		</c:if>
+	</table>
+</div>
+</section>
+<%@ include file="../common/footer.jsp"%>

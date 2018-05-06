@@ -1,0 +1,64 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+<div id="right">
+	<form action="functions?opr=add" method="post">
+		<table>
+			<tr>
+				<td style="width:80px"><input type="submit" value="提交">
+				</td>
+			</tr>
+			<tr>
+				<td style="width:80px">功能名称</td>
+				<td><input id="functionsName" type="text" name="functionsName" />
+				</td>
+			</tr>
+			<tr>
+				<td style="width:180px">功能路径</td>
+				<td><input id="functionsPath" type="text" name="functionsPath" />
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
+</section>
+<%@ include file="../common/footer.jsp"%>
+<script type="text/javascript">
+	$(function() {
+		var role = "opr=query";
+		$.get("role", role, function callback(data) {
+			var jsonObj = eval("(" + data + ")");
+			var optionstring = "";
+			for ( var item in jsonObj) {
+				optionstring += "<option value=\""+ item +"\" >"
+						+ jsonObj[item] + "</option>";
+			}
+			$("#roleId").html(optionstring);
+		});
+
+		var functions = "opr=query";
+		$.get("functions", functions, function callback(data) {
+			var jsonObj = eval("(" + data + ")");
+			var optionstring = "";
+			for ( var item in jsonObj) {
+				optionstring += "<option value=\""+ item +"\" >"
+						+ jsonObj[item] + "</option>";
+			}
+			$("#functionId").html(optionstring);
+		});
+	});
+
+	$("form").submit(function() {
+		var postTitle = $("#functionsName").val();
+		if (postTitle.trim() == "") {
+			alert("功能名称不能为空！");
+			return false;
+		}
+
+		var postContent = $("#functionsPath").val();
+		if (postContent.trim() == "") {
+			alert("功能路径不能为空！");
+			return false;
+		}
+		return true;
+	});
+</script>

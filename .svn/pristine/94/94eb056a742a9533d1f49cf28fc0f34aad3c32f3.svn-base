@@ -1,0 +1,20 @@
+﻿<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<div id="left">
+	<ol id="functions">
+	</ol>
+</div>
+<script type='text/javascript' src="static/js/jquery-1.12.4.js"></script>
+<script type="text/javascript">
+	$(function() {
+		var functionRole = "opr=query";
+		$.get("functionRole", functionRole, function callback(data) {
+			var jsonObj = eval("(" + data + ")");
+			var optionstring = "";
+			for ( var item in jsonObj) {
+				optionstring += "<li><a href =\""+ item +"\" >"
+						+ jsonObj[item] + "</a></li>";
+			}
+			$("#functions").html(optionstring);
+		});
+	});
+</script>

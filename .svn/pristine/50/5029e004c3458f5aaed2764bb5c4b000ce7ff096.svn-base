@@ -1,0 +1,113 @@
+package com.zszd.ai.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.alibaba.fastjson.JSON;
+import com.zszd.ai.constans.ScheduleTitle;
+import com.zszd.ai.model.FunctionRole;
+import com.zszd.ai.model.Functions;
+import com.zszd.ai.model.Testresults;
+import com.zszd.ai.service.EmployeeService;
+import com.zszd.ai.service.FunctionRoleService;
+import com.zszd.ai.service.ScheduleService;
+import com.zszd.ai.service.impl.EmployeeServiceImpl;
+import com.zszd.ai.service.impl.FunctionRoleServiceImpl;
+import com.zszd.ai.service.impl.ScheduleServiceImpl;
+
+/**
+ * 
+ * @ClassName:       FunctionsServlet
+ * @Description:    功能配置 以及配置对应的角色
+ * @author:            lizx
+ * @date:            2018-1-20        下午8:38:40
+ */
+@WebServlet(urlPatterns = { "/functionRole" }, name = "functionRole")
+public class FunctionRoleServlet extends HttpServlet {
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		this.doPost(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+		HttpSession session = request.getSession();// 获取session
+		int roleIdsessin = (Integer) session.getAttribute("roleId");
+		String path = request.getContextPath();
+		String basePath = request.getScheme() + "://" + request.getServerName()
+				+ ":" + request.getServerPort() + path + "/";
+		PrintWriter out = response.getWriter();
+
+		FunctionRoleService functionsRoleService = new FunctionRoleServiceImpl();
+		String opr = request.getParameter("opr");
+		if ("list".equals(opr)) {
+			List<FunctionRole> functionRoles = functionsRoleService.queryAllFunctionRoleInfo();
+			request.setAttribute("list", functionRoles);
+			request.getRequestDispatcher("jsp/functionRole/functionRole_list.jsp").forward(
+					request, response);
+		} else if("add".equals(opr)) {
+			int roleId = Integer.parseInt(request.getParameter("roleId"));
+			int functionId = Integer.parseInt(request.getParameter("functionId"));
+			FunctionRole functionRole = new FunctionRole();
+			functionRole.setRoleId(roleId);
+			functionRole.setFunctionId(functionId);
+			int rows = functionsRoleService
+					.addFunctionRoleInfo(functionRole);
+			if (rows>0) {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('功能角色配置成功，点击确认返回功能角色配置列表！');");
+				out.print("location.href=\"" + basePath
+						+ "functionRole?opr=list\";");
+				out.print("</script>");
+			} else {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('功能角色配置已存在，无需添加！');");
+				out.print("location.href=\"" + basePath
+						+ "functionRole?opr=list\";");
+				out.print("</script>");
+			}
+		} else if ("query".equals(opr)){
+			List<FunctionRole> list = functionsRoleService.queryAllFunctionRoleInfoByRoleId(roleIdsessin);
+			Map<String,String> functionRoleMap = new HashMap<String,String>();
+		    if(list!=null){
+		    	for (FunctionRole functionRole : list) {
+		    		functionRoleMap.put(functionRole.getFunctionPath(),functionRole.getFunctionName());
+				}
+		    }
+		    String functionRoleJson = JSON.toJSONString(functionRoleMap);
+			out.print(functionRoleJson);
+		}else if("delConfig".equals(opr)){
+			int functionRoleId = Integer.parseInt(request.getParameter("id"));
+			int rows = functionsRoleService
+					.delFunctionRoleConfigInfoById(functionRoleId);
+			if (rows>0) {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('功能角色配置删除成功，点击确认返回功能角色配置列表！');");
+				out.print("location.href=\"" + basePath
+						+ "functionRole?opr=list\";");
+				out.print("</script>");
+			} else {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('功能角色配置已删除，无需删除！');");
+				out.print("location.href=\"" + basePath
+						+ "functionRole?opr=list\";");
+				out.print("</script>");
+			}
+		}
+	}
+}

@@ -1,0 +1,15 @@
+package com.zszd.ai.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.zszd.ai.pojo.Draw;
+
+public interface DrawDao {
+	int addDrawRecord(Draw draw);
+
+	List<Draw> findDrawByName(@Param("name") String name);
+
+	List<Draw> findAllDraw();
+}

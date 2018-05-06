@@ -1,0 +1,50 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+<div id="right">
+	<table>
+		<h3>修改员工信息</h3>
+		<form action="employee?opr=submitModify" method="post">
+			<input type="hidden" value="${requestScope.employee.id}"
+				name="employeeId">
+			<tr>
+				<td>修改员工名称：</td>
+				<td><input type="text" value="${requestScope.employee.name}"
+					name="employeename">
+				</td>
+			</tr>
+			<tr>
+				<td>修改员工证件号码：</td>
+				<td><input type="text"
+					value="${requestScope.employee.validDocuments}"
+					name="validDocuments">
+				</td>
+			</tr>
+			<tr>
+				<td>修改员工工分：</td>
+				<td><input type="text"
+					value="${requestScope.employee.workpoints}" name="workpoints">
+				</td>
+			</tr>
+			<tr>
+				<td><input type="submit" value="提交修改 ">
+				</td>
+			</tr>
+		</form>
+	</table>
+</div>
+</section>
+<%@ include file="../common/footer.jsp"%>
+<script type="text/javascript">
+	$(function() {
+		var role = "opr=query";
+		$.get("company", role, function callback(data) {
+			var jsonObj = eval("(" + data + ")");
+			var optionstring = "";
+			for ( var item in jsonObj) {
+				optionstring += "<option value=\""+ item +"\" >"
+						+ jsonObj[item] + "</option>";
+			}
+			$("#companyId").html(optionstring);
+		});
+	});
+</script>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zszd.ai.dao.post.PostDao">
+
+	
+	<select id="queryPotRecordPageLikeName" resultType="Post">
+		select a.*,(select count(1) from comment b  where b.postId = a.id ) as commentCount from
+		post a where state=1 and ( postTitle like CONCAT('%',#{keywords},'%') or
+		postContent like CONCAT('%',#{keywords},'%'))
+		order by isTop
+		desc,substring(postDate,1,10) desc,commentCount desc limit
+		#{p.startIndex},#{p.pageSize}
+	</select>
+
+	<select id="getPostByPostId" resultType="Post">
+		select * from post where
+		id = #{id}
+	</select>
+
+	<insert id="addPostInfo" parameterType="Post">
+		insert into post
+		(postTitle,postContent,postType,userName)
+		values
+		(#{postTitle},#{postContent},#{postType},#{userName})
+	</insert>
+
+	<update id="updatePost" parameterType="Post">
+		update post set
+		clickCount=#{clickCount}+1 where id=#{id}
+	</update>
+
+	<update id="updatePostInfo" parameterType="Post">
+		update post
+		<set>
+			<if test="postType!=null">postType=#{postType},</if>
+			<if test="postTitle!=null">postTitle=#{postTitle},</if>
+			<if test="postContent!=null">postContent=#{postContent},</if>
+		</set>
+		where id=#{id}
+	</update>
+
+	<update id="deletePostById" parameterType="Post">
+		update post set state=0 where id=#{id}
+	</update>
+
+	<select id="getPostInfoCountLikeName" resultType="Integer">
+		select count(1) from post
+		<where>
+			and state =1
+			<if test="keywords!=null">
+				and (postTitle like CONCAT('%',#{keywords},'%')
+				or
+				postContent like CONCAT('%',#{keywords},'%'))
+			</if>
+		</where>
+	</select>
+</mapper>

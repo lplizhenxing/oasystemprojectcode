@@ -1,0 +1,35 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+<div id="right">
+	<table>
+		<c:if test="${requestScope.list!=null}">
+			<tr>
+				<th>研发组名称&nbsp;&nbsp;</th>
+				<th>所属部门&nbsp;&nbsp;</th>
+				<th>研发组口号&nbsp;&nbsp;</th>
+				<th>操作权限</th>
+			</tr>
+			<c:forEach items="${requestScope.list}" var="devgroup">
+				<tr>
+					<td colspan="4"><br /></td>
+				<tr>
+				<tr>
+					<td>${devgroup.name}&nbsp;&nbsp;</td>
+					<td>${devgroup.departmentName}&nbsp;&nbsp;</td>
+					<td>${devgroup.watchword}&nbsp;&nbsp;</td>
+					<td><c:if test="${sessionScope.roleId eq 5}">
+							<a href='devgroup?opr=modify&groupId=${devgroup.id}'
+								style="color:red">修改</a>
+							<a href='devgroup?opr=delete&groupId=${devgroup.id}'
+								style="color:red">删除</a>
+						</c:if> <c:if test="${sessionScope.roleId ne 5}">
+							<p style="color:red">目前只对技术总监开放修改和删除权限</p>
+						</c:if></td>
+				</tr>
+			</c:forEach>
+		</c:if>
+	</table>
+</div>
+</section>
+<%@ include file="../common/footer.jsp"%>
+

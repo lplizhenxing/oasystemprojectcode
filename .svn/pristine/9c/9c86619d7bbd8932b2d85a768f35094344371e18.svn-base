@@ -1,0 +1,76 @@
+package com.zszd.ai.service;
+
+import java.util.List;
+
+import com.zszd.ai.model.Resource;
+
+/**
+ * 
+ * @ClassName       ResourceService
+ * @Description    资源接口，包括图片 视频 文件
+ * @author            lizx
+ * @date           2018-1-27        上午10:00:02
+ */
+public interface ResourceService {
+    /**
+     * 
+     * @Title          queryPassedResourceInfoByType
+     * @Description    根据类型查看审核通过的资源
+     * @Tags           @param type
+     * @Tags           @return   
+     * @Return         List<Resource>   
+     * @throws
+     * @author           lizx
+     * @date           2018-1-27        下午10:12:22
+     */
+	List<Resource> queryPassedResourceInfoByType(int type);
+    /**
+     * 
+     * @Title          queryAllResourceInfoByType
+     * @Description    根据类型查看所有的资源
+     * @Tags           @param type
+     * @Tags           @return   
+     * @Return         List<Resource>   
+     * @throws
+     * @author           lizx
+     * @date           2018-1-27        下午10:12:39
+     */
+	List<Resource> queryAllResourceInfoByType(int type);
+    /**
+     * 
+     * @Title          insertResourceRecord
+     * @Description    上传资源后插入数据
+     * @Tags           @param resource
+     * @Tags           @return   
+     * @Return         int   
+     * @throws
+     * @author           lizx
+     * @date           2018-1-27        下午10:12:55
+     */
+	int insertResourceRecord(Resource resource);
+    /**
+     * 
+     * @Title          getResourceById
+     * @Description    修改资源 先得到资源的对象
+     * @Tags           @param id
+     * @Tags           @return   
+     * @Return         Resource   
+     * @throws
+     * @author           lizx
+     * @date           2018-1-27        下午10:13:13
+     */
+	Resource getResourceById(String id);
+	/**
+	 * 
+	 * @Title          updateResourceInfo
+	 * @Description    审核资源  一般可以修改名称  审核人 审核时间  状态  显示名称
+	 * @Tags           @param resource
+	 * @Tags           @return   
+	 * @Return         int   
+	 * @throws
+	 * @author           lizx
+	 * @date           2018-1-27        下午10:29:14
+	 */
+	int updateResourceInfo(Resource resource);
+
+}

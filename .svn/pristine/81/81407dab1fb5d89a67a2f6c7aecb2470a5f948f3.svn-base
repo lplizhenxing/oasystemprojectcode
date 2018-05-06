@@ -1,0 +1,22 @@
+package com.zszd.ai.service;
+
+import java.util.List;
+
+import com.zszd.ai.model.Resource;
+
+/**
+ * 
+ * @ClassName       ResourceService
+ * @Description    资源接口，包括图片 视频 文件
+ * @author            lizx
+ * @date           2018-1-27        上午10:00:02
+ */
+public interface ResourceService {
+
+	List<Resource> queryPassedResourceInfoByType(int type);
+
+	List<Resource> queryAllResourceInfoByType(int type);
+
+	int insertResourceRecord(Resource resource);
+
+}

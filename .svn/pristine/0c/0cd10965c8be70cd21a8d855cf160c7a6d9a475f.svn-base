@@ -1,0 +1,27 @@
+package com.zszd.ai.dao;
+
+import java.sql.Connection;
+import java.util.List;
+
+import com.zszd.ai.model.Test;
+/**
+ * 工作日志类型DAO接口
+ * @author lizx 20180103
+ *
+ */
+public interface TestDao {
+
+	List<Test> getTestByToday();
+
+	List<Test> queryALLTestInfo();
+
+	int addTestInfo(Connection conn, Test test);
+
+	int deleteTestById(int id);
+
+	Test queryTestInfoById(int id);
+
+	int updateTestInfo(Test test);
+
+
+}

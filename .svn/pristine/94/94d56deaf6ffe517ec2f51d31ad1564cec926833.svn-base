@@ -1,0 +1,148 @@
+package com.zszd.ai.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.zszd.ai.dao.LeaveDao;
+import com.zszd.ai.dao.SignRecordDao;
+import com.zszd.ai.model.SignRecord;
+import com.zszd.ai.service.SignRecordService;
+import com.zszd.ai.utils.MyBatisUtil;
+
+public class SignRecordServiceImpl implements SignRecordService {
+
+	@Override
+	public List<SignRecord> queryAllSignRecordInfoByName(String name) {
+		SqlSession sqlSession = null;
+		List<SignRecord> signRecods = new ArrayList<SignRecord>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			signRecods = sqlSession.getMapper(SignRecordDao.class)
+					.queryAllSignRecordInfoByName(name);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return signRecods;
+	}
+
+	@Override
+	public List<SignRecord> queryAllSignRecordInfoByNameAndSignDate(
+			String name, String signDate) {
+		SqlSession sqlSession = null;
+		List<SignRecord> signRecods = null;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			signRecods = sqlSession.getMapper(SignRecordDao.class)
+					.queryAllSignRecordInfoByNameAndSignDate(name,signDate);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return signRecods;
+	}
+
+	@Override
+	public List<SignRecord> queryAllSignRecordInfoByNameAndSignOutDate(
+			String name, String signOutDate) {
+		SqlSession sqlSession = null;
+		List<SignRecord> signRecods = null;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			signRecods = sqlSession.getMapper(SignRecordDao.class)
+					.queryAllSignRecordInfoByNameAndSignOutDate(name,signOutDate);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return signRecods;
+	}
+
+	@Override
+	public int updateSignRecordInfoByNameAndSignDate(String name,
+			String signDate) {
+		SqlSession sqlSession = null;
+		int rows =0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(SignRecordDao.class)
+					.updateSignRecordInfoByNameAndSignDate( name,signDate);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+
+	@Override
+	public int updateSignRecordInfoByNameAndSignOutDate(String name,
+			String signOutDate) {
+		SqlSession sqlSession = null;
+		int rows =0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(SignRecordDao.class)
+					.updateSignRecordInfoByNameAndSignOutDate(name,signOutDate);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+
+	@Override
+	public int insertSignRecordInfoByNameAndSignOutDate(String name,
+			String signOutDate) {
+		SqlSession sqlSession = null;
+		int rows =0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(SignRecordDao.class)
+					.insertSignRecordInfoByNameAndSignOutDate(name,signOutDate);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+
+	@Override
+	public int insertSignRecordInfoByNameAndSignDate(String name,
+			String signDate) {
+		SqlSession sqlSession = null;
+		int rows =0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(SignRecordDao.class)
+					.insertSignRecordInfoByNameAndSignDate(name,signDate);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+
+}

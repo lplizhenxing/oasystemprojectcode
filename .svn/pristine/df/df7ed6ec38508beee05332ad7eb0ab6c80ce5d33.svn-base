@@ -1,0 +1,48 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+<div id="right">
+	<form action="functionRole?opr=add" method="post">
+		<table>
+			<tr>
+				<td style="width:80px"><input type="submit" value="提交">
+				</td>
+			</tr>
+			<tr>
+				<td style="width:80px">角色名称</td>
+				<td><select name="roleId" id="roleId"></select></td>
+			</tr>
+			<tr>
+				<td style="width:80px">功能名称</td>
+				<td><select name="functionId" id="functionId"></select></td>
+			</tr>
+		</table>
+	</form>
+</div>
+</section>
+<%@ include file="../common/footer.jsp"%>
+<script type="text/javascript">
+	$(function() {
+		var role = "opr=query";
+		$.get("role", role, function callback(data) {
+			var jsonObj = eval("(" + data + ")");
+			var optionstring = "";
+			for ( var item in jsonObj) {
+				optionstring += "<option value=\""+ item +"\" >"
+						+ jsonObj[item] + "</option>";
+			}
+			$("#roleId").html(optionstring);
+		});
+
+		var functions = "opr=query";
+		$.get("functions", functions, function callback(data) {
+			var jsonObj = eval("(" + data + ")");
+			var optionstring = "";
+			for ( var item in jsonObj) {
+				optionstring += "<option value=\""+ item +"\" >"
+						+ jsonObj[item] + "</option>";
+			}
+			$("#functionId").html(optionstring);
+		});
+	});
+</script>
+

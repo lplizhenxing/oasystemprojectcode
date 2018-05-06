@@ -1,0 +1,46 @@
+package com.zszd.ai.controller;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.zszd.ai.pojo.FunctionRole;
+import com.zszd.ai.pojo.SysUser;
+import com.zszd.ai.service.sysfunctions.FunctionRoleService;
+import com.zszd.ai.service.sysfunctions.FunctionRoleServiceImpl;
+import com.zszd.ai.tools.Constants;
+
+@Controller
+@RequestMapping("/functionRole")
+public class FunctionRoleController {
+
+	private Logger logger = Logger.getLogger(LoginController.class);
+
+	@Resource
+	FunctionRoleService functionRoleService = new FunctionRoleServiceImpl();
+
+	@RequestMapping(value = "/queryFunctionRoleByRoleId.html", method = RequestMethod.GET)
+	@ResponseBody
+	public List<FunctionRole> queryFunctionRoleByRoleId(HttpSession session) {
+		int roleId = ((SysUser) session.getAttribute(Constants.SYSUSER_SESSION))
+				.getRoleId();
+		List<FunctionRole> funList = functionRoleService
+				.queryAllFunctionRoleInfoByRoleId(roleId);
+		return funList;
+	}
+	
+	@RequestMapping(value="/queryAllFunctionRoleInfo.html")
+	public String queryAllFunctionRoleInfo(HttpServletRequest request) {
+		List<FunctionRole> funList = functionRoleService.queryAllFunctionRoleInfo();
+		request.setAttribute("list", funList);
+		return "functionRole/functionRole_list";
+	}
+}

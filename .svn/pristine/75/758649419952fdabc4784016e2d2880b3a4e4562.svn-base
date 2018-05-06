@@ -1,0 +1,55 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/userlogin.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<base href="<%=basePath%>">
+<title>公司修改页面</title>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" type="text/css" href="static/css/userindex.css">
+</head>
+<body>
+	<%@ include file="../common/userheader.jsp"%>
+	<section id="section">
+    <%@ include file="../common/userleft.jsp"%>
+	<div id="right">
+	<br/>
+		<h1>修改公司信息</h1>
+		<form action="company?opr=submitModify" method="post">
+			<table>
+				<tr>
+					<td style="width:500px;"><input type="hidden" value="${requestScope.company.id}" name="companyId"></td>
+				</tr>
+				<tr>
+					<td style="width:500px;">修改公司名称：<input type="text" value="${requestScope.company.name}" name="companyName"></td>
+				</tr>
+				<tr>
+					<td style="width:500px;">修改公司网站：<input type="text" value="${requestScope.company.url}" name="companyUrl"></td>
+				</tr>
+				<tr>
+					<td style="width:500px;">修改公司电话：<input type="text" value="${requestScope.company.telephone}" name="companyTel"></td>
+				</tr>
+				<tr>
+					<td style="width:500px;">修改公司传真：<input type="text" value="${requestScope.company.fax}" name="companyFax"></td>
+				</tr>
+				<tr>
+					<td style="width:500px;">修改公司地址：<input type="text" value="${requestScope.company.address}" name="companyAddress"></td>
+				</tr>
+				<tr>
+					<td style="width:500px;">修改公司所属班级：<input type="text" value="${requestScope.company.className}" name="companyClass"></td>
+				</tr>
+				<tr>
+					<td><input type="submit" value="提交修改 "></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	</section>
+	<%@ include file="../common/footer.jsp"%>
+</body>
+</html>

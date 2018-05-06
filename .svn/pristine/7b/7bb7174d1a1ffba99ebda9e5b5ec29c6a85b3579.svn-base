@@ -1,0 +1,18 @@
+package com.zszd.ai.dao.sysfunctions;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.zszd.ai.pojo.Functions;
+
+public interface FunctionsDao {
+
+	List<Functions> queryAllFunctionsInfo();
+
+	int addFunctionsInfo(Functions functions);
+
+	Functions queryFunctionsInfoById(@Param("id")Integer functionId);
+
+	int updateFunctionsInfo(Functions functions);
+}

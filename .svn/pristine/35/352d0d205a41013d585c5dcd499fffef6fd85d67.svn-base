@@ -1,0 +1,65 @@
+package com.zszd.ai.service.impl;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.zszd.ai.dao.ClassesDao;
+import com.zszd.ai.model.Classes;
+import com.zszd.ai.service.ClassesService;
+import com.zszd.ai.utils.MyBatisUtil;
+
+public class ClassesServiceImpl implements ClassesService {
+
+	@Override
+	public List<Classes> queryAllClasses() {
+		SqlSession sqlSession=null;
+		List<Classes> classesList = null;
+		try{
+			sqlSession=MyBatisUtil.createSqlSession();
+			classesList=sqlSession.getMapper(ClassesDao.class).queryAllClasses();
+			sqlSession.commit();
+		}catch(Exception e){
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return classesList;
+	}
+
+	@Override
+	public int insertClasses(Classes classes) {
+		SqlSession sqlSession=null;
+		int row=0;
+		try{
+			sqlSession=MyBatisUtil.createSqlSession();
+			row=sqlSession.getMapper(ClassesDao.class).insertClasses(classes);
+			sqlSession.commit();
+		}catch(Exception e){
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return row;
+	}
+
+	@Override
+	public int updateClassesById(Classes classes) {
+		SqlSession sqlSession=null;
+		int row=0;
+		try{
+			sqlSession=MyBatisUtil.createSqlSession();
+			row=sqlSession.getMapper(ClassesDao.class).updateClassesById(classes);
+			sqlSession.commit();
+		}catch(Exception e){
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return row;
+	}
+
+}

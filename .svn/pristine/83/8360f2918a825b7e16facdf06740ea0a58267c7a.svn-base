@@ -1,0 +1,53 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/userlogin.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<base href="<%=basePath%>">
+<title>部门添加页面</title>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" type="text/css" href="static/css/userindex.css">
+</head>
+
+<body>
+	<%@ include file="../common/userheader.jsp"%>
+	<section id="section"> <%@ include
+		file="../common/userleft.jsp"%> 
+		<div id="right">
+	<br/>
+		<h1>添加部门信息</h1>
+		<form action="department?opr=submitAdd" method="post">
+			<table>			
+				<tr>
+					<td style="width:500px;">部门名称：<input type="text"  name="departmentName"></td>
+				</tr>
+				<tr>
+					<td style="width:500px;">公司id：<input type="text"  name="departmentId"></td>
+				</tr>
+				<tr>
+					<td style="width:500px;">电话号码：<input type="text"  name="departmentTel"></td>
+				</tr>
+				<tr>
+					<td style="width:500px;">传真号码：<input type="text"  name="departmentFax"></td>
+				</tr>
+				<tr>
+					<td style="width:500px;">创建时间：<input type="text"  name="departmentTime"></td>
+				</tr>
+				<tr>
+					<td style="width:500px;">部门地址：<input type="text"  name="departmentAddress"></td>
+				</tr>
+				<tr>
+					<td><input type="submit" value="提交 "></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	</section>
+	<%@ include file="../common/footer.jsp"%>
+</body>
+</html>

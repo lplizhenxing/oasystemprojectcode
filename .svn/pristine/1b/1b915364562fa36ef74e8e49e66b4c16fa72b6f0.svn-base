@@ -1,0 +1,123 @@
+package com.zszd.ai.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.zszd.ai.model.Resource;
+import com.zszd.ai.service.ResourceService;
+import com.zszd.ai.service.impl.ResourceServiceImpl;
+
+/**
+ * 
+ * @ClassName       ResourceServlet
+ * @Description    资源管理 
+ * @author            lizx
+ * @date           2018-1-27        上午10:01:27
+ */
+@WebServlet(urlPatterns = { "/resource" }, name = "resource")
+public class ResourceServlet extends HttpServlet {
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		this.doPost(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+		HttpSession session = request.getSession();// 获取session
+		String loginname = (String) session.getAttribute("login");
+		int roleId = (Integer)session.getAttribute("roleId");
+		String path = request.getContextPath();
+		String basePath = request.getScheme() + "://" + request.getServerName()
+				+ ":" + request.getServerPort() + path + "/";
+		PrintWriter out = response.getWriter();
+
+		ResourceService resourceService = new ResourceServiceImpl();
+		String opr = request.getParameter("opr");
+		String typeN = (String) request.getParameter("type");
+		int type = 0;
+		if(typeN != null){
+			type = Integer.parseInt(typeN);
+		}
+		if ("list".equals(opr)) {
+			List<Resource> list = null;
+			if(roleId == 6){
+				list = resourceService.queryPassedResourceInfoByType(type);
+			}else{
+				list = resourceService.queryAllResourceInfoByType(type);
+			}
+			request.setAttribute("list", list);
+			switch (type) {
+			case 0:
+				request.getRequestDispatcher("jsp/resource/photo_list.jsp").forward(
+						request, response);
+				break;
+			case 1:
+				request.getRequestDispatcher("jsp/resource/video_list.jsp").forward(
+						request, response);
+				break;
+			case 2:
+				request.getRequestDispatcher("jsp/resource/file_list.jsp").forward(
+						request, response);
+				break;
+			}	
+		}else if("modify".equals(opr)){
+			String id = (String) request.getParameter("id");
+			Resource resource = resourceService.getResourceById(id);
+			request.setAttribute("resource", resource);
+			switch (type) {
+			case 0:
+				request.getRequestDispatcher("jsp/resource/photo_modify.jsp").forward(
+						request, response);
+				break;
+			case 1:
+				request.getRequestDispatcher("jsp/resource/video_modify.jsp").forward(
+						request, response);
+				break;
+			case 2:
+				request.getRequestDispatcher("jsp/resource/file_modify.jsp").forward(
+						request, response);
+				break;
+			}	
+		} else if ("submitModify".equals(opr)) {
+			String name = request.getParameter("name");
+			String state = request.getParameter("state");
+			String showType = request.getParameter("showType");
+			String id = request.getParameter("id");
+			
+			Date date = new Date();
+			Resource resource = new Resource();
+			resource.setId(Integer.valueOf(id));
+			resource.setName(name);
+			resource.setState(Integer.valueOf(state));
+			resource.setShowType(showType);
+			resource.setReviewBy(loginname);
+			resource.setReviewTime(date);
+			int row = resourceService.updateResourceInfo(resource);
+			if (row > 0) {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('当前信息更新成功，点击确认返回！');");
+				out.print("location.href=\"" + basePath + "resource?opr=list&type="+type+"\";");
+				out.print("</script>");
+			} else {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('当前信息更新成功，点击确认返回！');");
+				out.print("location.href=\"" + basePath + "resource?opr=list&type="+type+"\";");
+				out.print("</script>");
+			}
+		}
+	}
+}

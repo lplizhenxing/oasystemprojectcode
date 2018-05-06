@@ -1,0 +1,64 @@
+package com.zszd.ai.dao.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.zszd.ai.dao.SensitivewordsDao;
+import com.zszd.ai.model.Sensitivewords;
+import com.zszd.ai.utils.DataSourceUtil;
+/**
+ * 敏感词DAO实现类
+ * @author lizx 20180103
+ *
+ */
+public class SensitivewordsDaoImpl implements SensitivewordsDao {
+
+	@Override
+	public List<Sensitivewords> getAllSensitivewords(Connection conn) {
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Sensitivewords sensitivewords = null;
+		List<Sensitivewords> senList = new ArrayList<Sensitivewords>();
+		String sql = "select * from sensitivewords order by  length(content) desc";
+		
+		try {
+			Object[] oo = null;
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				sensitivewords = new Sensitivewords();
+				sensitivewords.setId(rs.getInt("id"));
+				sensitivewords.setContent(rs.getString("content"));
+				sensitivewords.setContentDate(rs.getDate("contentDate"));
+				senList.add(sensitivewords);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return senList;
+	}
+
+	@Override
+	public int addSensitiveWordsInfo(Connection conn,
+			Sensitivewords sensitivewords) {
+		int row =0;
+		PreparedStatement ps=null;
+		String sql = "insert into sensitivewords (content) " +
+				"values (?)";
+		Object[] oo={sensitivewords.getContent()};
+		try {	
+			row = DataSourceUtil.executeUpdate(conn, ps, sql, oo);
+		}finally{
+			DataSourceUtil.colseAll(ps, conn,null);
+		}
+		return row;
+	}
+
+}

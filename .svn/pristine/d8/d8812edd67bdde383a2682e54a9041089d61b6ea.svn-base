@@ -1,0 +1,14 @@
+package com.zszd.ai.tools;
+/**
+ * 代办事项常量
+ * @author lizx  20180103
+ *
+ */
+public class LeaveState {
+
+	public static final String WAITE = "待审核";
+	public static final String PASS = "审核通过";
+	public static final String NOPASS = "驳回请求";
+
+
+}

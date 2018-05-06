@@ -1,0 +1,35 @@
+package com.zszd.ai.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.zszd.ai.model.Page;
+import com.zszd.ai.model.Post;
+
+/**
+ * 帖子DAO接口
+ * 
+ * @author lizx 20180103
+ * 
+ */
+public interface PostDao {
+
+	Post getPostByPostId(@Param("id") int id);
+
+	int addPostInfo(Post post);
+
+	int updatePost(Post post);
+
+	int updateCommentCount( Post post);
+
+	int updatePostInfo( Post post);
+
+	int deletePostById( int id);
+
+	int getPostInfoCountLikeName( @Param("keywords")String keywords);
+
+	List<Post> queryPotRecordPageLikeName(@Param("p") Page p,
+			@Param("keywords") String keywords);
+
+}

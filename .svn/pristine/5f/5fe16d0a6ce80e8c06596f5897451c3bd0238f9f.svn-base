@@ -1,0 +1,89 @@
+package com.zszd.ai.service.impl;
+
+import java.util.List;
+
+import com.zszd.ai.dao.EmployeeDao;
+import com.zszd.ai.dao.WorkPointDao;
+import com.zszd.ai.dao.impl.EmployeeDaoImpl;
+import com.zszd.ai.dao.impl.WorkPointDaoImpl;
+import com.zszd.ai.model.Employee;
+import com.zszd.ai.service.EmployeeService;
+/**
+ * 员工接口实现
+ * @author lizx 20180103
+ *
+ */
+public class EmployeeServiceImpl implements EmployeeService{
+	EmployeeDao employeeDao = new EmployeeDaoImpl();
+	WorkPointDao workPointDao = new WorkPointDaoImpl();
+
+	@Override
+	public List<Employee> queryAllEmployeeInfo() {
+		return employeeDao.queryAllEmployeeInfo();
+	}
+
+	@Override
+	public int queryWorkPointByName(String name) {
+		// TODO Auto-generated method stub
+		return employeeDao.queryWorkPointByName(name);
+	}
+
+	@Override
+	public List queryWorkPointRecordByName(String name) {
+		int id = employeeDao.queryIdByName(name);
+		if(id!=-1){
+			return workPointDao.queryWorkPointRecordByEmployeeId(id);
+		}
+		return null;
+		
+	}
+
+	@Override
+	public String queryNameById(int id) {
+		// TODO Auto-generated method stub
+		return employeeDao.queryNameById(id);
+	}
+
+	@Override
+	public int getEmployeeCountByGroupId(int groupId) {
+		// TODO Auto-generated method stub
+		return employeeDao.getEmployeeCountByGroupId(groupId);
+	}
+
+	@Override
+	public Employee queryEmployeeInfoById(int id) {
+		// TODO Auto-generated method stub
+		return employeeDao.queryEmployeeInfoById(id);
+	}
+
+	@Override
+	public int updateEmployeeInfo(Employee employee) {
+		// TODO Auto-generated method stub
+		return employeeDao.updateEmployeeInfo(employee);
+	}
+	
+	@Override
+	public int updateAllInfo(Employee employee) {
+		// TODO Auto-generated method stub
+		return employeeDao.updateAllInfo(employee);
+	}
+
+	@Override
+	public String getEmployeeNameByLoginName(String loginname) {
+		// TODO Auto-generated method stub
+		return employeeDao.getEmployeeNameByLoginName(loginname);
+	}
+
+	@Override
+	public Employee getEmployeeInfoByLoginName(String name) {
+		// TODO Auto-generated method stub
+		return employeeDao.getEmployeeInfoByLoginName(name);
+	}
+
+	@Override
+	public int queryWorkPointByAbbr(String name) {
+		// TODO Auto-generated method stub
+		return employeeDao.queryWorkPointByAbbr(name);
+	}
+
+}

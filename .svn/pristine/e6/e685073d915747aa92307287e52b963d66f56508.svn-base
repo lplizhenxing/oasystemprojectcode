@@ -1,0 +1,8 @@
+package com.zszd.ai.tools;
+
+public class Constants {
+
+	public static final String SYSUSER_SESSION = "sysuser_Session";
+	public static final String EMPlOYEE_SESSION = "employee_Session";
+
+}

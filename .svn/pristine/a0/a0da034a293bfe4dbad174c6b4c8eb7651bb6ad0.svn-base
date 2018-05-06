@@ -1,0 +1,63 @@
+package com.zszd.ai.service;
+
+import java.util.List;
+
+import com.zszd.ai.model.FunctionRole;
+/**
+ * 
+ * @ClassName       FunctionRoleService
+ * @Description    功能角色模块
+ * @author            lizx
+ * @date           2018-1-21        上午11:39:57
+ */
+public interface FunctionRoleService {
+
+	/**
+	 * 
+	 * @Title          queryAllFunctionRoleInfo
+	 * @Description    查询所有的功能角色配置信息
+	 * @Tags           @return   
+	 * @Return         List<FunctionRole>   
+	 * @throws
+	 * @author           lizx
+	 * @date           2018-1-21        上午11:40:02
+	 */
+	List<FunctionRole> queryAllFunctionRoleInfo();
+    /**
+     * 
+     * @Title          addFunctionRoleInfo
+     * @Description    添加功能角色配置信息，给角色添加功能
+     * @Tags           @param functionRole
+     * @Tags           @return   
+     * @Return         int   
+     * @throws
+     * @author           lizx
+     * @date           2018-1-21        上午11:40:12
+     */
+	int addFunctionRoleInfo(FunctionRole functionRole);
+    /**
+     * 
+     * @Title          queryAllFunctionRoleInfoByRoleId
+     * @Description    根据角色ID查询所有的功能角色配置信息
+     * @Tags           @param roleIdsessin
+     * @Tags           @return   
+     * @Return         List<FunctionRole>   
+     * @throws
+     * @author           lizx
+     * @date           2018-1-21        上午11:40:23
+     */
+	List<FunctionRole> queryAllFunctionRoleInfoByRoleId(int roleIdsessin);
+	/**
+	 * 
+	 * @Title          delFunctionRoleConfigInfoById
+	 * @Description    删除配置
+	 * @Tags           @param functionRoleId
+	 * @Tags           @return   
+	 * @Return         int   
+	 * @throws
+	 * @author           lizx
+	 * @date           2018-1-21        下午2:28:43
+	 */
+	int delFunctionRoleConfigInfoById(int functionRoleId);
+
+}

@@ -1,0 +1,84 @@
+package com.zszd.ai.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.zszd.ai.dao.DrawDao;
+import com.zszd.ai.dao.WorkPointDao;
+import com.zszd.ai.dao.employee.EmployeeDao;
+import com.zszd.ai.pojo.Draw;
+import com.zszd.ai.pojo.Employee;
+import com.zszd.ai.pojo.Workpoint;
+import com.zszd.ai.service.DrawService;
+import com.zszd.ai.tools.MyBatisUtil;
+
+public class DrawServiceImpl implements DrawService {
+
+	public int addDrawRecord(Draw draw) {
+		SqlSession sqlSession = null;
+		int rows =0;
+		try {
+			// 更新雇员工分值
+	  		Employee me =  sqlSession.getMapper(EmployeeDao.class).getEmployeeInfoByLoginName(draw.getLoginName());
+			me.setWorkpoints(me.getWorkpoints() - 10);
+			int row1 = sqlSession.getMapper(EmployeeDao.class).updateEmployeeWorkPoint(me);
+			
+			// 添加工分记录
+			Workpoint wp = new Workpoint();
+			wp.setEmployeeId(me.getId());
+			wp.setRemarks("抽奖扣除10积分,抽到的是：" + draw.getPrizeName());
+			wp.setWorkpoint(-10);
+			int row2 = sqlSession.getMapper(WorkPointDao.class).addWorkPointRecord(wp);
+			
+			//添加抽奖表
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(DrawDao.class)
+					.addDrawRecord(draw);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+
+	public List<Draw> findDrawByName(String name) {
+		SqlSession sqlSession = null;
+		List<Draw> draws = new ArrayList<Draw>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			draws = sqlSession.getMapper(DrawDao.class)
+					.findDrawByName(name);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return draws;
+	}
+
+	@Override
+	public List<Draw> findAllDraw() {
+		SqlSession sqlSession = null;
+		List<Draw> draws = new ArrayList<Draw>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			draws = sqlSession.getMapper(DrawDao.class)
+					.findAllDraw();
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return draws;
+	}
+
+}

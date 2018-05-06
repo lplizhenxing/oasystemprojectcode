@@ -1,0 +1,87 @@
+package com.zszd.ai.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.zszd.ai.dao.FunctionRoleDao;
+import com.zszd.ai.model.FunctionRole;
+import com.zszd.ai.service.FunctionRoleService;
+import com.zszd.ai.utils.MyBatisUtil;
+
+public class FunctionRoleServiceImpl implements FunctionRoleService {
+
+	@Override
+	public List<FunctionRole> queryAllFunctionRoleInfo() {
+		SqlSession sqlSession = null;
+		List<FunctionRole> functionRole = new ArrayList<FunctionRole>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			functionRole = sqlSession.getMapper(FunctionRoleDao.class)
+					.queryAllFunctionRoleInfo();
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return functionRole;
+	}
+
+	@Override
+	public int addFunctionRoleInfo(FunctionRole functionRole) {
+		SqlSession sqlSession = null;
+		int rows =0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(FunctionRoleDao.class)
+					.addFunctionRoleInfo(functionRole);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+
+	@Override
+	public List<FunctionRole> queryAllFunctionRoleInfoByRoleId(
+			int roleIdsessin) {
+		SqlSession sqlSession = null;
+		List<FunctionRole> functionRole = new ArrayList<FunctionRole>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			functionRole = sqlSession.getMapper(FunctionRoleDao.class)
+					.queryAllFunctionRoleInfoByRoleId(roleIdsessin);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return functionRole;
+	}
+
+	@Override
+	public int delFunctionRoleConfigInfoById(int functionRoleId) {
+		SqlSession sqlSession = null;
+		int rows =0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(FunctionRoleDao.class)
+					.delFunctionRoleConfigInfoById(functionRoleId);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+}

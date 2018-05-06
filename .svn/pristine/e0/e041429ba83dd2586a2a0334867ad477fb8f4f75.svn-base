@@ -1,0 +1,20 @@
+package com.zszd.ai.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.zszd.ai.model.Resource;
+
+public interface ResourceDao {
+
+	public List<Resource> queryPassedResourceInfoByType(@Param("type")int type);
+
+	public List<Resource> queryAllResourceInfoByType(@Param("type")int type);
+
+	public int insertResourceRecord(Resource resource);
+
+	public Resource getResourceById(@Param("id")String id);
+
+	public int updateResourceInfo(Resource resource);
+}

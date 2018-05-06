@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zszd.ai.dao.sensitivewords.SensitivewordsDao">
+	<select id="getAllSensitivewords" resultType="Sensitivewords">
+	    select * from sensitivewords  order by id desc
+	</select>
+
+	<insert id="addSensitiveWordsInfo" parameterType="Sensitivewords">
+		insert into sensitivewords (content)  values (#{content})
+	</insert>
+</mapper>

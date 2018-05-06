@@ -1,0 +1,37 @@
+package com.zszd.ai.model;
+/**
+ * 研发组
+ * @author lizx 20180103
+ *
+ */
+public class Devgroup {
+
+	private int id;
+	private String name;
+	private String watchword;
+	private int departmentId;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getWatchword() {
+		return watchword;
+	}
+	public void setWatchword(String watchword) {
+		this.watchword = watchword;
+	}
+	public int getDepartmentId() {
+		return departmentId;
+	}
+	public void setDepartmentId(int departmentId) {
+		this.departmentId = departmentId;
+	}	
+}

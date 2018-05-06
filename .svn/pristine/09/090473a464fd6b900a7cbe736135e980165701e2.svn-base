@@ -1,0 +1,19 @@
+@CHARSET "UTF-8";
+
+#view {
+	padding:5px;
+}
+
+#view a {
+	text-decoration: none;
+	color: red;
+	font-size: 26px;
+}
+
+#view table {
+	border: 1px solid red;
+}
+
+#view td, #view th{
+	border: 1px solid red;
+}	

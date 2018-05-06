@@ -1,0 +1,220 @@
+package com.zszd.ai.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.zszd.ai.dao.EmployeeDao;
+import com.zszd.ai.dao.SysUserDao;
+import com.zszd.ai.model.Employee;
+import com.zszd.ai.model.SysUser;
+import com.zszd.ai.service.SysUserService;
+import com.zszd.ai.utils.MyBatisUtil;
+
+/**
+ * 系统用户接口实现
+ * 
+ * @author lizx 20180103
+ * 
+ */
+public class SysUserServiceImpl implements SysUserService {
+
+	@Override
+	public int insert(SysUser sysUser) {
+		SqlSession sqlSession = null;
+		int rows = 0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(SysUserDao.class).insert(sysUser);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+
+	@Override
+	public int query(SysUser sysUser) {
+		SqlSession sqlSession = null;
+		int rows = 0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(SysUserDao.class).query(sysUser);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+
+	@Override
+	public int updateLoginRecord(SysUser sysUser) {
+		SqlSession sqlSession = null;
+		int rows = 0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(SysUserDao.class)
+					.updateLoginRecord(sysUser);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+
+	@Override
+	public int queryLoginCountsByName(String name) {
+		SqlSession sqlSession = null;
+		int rows = 0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(SysUserDao.class)
+					.queryLoginCountsByName(name);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+
+	@Override
+	public int getUserIdByUserName(String name) {
+		SqlSession sqlSession = null;
+		int rows = 0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(SysUserDao.class).getUserIdByUserName(
+					name);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+
+	@Override
+	public SysUser getUserInfoByUserName(String name) {
+		SqlSession sqlSession = null;
+		SysUser sysUser = null;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			sysUser = sqlSession.getMapper(SysUserDao.class)
+					.getUserInfoByUserName(name);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return sysUser;
+	}
+
+	@Override
+	public int updateUserPasswordInfo(SysUser sysUser) {
+		SqlSession sqlSession = null;
+		int rows = 0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(SysUserDao.class)
+					.updateUserPasswordInfo(sysUser);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+
+	@Override
+	public int updateSysUser(SysUser sysUser) {
+		SqlSession sqlSession = null;
+		int rows = 0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(SysUserDao.class)
+					.updateSysUser(sysUser);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+
+	@Override
+	public List<SysUser> getAllUserInfo() {
+		SqlSession sqlSession = null;
+		List<SysUser> sysUsers = new ArrayList<SysUser>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			sysUsers = sqlSession.getMapper(SysUserDao.class)
+					.getAllUserInfo();
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return sysUsers;
+	}
+
+	@Override
+	public List<SysUser> getAllOnLineUserInfo() {
+		SqlSession sqlSession = null;
+		List<SysUser> sysUsers = new ArrayList<SysUser>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			sysUsers = sqlSession.getMapper(SysUserDao.class)
+					.getAllOnLineUserInfo();
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return sysUsers;
+	}
+
+	public boolean insertNewEmployee(SysUser sysUser, Employee employee) {
+
+		boolean flag = false;
+		SqlSession sqlSession = null;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			int rows1 = sqlSession.getMapper(SysUserDao.class).insert(sysUser);
+			int rows2 = sqlSession.getMapper(EmployeeDao.class).insert(employee);
+			flag = true;
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return flag;
+	}
+
+}

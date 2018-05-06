@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
+  <display-name></display-name>
+  <welcome-file-list>
+    <welcome-file>loginnew.jsp</welcome-file>
+  </welcome-file-list>
+  <resource-ref>
+    <description>zszd DataSource</description>
+    <res-ref-name>zszd</res-ref-name>
+    <res-type>javax.sql.DataSource</res-type>
+    <res-auth>Container</res-auth>
+  </resource-ref>
+  <listener>
+    <listener-class>com.zszd.ai.listener.GlobalResourceInitListener</listener-class>
+  </listener>
+  <listener>
+    <listener-class>com.zszd.ai.listener.SessionAttributeAccessListener</listener-class>
+  </listener>
+  <listener>
+    <listener-class>com.zszd.ai.listener.OnlineUserInitListener</listener-class>
+  </listener>
+  <filter>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <filter-class>com.zszd.ai.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>charset</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter>
+    <filter-name>LoginCheckFilter</filter-name>
+    <filter-class>com.zszd.ai.filter.LoginCheckFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>LoginCheckFilter</filter-name>
+    <url-pattern>/jsp/photo/*</url-pattern>
+  </filter-mapping>
+  <filter>
+    <filter-name>WordFilter</filter-name>
+    <filter-class>com.zszd.ai.filter.WordFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>WordFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+</web-app>

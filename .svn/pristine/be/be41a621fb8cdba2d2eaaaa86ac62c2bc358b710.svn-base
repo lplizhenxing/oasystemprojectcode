@@ -1,0 +1,58 @@
+package com.zszd.ai.model;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+/**
+ * 工分
+ * @author lizx 20180103
+ *
+ */
+public class Workpoint {
+	private int id;
+	private int employeeId;
+	private Employee employee;
+	private int workpoint;
+	private String remarks;
+	private Date operatedate;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getEmployeeId() {
+		return employeeId;
+	}
+	public void setEmployeeId(int employeeId) {
+		this.employeeId = employeeId;
+	}
+
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+	public String getOperatedate() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
+		return sdf.format(operatedate);
+	}
+	public void setOperatedate(Date operatedate) {
+		this.operatedate = operatedate;
+	}
+	public int getWorkpoint() {
+		return workpoint;
+	}
+	public void setWorkpoint(int workpoint) {
+		this.workpoint = workpoint;
+	}
+	public Employee getEmployee() {
+		return employee;
+	}
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+	
+	
+
+}

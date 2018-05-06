@@ -1,0 +1,132 @@
+package com.zszd.ai.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.zszd.ai.model.Test;
+import com.zszd.ai.service.TestService;
+import com.zszd.ai.service.impl.TestServiceImpl;
+/**
+ * 工作日志类型
+ * @author lizx 20180103
+ *
+ */
+@WebServlet(urlPatterns = { "/test" }, name = "test")
+public class TestServlet extends HttpServlet {
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		this.doPost(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+		String path = request.getContextPath();
+		String basePath = request.getScheme() + "://" + request.getServerName()
+				+ ":" + request.getServerPort() + path + "/";
+		String opr = request.getParameter("opr");
+		PrintWriter out = response.getWriter();
+		TestService testService = new TestServiceImpl();
+		if ("list".equals(opr)) {
+			List<Test> list = testService.queryALLTestInfo();
+			request.setAttribute("list", list);
+			request.getRequestDispatcher("jsp/test/testinfo_list.jsp").forward(
+					request, response);
+		} else if ("modify".equals(opr)) {
+			String testId = request.getParameter("testId");
+			Test test = testService.queryTestInfoById(Integer
+					.valueOf(testId));
+			request.setAttribute("test", test);
+			request.getRequestDispatcher("jsp/test/test_modify.jsp").forward(
+					request, response);
+		} else if ("delete".equals(opr)) {
+			String testId = request.getParameter("testId");
+			out.print("<script type='text/javascript'>");
+			out.print("alert('确认要删除该工作日志类型吗？点击确认删除！');");
+			out.print("location.href=\"" + basePath
+					+ "test?opr=deleteTest&testId=" + testId + "\";");
+			out.print("</script>");
+		} else if ("deleteTest".equals(opr)) {
+			String testId = request.getParameter("testId");
+			if (testService.deleteTestById(Integer.valueOf(testId)) > 0) {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('成功删除该工作日志类型，点击确认返回工作日志类型列表！');");
+				out.print("location.href=\"" + basePath + "test?opr=list\";");
+				out.print("</script>");
+
+			} else {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('删除该工作日志类型失败，点击确认返回工作日志类型列表！');");
+				out.print("location.href=\"" + basePath + "test?opr=list\";");
+				out.print("</script>");
+			}
+		} else if ("add".equals(opr)) {
+			String typename = request.getParameter("typename");
+			String question = request.getParameter("question");
+			String answer = request.getParameter("answer");
+
+			Test test = new Test();
+			test.setTypeName(typename);
+			test.setQuestion(question);
+			test.setAnswer(answer);
+			try {
+				boolean row = testService.addTestInfo(test);
+				if (row) {
+					out.print("<script type='text/javascript'>");
+					out.print("alert('当前工作日志类型提交成功，点击确认返回工作日志类型列表！');");
+					out.print("location.href=\"" + basePath
+							+ "test?opr=list\";");
+					out.print("</script>");
+				} else {
+					out.print("<script type='text/javascript'>");
+					out.print("alert('当前工作日志类型记录提交失败，请重新添加！');");
+					out.print("location.href=\"" + basePath
+							+ "jsp/test/test_add.jsp\";");
+					out.print("</script>");
+				}
+			} catch (Exception e) {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('当前工作日志类型记录提交失败，记录已经存在！');");
+				out.print("location.href=\"" + basePath
+						+ "test?opr=list\";");
+				out.print("</script>");
+
+			}
+		} else if ("submitModify".equals(opr)) {
+			String typename = request.getParameter("typename");
+			String question = request.getParameter("question");
+			String answer = request.getParameter("answer");
+			String testId = request.getParameter("testId");
+			Test test = new Test();
+			test.setId(Integer.valueOf(testId));
+			test.setTypeName(typename);
+			test.setQuestion(question);
+			test.setAnswer(answer);
+			int row = testService.updateTestInfo(test);
+
+			if (row > 0) {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('当前工作日志类型更新成功，点击确认返回工作日志类型信息列表！');");
+				out.print("location.href=\"" + basePath + "test?opr=list\";");
+				out.print("</script>");
+
+			} else {
+				out.print("<script type='text/javascript'>");
+				out.print("alert('当前工作日志类型更新失败，点击确认返回工作日志类型列表！');");
+				out.print("location.href=\"" + basePath + "test?opr=list\";");
+				out.print("</script>");
+			}
+		}
+	}
+}

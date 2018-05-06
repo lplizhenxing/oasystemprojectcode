@@ -1,0 +1,18 @@
+package com.zszd.ai.dao;
+
+import java.sql.Connection;
+import java.util.List;
+
+import com.zszd.ai.model.Requirements;
+
+public interface RequirementsDao {
+
+	List<Requirements> queryAllRequirementInfo();
+
+	int addRequirementsInfo(Connection conn, Requirements requirements);
+
+	Requirements getRequirementsById(Connection conn, int id);
+
+	int updateRequirementsInfo(Connection conn, Requirements requirements);
+
+}

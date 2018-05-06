@@ -1,0 +1,93 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/userlogin.jsp"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<base href="<%=basePath%>">
+<title>录入公司页面</title>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" type="text/css" href="static/css/userindex.css">
+<link rel="stylesheet" type="text/css" href="static/css/register.css">
+</head>
+<body>
+	<%@ include file="../common/userheader.jsp"%>
+	<section id="section"> 
+	<%@ include file="../common/userleft.jsp"%>
+	<div id="right">
+		<div id="mess">${empty requestScope.message
+			?"":"验证信息:"}${requestScope.message}</div>
+		<div id="registerpage">
+			<h1>
+				录入公司信息
+			</h1>
+			<form action="company?opr=submitAdd" method="post">
+				<table>
+					<tr>
+						<td>新公司名称：</td>
+						<td  style="width:300px"><input type="text" name="comname" id="comname">&nbsp;<font color="red">*</font>
+						</td>
+						<td>
+						</td>
+					</tr>
+					<tr>
+						<td>新公司地址：</td>
+						<td style="width:300px">
+						     <input type="text" name="address" id="address"  />&nbsp;<font color="red">*</font>
+						</td>
+						<td>
+						    <div id="usernameDiv" style="display: inline"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>新公司电话：</td>
+						<td>
+						    <input type="text" name="tel" id="tel"  />&nbsp;<font color="red">*</font>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>新公司网站：</td>
+						<td>
+						    <input type="text" name="url" id="url"  />&nbsp;<font color="red">*</font>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>新公司传真：</td>
+						<td> <input type="text" name="fax" id="fax"  />&nbsp;<font color="red">*</font>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>创建时间：</td>
+						<td>
+							<input type="text" name="buildTime" id="buildTime"  />&nbsp;<font color="red">*</font>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>所属班级：</td>
+						<td><input type="text" name="class" id="class"  />&nbsp;<font color="red">*</font>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td colsspan="3"><input type="submit" value="提交" id="submit">
+							<input type="reset" value="重置"><br /></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+	</section>
+	<%@ include file="../common/footer.jsp"%>
+</body>
+<script type="text/javascript" scr="static/js/news.js"></script>
+<script type="text/javascript">
+
+</script>
+</html>

@@ -1,0 +1,102 @@
+package com.zszd.ai.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.zszd.ai.dao.CommentDao;
+import com.zszd.ai.model.Comment;
+import com.zszd.ai.service.CommentService;
+import com.zszd.ai.utils.MyBatisUtil;
+/**
+ * 评论接口实现
+ * @author lizx 20180103
+ *
+ */
+public class CommentServiceImpl implements CommentService {
+
+	@Override
+	public int addCommentInfo(Comment comment) {
+		SqlSession sqlSession = null;
+		int row=0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			row = sqlSession.getMapper(CommentDao.class).addCommentInfo(comment);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return row;
+	}
+	@Override
+	public List<Comment> getAllCommentByPostId(int postId) {
+		SqlSession sqlSession = null;
+		List<Comment> comment=new ArrayList<Comment>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			comment= sqlSession.getMapper(CommentDao.class).getAllCommentByPostId(postId);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}		
+		return comment;
+	}
+	
+	@Override
+	public Comment getCommentByCommentId(int commentId) {
+		SqlSession sqlSession = null;
+		Comment comment=new Comment();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			comment= sqlSession.getMapper(CommentDao.class).getCommentByCommentId(commentId);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}		
+		return comment;
+	}
+	@Override
+	public int updateCommentInfo(Comment comment) {
+		SqlSession sqlSession = null;
+		int row=0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			row = sqlSession.getMapper(CommentDao.class).updateCommentInfo(comment);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return row;
+	
+	}
+	@Override
+	public int deleteCommentById(int id) {
+		SqlSession sqlSession = null;
+		int row=0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			row = sqlSession.getMapper(CommentDao.class).deleteCommentById(id);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return row;
+	}
+
+}

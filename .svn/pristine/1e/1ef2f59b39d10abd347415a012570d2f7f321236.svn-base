@@ -1,0 +1,60 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/userlogin.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<base href="<%=basePath%>">
+<title>员工信息页面</title>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" type="text/css" href="static/css/userindex.css">
+</head>
+<body>
+	<%@ include file="../common/userheader.jsp"%>
+	<section id="section">
+    <%@ include file="../common/userleft.jsp"%>
+	<div id="right">
+	<br/>
+		<h3>所有员工信息记录</h3>
+		<table>
+           <c:if test="${requestScope.list!=null}">
+              <tr>
+				    <th>员工名称</th>
+				    <th>所属研发组</th>	
+					<th>是否组长</th>	
+					<th>员工工分</th>					
+					<th>操作权限</th>
+				</tr>
+			<c:forEach items="${requestScope.list}" var="employee">
+			    <tr>
+					<td colspan="6"><hr/></td>
+				<tr>
+				<tr >				
+				     <c:if test="${employee.isLeader ==1}">
+					     <td style="color:red;font-weight:bolder">${employee.name}</td>
+					 </c:if>
+					 <c:if test="${employee.isLeader ==0}">
+					     <td >${employee.name}</td>
+					 </c:if>
+					 <td>${employee.devgroup.name}</td>
+					 <td>${employee.isLeader ==1 ?"组长":"组员"}</td>
+					 <td> <a href="workpoint?opr=view&employeeId=${employee.id}">${employee.workpoints}</a></td>
+					 <td> 
+					   <c:if test="${sessionScope.login eq 'admin'}">
+							<a href='employee?opr=modify&employeeId=${employee.id}' style="color:red">修改</a><br/>
+					        <a href='employee?opr=delete&employeeId=${employee.id}' style="color:red">删除</a>
+					   </c:if>
+					</td>
+				</tr>
+		     </c:forEach>
+		   </c:if>
+		   </table>
+	</div>
+	</section>
+	<%@ include file="../common/footer.jsp"%>
+</body>
+</html>

@@ -1,0 +1,24 @@
+package com.zszd.ai.service;
+
+import com.zszd.ai.model.Order;
+/**
+ * 
+ * @ClassName       OrderService
+ * @Description    员工福利模块 员工商城 记录员工购买记录
+ * @author            lizx
+ * @date           2018-1-21        上午11:42:06
+ */
+public interface OrderService {
+	/**
+	 * 
+	 * @Title          addOrderInfo
+	 * @Description    添加购买商品记录
+	 * @Tags           @param order
+	 * @Tags           @return   
+	 * @Return         boolean   
+	 * @throws
+	 * @author           lizx
+	 * @date           2018-1-21        上午11:42:12
+	 */
+	boolean addOrderInfo(Order order);
+}

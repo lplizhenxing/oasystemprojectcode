@@ -1,0 +1,47 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+<div id="right">
+	<br /> <a href="jsp/bugs/bugs_add.jsp"
+		style="color:red; font-size:26px">提交bug</a>
+	<table>
+		<c:if test="${requestScope.list!=null}">
+			<tr>
+				<th>提出者</th>
+				<th>标题</th>
+				<th>内容</th>
+				<th>项目编码</th>
+				<th>提交日期</th>
+				<th>解决日期</th>
+				<th>解决者</th>
+				<th>状态</th>
+				<th>操作权限</th>
+			</tr>
+			<c:forEach items="${requestScope.list}" var="bug">
+				<tr>
+					<td colspan="9"><br />
+					</td>
+				<tr>
+				<tr>
+					<td>${bug.userName}</td>
+					<td>${bug.title}</td>
+					<td>${bug.content}</td>
+					<td>${bug.projectId}</td>
+					<td>${bug.submitTime}</td>
+					<td>${bug.resolveTime}</td>
+					<td>${bug.resolveDevName}</td>
+					<td>${bug.state}</td>
+					<td><c:if
+							test="${bug.userName eq sessionScope.login and bug.state eq '待审核'}">
+							<a href='bugs?opr=modify&id=${bug.id}' style="color:red">修改</a>
+						</c:if> <c:if test="${sessionScope.roleId eq 5 and bug.state eq '待审核'}">
+							<a href='bugs?opr=check&id=${bug.id}' style="color:red">审核</a>
+						</c:if></td>
+				</tr>
+			</c:forEach>
+		</c:if>
+	</table>
+</div>
+</section>
+<%@ include file="../common/footer.jsp"%>
+
+

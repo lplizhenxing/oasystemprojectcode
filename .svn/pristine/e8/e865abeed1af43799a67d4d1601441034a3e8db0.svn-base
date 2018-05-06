@@ -1,0 +1,31 @@
+package com.zszd.ai.service.impl;
+
+import java.sql.Connection;
+import java.util.List;
+
+import com.zszd.ai.dao.DrawDao;
+import com.zszd.ai.dao.impl.DrawDaoImpl;
+import com.zszd.ai.model.Draw;
+import com.zszd.ai.service.DrawService;
+import com.zszd.ai.utils.DataSourceUtil;
+
+public class DrawServiceImpl implements DrawService {
+	DrawDao dwDao=new DrawDaoImpl();
+	
+	public int addDrawRecord(Draw draw) {
+		Connection conn = DataSourceUtil.getConnection();
+		return dwDao.addDrawRecord(draw);
+	}
+
+	public List<Draw> findDrawByName(String name) {
+		Connection conn = DataSourceUtil.getConnection();
+		return dwDao.findDrawByName(name);
+	}
+
+	@Override
+	public List<Draw> findAllDraw() {
+		// TODO Auto-generated method stub
+		return dwDao.findAllDraw();
+	}
+
+}

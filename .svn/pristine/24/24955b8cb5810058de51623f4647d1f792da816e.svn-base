@@ -1,0 +1,7 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<header id="header">
+	<p>
+		尊敬的<span>${sessionScope.login}</span>,第<span>${sessionScope.logincount}</span>次访问,
+		<a href="dologin?opr=logout" style="font-size:16px;">登出</a> 
+		<a href="jsp/user/userindex.jsp" style="font-size:16px;">返回首页</a>	</p>
+</header>

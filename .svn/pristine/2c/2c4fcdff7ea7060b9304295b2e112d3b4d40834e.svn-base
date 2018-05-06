@@ -1,0 +1,118 @@
+package com.zszd.ai.service.impl;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.zszd.ai.dao.DepartmentDao;
+import com.zszd.ai.model.Department;
+import com.zszd.ai.service.DepartmentService;
+import com.zszd.ai.utils.MyBatisUtil;
+
+public class DepartmentServiceImpl implements DepartmentService {
+
+	@Override
+	public int insertDepartment(Department department) {
+		SqlSession sqlSession = null;
+		int row=0;
+		try{
+			sqlSession = MyBatisUtil.createSqlSession();
+			row = sqlSession.getMapper(DepartmentDao.class).insertDepartment(department);
+			sqlSession.commit();
+		}catch(Exception e){
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		
+		return row;
+	}
+
+	@Override
+	public int updateDepartment(Department department) {
+		SqlSession sqlSession = null;
+		int row=0;
+		try{
+			sqlSession = MyBatisUtil.createSqlSession();
+			row = sqlSession.getMapper(DepartmentDao.class).updateDepartment(department);
+			sqlSession.commit();
+		}catch(Exception e){
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		
+		return row;
+	}
+
+	@Override
+	public Department queryDepartmentById(int id) {
+		SqlSession sqlSession = null;
+		Department department=null;
+		try{
+			sqlSession = MyBatisUtil.createSqlSession();
+			department = sqlSession.getMapper(DepartmentDao.class).queryDepartmentById(id);
+			sqlSession.commit();
+		}catch(Exception e){
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return department;
+	}
+
+	@Override
+	public List<Department> queryDepartmentInfo() {
+		SqlSession sqlSession = null;
+		List<Department> departmentList=null;
+		try{
+			sqlSession = MyBatisUtil.createSqlSession();
+			departmentList = sqlSession.getMapper(DepartmentDao.class).queryDepartmentInfo();
+			sqlSession.commit();
+		}catch(Exception e){
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return departmentList;
+	}
+
+	@Override
+	public int countDevByDepartmentId(int departmentId) {
+		SqlSession sqlSession = null;
+		int count=0;
+		try{
+			sqlSession = MyBatisUtil.createSqlSession();
+			count=sqlSession.getMapper(DepartmentDao.class).countDevByDepartmentId(departmentId);
+			sqlSession.commit();
+		}catch(Exception e){
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return count;
+	}
+
+	@Override
+	public int deleteDepartmentById(int id) {
+		SqlSession sqlSession = null;
+		int row=0;
+		try{
+			sqlSession = MyBatisUtil.createSqlSession();
+			row=sqlSession.getMapper(DepartmentDao.class).deleteDepartmentById(id);
+			sqlSession.commit();
+		}catch(Exception e){
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return row;
+	}
+
+}

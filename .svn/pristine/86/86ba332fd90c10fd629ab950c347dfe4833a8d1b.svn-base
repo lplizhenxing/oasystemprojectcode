@@ -1,0 +1,71 @@
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://"
+			+ request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
+%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<base href="<%=basePath%>">
+
+<title>工时兑换商品页面</title>
+
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" type="text/css" href="static/css/userindex.css">
+</head>
+<body>
+	<%@ include file="../../common/userheader.jsp"%>
+	<section id="section"> 
+	<%@ include file="../../common/userleft.jsp"%>
+	<div id="right">
+		<br />
+		<h1>可以兑换的商品</h1>
+		<br /> <br />
+		<c:if test="${requestScope.list!=null}">
+			<c:forEach items="${requestScope.list}" var="goodslist">
+				<div class="a">
+					<table>
+						<tr style="text-align:center">
+							<td style="width:10px;height:10px;"><img
+								style="width:200px;height:200px;"
+								src="${goodslist.goodsImagesPath}" /></td>
+						</tr>
+						<tr style="text-align:center">
+							<td>${goodslist.goodsName}</td>
+						</tr>
+						<tr style="text-align:center">
+							<td>价格：${goodslist.goodsPrice}工分/份</td>
+						</tr>
+						<tr style="text-align:center">
+							<td>库存量：${goodslist.goodsStock}份</td>
+						</tr>
+						<tr style="text-align:center">
+							<td><a
+								href="wpChange?opr=change&employeeId=${requestScope.employee.id}&goodsId=${goodslist.goodsId}">兑换</a>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</c:forEach>
+		</c:if>
+
+	</div>
+	</section>
+	<%@ include file="../../common/footer.jsp"%>
+</body>
+<style type="text/css">
+.a {
+	width: 200px;
+	padding: 30px;
+	border: 1px solid red;
+	float: left;
+}
+</style>
+</html>

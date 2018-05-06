@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zszd.ai.dao.sysfunctions.RoleDao">
+	<select id="queryAllRoleInfo" resultType="Role">
+		select * from role
+	</select>
+
+	<select id="queryRoleNameByRoleId" resultType="string">
+		select roleName from role where id=#{roleId}
+	</select>
+	
+	<select id="queryAllRoleInfoByCompany" resultType="Role">
+		select * from role where id not in (1,2,3)
+	</select>
+</mapper>

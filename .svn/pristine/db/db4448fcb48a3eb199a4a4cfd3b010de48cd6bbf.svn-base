@@ -1,0 +1,65 @@
+package com.zszd.ai.servlet;
+
+import java.io.IOException;
+import java.util.Date;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.zszd.ai.model.Complaint;
+import com.zszd.ai.model.SysUser;
+import com.zszd.ai.service.impl.ComplaintServiceImpl;
+
+@WebServlet(urlPatterns = { "/complaint" }, name = "complaint")
+public class ComplaintServlet extends HttpServlet {
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		this.doPost(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+
+		HttpSession session = request.getSession();// 获取session
+		
+		String opr = request.getParameter("opr");
+		
+		if(opr.equals("addComplaint")) {
+			String content = request.getParameter("complaintContent");
+			Date createionDate = new Date();
+			Complaint comp = new Complaint();
+			comp.setContent(content);
+			comp.setCreateionDate(createionDate);
+			
+			int result = new ComplaintServiceImpl().addComplaint(comp);
+			if(result != 0) {
+				session.setAttribute("alert", "<script>function myFunction(){alert('添加成功');}</script>");
+			}
+			String refer = request.getHeader("REFERER");
+			response.sendRedirect(refer);
+		} else if(opr.equals("feedbackComplaint")) {
+			String content = request.getParameter("feedbackContent");
+			Date feedbackTime = new Date();
+			Complaint comp = new Complaint();
+			comp.setFeedback(content);
+			String loginName = (String) session.getAttribute("login");
+			comp.setFeedbackMan(loginName);
+			int id = Integer.parseInt(request.getParameter("id"));
+			comp.setId(id);
+			comp.setFeedbackTime(feedbackTime);
+			int result = new ComplaintServiceImpl().addFeedback(comp);
+			if(result != 0) {
+				session.setAttribute("alert", "<script>function myFunction(){alert('反馈成功');}</script>");
+			}
+			response.sendRedirect("jsp/complaint/complaint_search.jsp");
+		}
+	}
+
+}

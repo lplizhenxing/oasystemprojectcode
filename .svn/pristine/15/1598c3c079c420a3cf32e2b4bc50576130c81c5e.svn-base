@@ -1,0 +1,33 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+<div id="right">
+	<br /> <a href="jsp/functionRole/functionRole_add.jsp"
+		style="color:red; font-size:26px">新增功能权限配置</a>
+	<table>
+		<c:if test="${requestScope.list!=null}">
+			<tr>
+				<th>配置序号&nbsp;&nbsp;&nbsp;&nbsp;</th>
+				<th>角色名称&nbsp;&nbsp;&nbsp;&nbsp;</th>
+				<th>功能名称&nbsp;&nbsp;&nbsp;&nbsp;</th>
+				<th>操作权限&nbsp;&nbsp;&nbsp;&nbsp;</th>
+			</tr>
+			<c:forEach items="${requestScope.list}" var="functionRole"
+				varStatus="num">
+				<tr>
+					<td colspan="4"><br />
+					</td>
+				<tr>
+				<tr>
+					<td>${num.count}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+					<td>${functionRole.roleName}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+					<td>${functionRole.functionName}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+					<td><a href="functionRole?opr=delConfig&id=${functionRole.id}">删除配置</a>
+					</td>
+				</tr>
+			</c:forEach>
+		</c:if>
+	</table>
+</div>
+</section>
+<%@ include file="../common/footer.jsp"%>
+

@@ -1,0 +1,70 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/userlogin.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<base href="<%=basePath%>">
+<title>需求管理页面</title>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" type="text/css" href="static/css/userindex.css">
+</head>
+<body>
+	<%@ include file="../common/userheader.jsp"%>
+	<section id="section"> <%@ include
+		file="../common/userleft.jsp"%>
+	<div id="right">
+	<br/>
+		<h3>所有需求信息<a href="jsp/requirements/requirements_add.jsp" style="color:red">提交需求</a></h3>
+		<table>
+			<c:if test="${requestScope.list!=null}">
+			       <tr>
+					    <th>提出者</th>
+						<th>标题</th>
+						<th>内容</th>
+						<th>项目编码</th>
+						<th>提交日期</th>
+						<th>解决日期</th>
+						<th>解决者</th>
+						<th>状态</th>
+						<th>操作权限</th>
+					</tr>
+				<c:forEach items="${requestScope.list}" var="requirement">
+				   <tr>
+					<td colspan="9"><hr/></td>
+					<tr>
+					<tr>
+					    <td>${requirement.userName}</td>
+						<td>${requirement.title}</td>
+						<td>${requirement.content}</td>
+						<td>${requirement.projectId}</td>
+						<td>${requirement.submitTime}</td>
+						<td>${requirement.resolveTime}</td>
+						<td>${requirement.resolveDevName}</td>
+						<td>${requirement.state}</td>
+						<td>
+						    <c:if test="${sessionScope.login eq 'admin' or requirement.userName eq sessionScope.login}">
+							<a href='requirements?opr=modify&id=${requirement.id}' style="color:red">修改</a><br/>
+							</c:if>	</td>					
+							<td><c:if test="${sessionScope.roleId eq 1}">
+						    <a href='requirements?opr=delete&id=${requirement.id}' style="color:red">删除</a>
+							</c:if>
+						</td>
+						<td><c:if test="${sessionScope.roleId eq 5}">
+						    <a href='requirements?opr=check&id=${requirement.id}' style="color:red">审核</a>
+							</c:if>
+						</td>
+					</tr>
+					
+				</c:forEach>
+			</c:if>
+		</table>
+	</div>
+	</section>
+	<%@ include file="../common/footer.jsp"%>
+</body>
+</html>

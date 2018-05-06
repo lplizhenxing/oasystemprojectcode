@@ -1,0 +1,11 @@
+package com.zszd.ai.dao;
+
+import java.util.List;
+
+import com.zszd.ai.model.Draw;
+
+public interface DrawDao {
+	int addDrawRecord(Draw draw);
+	List<Draw> findDrawByName(String name);
+	List<Draw> findAllDraw();
+}

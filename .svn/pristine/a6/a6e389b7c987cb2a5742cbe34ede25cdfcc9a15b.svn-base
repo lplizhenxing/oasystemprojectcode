@@ -1,0 +1,25 @@
+package com.zszd.ai.dao.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+import com.zszd.ai.dao.OrderDao;
+import com.zszd.ai.model.Order;
+import com.zszd.ai.utils.DataSourceUtil;
+
+public class OrderDaoImpl implements OrderDao {
+	@Override
+	public int addOrderInfo(Connection conn, Order order) {
+		int row =0;
+		PreparedStatement ps=null;
+		String sql = "insert into order (goodsId,userName,buyTime,address) " +
+				"values (?,?,?,?)";
+		Object[] oo={order.getGoodsId(),order.getUserName(),order.getBuyTime(),order.getAddress()};
+		try {	
+			row = DataSourceUtil.executeUpdate(conn, ps, sql, oo);
+		}finally{
+			DataSourceUtil.colseAll(ps, null,null);
+		}
+		return row;
+	}
+}

@@ -1,0 +1,9 @@
+package com.zszd.ai.dao;
+
+import java.sql.Connection;
+
+import com.zszd.ai.model.Employee;
+
+public interface WpChangeDao {
+	int updateWorkPoint(Employee employee);
+}

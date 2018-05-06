@@ -1,0 +1,45 @@
+package com.zszd.ai.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.zszd.ai.model.SysUser;
+/**
+ * 系统用户DAO接口
+ * @author lizx 20180103
+ *
+ */
+public interface SysUserDao {
+
+	int insert(SysUser sysUser);
+    /**
+     * 
+     * @Title          query
+     * @Description    根据用户名和密码 查询是否有这个用户
+     * @Tags           @param sysUser
+     * @Tags           @return   
+     * @Return         int   
+     * @throws
+     * @author           lizx
+     * @date           2018-2-1        下午2:13:19
+     */
+	int query(SysUser sysUser);
+
+	int updateLoginRecord(SysUser sysUser);
+
+	int queryLoginCountsByName(@Param("name")String name);
+
+	int getUserIdByUserName(@Param("name")String name);
+
+	SysUser getUserInfoByUserName(@Param("name")String name);
+
+	int updateUserPasswordInfo(SysUser sysUser);
+
+	int updateSysUser(SysUser sysUser);
+
+	List<SysUser> getAllUserInfo();
+
+	List<SysUser> getAllOnLineUserInfo();
+
+}

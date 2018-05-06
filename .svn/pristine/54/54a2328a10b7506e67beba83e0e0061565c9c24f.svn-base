@@ -1,0 +1,27 @@
+package com.zszd.ai.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.zszd.ai.model.Leave;
+
+public interface LeaveDao {
+
+	List<Leave> queryAllLeaveInfo();
+
+	int addLeaveInfo(Leave leave);
+
+	List<Leave> queryAllLeaveInfoByName(@Param("name")String name);
+	
+	int approveLeaveInfo(Leave leave);
+	
+	int rejectLeaveInfo(Leave leave);
+	
+	int cancelLeaveByLeaveId(@Param("leaveId")int leaveId);
+
+	List<Leave> queryAllLeaveInfoByCompanyId(@Param("companyId")int companyId);
+
+	List<Leave> queryAllLeaveInfoByCompanyIdAndName(@Param("companyId")int companyId, @Param("name")String name);
+
+}

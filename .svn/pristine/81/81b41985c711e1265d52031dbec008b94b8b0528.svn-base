@@ -1,0 +1,152 @@
+package com.zszd.ai.service.impl;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.zszd.ai.dao.DevgroupDao;
+import com.zszd.ai.model.Devgroup;
+import com.zszd.ai.service.DevgroupService;
+import com.zszd.ai.utils.MyBatisUtil;
+
+public class DevgroupServiceImpl implements DevgroupService {
+
+	@Override
+	public List<Devgroup> queryAllDevGroupInfo() {
+		SqlSession sqlSession = null;
+		List<Devgroup> devgroupList = null;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession(); 
+			devgroupList = sqlSession.getMapper(DevgroupDao.class).queryAllDevGroupInfo();
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return devgroupList;
+	}
+
+	@Override
+	public String queryNameById(int id) {
+		SqlSession sqlSession = null;
+		String name = null;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			name = sqlSession.getMapper(DevgroupDao.class).queryNameById(id);
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return name;
+	}
+
+	@Override
+	public Devgroup queryDevGroupInfoById(int id) {
+		SqlSession sqlSession = null;
+		Devgroup devgroup = null;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			devgroup = sqlSession.getMapper(DevgroupDao.class)
+					.queryDevGroupInfoById(id);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return devgroup;
+	}
+
+	@Override
+	public int updateDevGroupInfo(Devgroup devgroup) {
+		SqlSession sqlSession = null;
+		int row = 0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			row = sqlSession.getMapper(DevgroupDao.class).updateDevGroupInfo(
+					devgroup);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return row;
+	}
+
+	@Override
+	public int deleteDevGroupById(int id) {
+		SqlSession sqlSession = null;
+		int row = 0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			row = sqlSession.getMapper(DevgroupDao.class)
+					.deleteDevGroupById(id);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return row;
+	}
+
+	@Override
+	public int insertDevGroup(Devgroup devgroup) {
+		SqlSession sqlSession = null;
+		int row = 0;
+		try {
+			sqlSession=MyBatisUtil.createSqlSession();
+			row=sqlSession.getMapper(DevgroupDao.class).insertDevGroup(devgroup);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return row;
+	}
+
+	@Override
+	public int getDevGroupCountByDepartmentId(int id) {
+		SqlSession sqlSession=null;
+		int row=0;
+		try{
+			sqlSession=MyBatisUtil.createSqlSession();
+			row=sqlSession.getMapper(DevgroupDao.class).getDevGroupCountByDepartmentId(id);
+			sqlSession.commit();
+		}catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return row;
+	}
+
+	@Override
+	public List<Devgroup> queryAllDevGroupInfoByCompanyId(int companyId) {
+		SqlSession sqlSession = null;
+		List<Devgroup> devgroupList = null;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession(); 
+			devgroupList = sqlSession.getMapper(DevgroupDao.class).queryAllDevGroupInfoByCompanyId(companyId);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return devgroupList;
+	}
+
+}

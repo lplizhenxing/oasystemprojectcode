@@ -1,0 +1,28 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+<div id="right">
+	<c:if test="${requestScope.list!=null}">
+		<table>
+			<tr>
+				<th>员工编号&nbsp;&nbsp;</th>
+				<th>工分日期&nbsp;&nbsp;</th>
+				<th>工分值&nbsp;&nbsp;</th>
+				<th>工分原因&nbsp;&nbsp;</th>
+			</tr>
+			<c:forEach items="${requestScope.list}" var="workpointlist">
+				<tr>
+					<td colspan="6"><hr /></td>
+				<tr>
+				<tr>
+					<td style="width:50px;">${workpointlist.employeeId}&nbsp;&nbsp;</td>
+					<td style="width:50px;">${workpointlist.operatedate}&nbsp;&nbsp;</td>
+					<td style="width:50px;">${workpointlist.workpoint}&nbsp;&nbsp;</td>
+					<td style="width:400px;">${workpointlist.remarks}&nbsp;&nbsp;</td>
+				</tr>
+			</c:forEach>
+		</table>
+	</c:if>
+</div>
+</section>
+<%@ include file="../common/footer.jsp"%>
+

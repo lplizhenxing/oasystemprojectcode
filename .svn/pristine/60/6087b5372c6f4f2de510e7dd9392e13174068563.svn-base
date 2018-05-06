@@ -1,0 +1,26 @@
+package com.zszd.ai.dao;
+
+import java.sql.Connection;
+import java.util.List;
+
+import com.zszd.ai.model.Testresults;
+/**
+ * 工作日志DAO接口
+ * @author lizx 20180103
+ *
+ */
+public interface TestresultsDao {
+
+	int addTestResults(Connection conn,Testresults testresults);
+
+	List<Testresults> queryTestResultsByUserName(String name);
+
+	List<Testresults> queryALLTestResults();
+
+	Testresults queryTestResultInfoById(int id);
+
+	int deleteTestresultsById(int id);
+
+	int updateTestResultsInfo(Testresults testresults);
+
+}

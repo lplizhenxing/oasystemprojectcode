@@ -1,0 +1,122 @@
+package com.zszd.ai.service.devgroup;
+
+import java.util.List;
+
+import com.zszd.ai.pojo.Devgroup;
+
+/**
+ * 
+ * @ClassName DevgroupService
+ * @Description 组织架构模块值研发组细分模块
+ * @author lvjc
+ * @date 2018-1-21 下午8:30:15
+ */
+public interface DevgroupService {
+	/**
+	 * 
+	 * @Title queryAllDevGroupInfo
+	 * @Description 查询所有研发组信息
+	 * @Tags @return
+	 * @Return List<Devgroup>
+	 * @throws
+	 * @author lvjc
+	 * @date 2018-1-21 下午8:30:28
+	 */
+	List<Devgroup> queryAllDevGroupInfo();
+
+	/**
+	 * 
+	 * @Title          queryNameById
+	 * @Description    根据研发组ID获取研发组名称
+	 * @Tags           @param id
+	 * @Tags           @return   
+	 * @Return         String   
+	 * @throws
+	 * @author           lvjc
+	 * @date           2018-1-21        下午8:31:12
+	 */
+	String queryNameById(int id);
+
+	/**
+	 * 
+	 * @Title          queryDevGroupInfoById
+	 * @Description    根据研发组ID获取研发组信息
+	 * @Tags           @param id
+	 * @Tags           @return   
+	 * @Return         Devgroup   
+	 * @throws
+	 * @author           lvjc
+	 * @date           2018-1-21        下午8:31:30
+	 */
+	Devgroup queryDevGroupInfoById(int id);
+
+	/**
+	 * 
+	 * @Title          updateDevGroupInfo
+	 * @Description    更新研发组信息
+	 * @Tags           @param devgroup
+	 * @Tags           @return   
+	 * @Return         int   
+	 * @throws
+	 * @author           lvjc
+	 * @date           2018-1-21        下午8:31:46
+	 */
+	int updateDevGroupInfo(Devgroup devgroup);
+
+	/**
+	 * 
+	 * @Title deleteDevGroupById
+	 * @Description 通过Id删除研发组
+	 * @Tags @param id
+	 * @Tags @return
+	 * @Return int
+	 * @throws
+	 * @author lvjc
+	 * @date 2018-1-21 下午8:29:35
+	 */
+	int deleteDevGroupById(int id);
+
+	/**
+	 * 
+	 * @Title          insertDevGroup
+	 * @Description    增加研发组信息
+	 * @Tags           @param devgroup
+	 * @Tags           @return   
+	 * @Return         int   
+	 * @throws
+	 * @author           lvjc
+	 * @date           2018-1-21        下午8:32:06
+	 */
+	int insertDevGroup(Devgroup devgroup);
+	/**
+	 * 
+	 * @Title          getDevGroupCountByDepartmentId
+	 * @Description    获取研发组数量
+	 * @Tags           @param id
+	 * @Tags           @return   
+	 * @Return         int   
+	 * @throws
+	 * @author           lvjc
+	 * @date           2018-1-22        下午5:44:21
+	 */
+	int getDevGroupCountByDepartmentId(int id);
+    /**
+     * 
+     * @Title          queryAllDevGroupInfoByCompanyId
+     * @Description    只能看到自己公司的研发组信息
+     * @Tags           @param companyId
+     * @Tags           @return   
+     * @Return         List<Devgroup>   
+     * @throws
+     * @author           lizx
+     * @date           2018-1-30        下午12:09:19
+     */
+	List<Devgroup> queryAllDevGroupInfoByCompanyId(int companyId);
+
+	int getDevgroupCount(String queryDepartmentName, String queryCompanyName,
+			String queryDevgroupName);
+
+	List<Devgroup> getDevgroupListBy(String queryDepartmentName,
+			String queryCompanyName, String queryDevgroupName, int currentPage,
+			int pageSize);
+}

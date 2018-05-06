@@ -1,0 +1,86 @@
+package com.zszd.ai.service.impl;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.zszd.ai.dao.CompanyDao;
+import com.zszd.ai.model.Company;
+import com.zszd.ai.service.CompanyService;
+import com.zszd.ai.utils.MyBatisUtil;
+
+
+
+public class CompanyServiceImpl implements CompanyService {
+
+	@Override
+	public int insertCompany(Company company) {
+		SqlSession sqlSession = null;
+		int row=0;
+		try{
+			sqlSession = MyBatisUtil.createSqlSession();
+			row = sqlSession.getMapper(CompanyDao.class).insertCompany(company);
+			sqlSession.commit();
+		}catch(Exception e){
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		
+		return row;
+	}
+
+	@Override
+	public int updateCompany(Company company) {
+		SqlSession sqlSession = null;
+		int row=0;
+		try{
+			sqlSession = MyBatisUtil.createSqlSession();
+			row = sqlSession.getMapper(CompanyDao.class).updateCompany(company);
+			sqlSession.commit();
+		}catch(Exception e){
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		
+		return row;
+	}
+
+	@Override
+	public Company queryCompanyById(int id) {
+		SqlSession sqlSession = null;
+		Company company=null;
+		try{
+			sqlSession = MyBatisUtil.createSqlSession();
+			company = sqlSession.getMapper(CompanyDao.class).queryCompanyById(id);
+			sqlSession.commit();
+		}catch(Exception e){
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return company;
+	}
+
+	@Override
+	public List<Company> queryCompanyInfo() {
+		SqlSession sqlSession = null;
+		List<Company> comList=null;
+		try{
+			sqlSession = MyBatisUtil.createSqlSession();
+			comList = sqlSession.getMapper(CompanyDao.class).queryCompanyInfo();
+			sqlSession.commit();
+		}catch(Exception e){
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return comList;
+	}
+
+}

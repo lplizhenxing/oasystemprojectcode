@@ -1,0 +1,109 @@
+<%@page import="com.zszd.ai.model.SysUser"%>
+<%@page import="com.zszd.ai.model.Employee"%>
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <base href="<%=basePath%>">
+    <%Employee employee=(Employee)session.getAttribute("employee"); 
+    SysUser sUser=(SysUser)session.getAttribute("sUser");%>
+    <title>录入新员工页面</title>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" type="text/css" href="static/css/userindex.css">
+<link rel="stylesheet" type="text/css" href="static/css/register.css">
+</head>
+<body>
+	<%@ include file="../common/userheader.jsp"%>
+	<section id="section"> 
+	<%@ include file="../common/userleft.jsp"%>
+	<div id="right">
+		<h1>
+			个人信息
+		</h1>
+		<input id="edit" type="button" value="编辑">
+		<form action="employee?opr=revise" method="post">
+		<!-- disabled readonly -->
+			<table>
+				<tr>
+				<td>员工名称：</td><td><input name="name" id="name" type="text" value=<%=employee.getName()%> readonly>&nbsp;&nbsp;</td>
+				<td>登录帐号：</td><td><input name="abbr" id="abbr" type="text" value=<%=employee.getAbbr()%> readonly></td>
+				</tr>
+				<tr>
+				<td>姓名拼音：</td><td><input name="namePinyin" id="namePinyin" type="text" value=<%=employee.getNamePinyin()%> readonly>&nbsp;&nbsp;</td>
+				<td>学员状态：</td><td><input name="state" id="state" type="text" value=<%=sUser.getState()%> readonly></td>
+				</tr>
+				<tr>
+				<td>性别：</td><td><input name="sex" id="sex" type="text" value=<%=employee.getSex()%> readonly>&nbsp;&nbsp;</td>
+				<td>班主任姓名：</td><td><input name="skillTeacher" id="skillTeacher" value="刘小艳" type="text" readonly></td>
+				</tr>
+				<tr>
+				<td>工作种类：</td><td><input name="workType" id="workType" type="text" value=<%=employee.getWorkType()%>>&nbsp;&nbsp;</td>
+				<td>工作单位：</td><td><input name="workUnit" id="workUnit" type="text" value=<%=employee.getWorkUnit()%>></td>
+				</tr>
+				<tr>
+				<td>工作状态：</td><td><input name="workState" id="workState" type="text" value=<%=employee.getWorkState()%>>&nbsp;&nbsp;</td>
+				<td>专业：</td><td><input name="major" id="major" type="text" value=<%=employee.getMajor()%>></td>
+				</tr>
+				<tr>
+				<td>毕业学校：</td><td><input name="endSchool" id="endSchool" type="text" value=<%=employee.getEndSchool()%>>&nbsp;&nbsp;</td>
+				<td>最高学历：</td><td><input name="education" id="education" type="text" value=<%=employee.getEducation()%>></td>
+				</tr>
+				<tr>
+				<td>毕业时间：</td><td><input name="endTime" id="endTime" type="text" value=<%=employee.getEndTime()%>>&nbsp;&nbsp;</td>
+				<td>邮政编码：</td><td><input name="postalcode" id="postalcode" type="text" value=<%=employee.getPostalcode()%>></td>
+				</tr>
+				<tr>
+				<td>手机号码：</td><td><input name="phone" id="phone" type="text" value=<%=employee.getPhone()%>>&nbsp;&nbsp;</td>
+				<td>通信地址：</td><td><input name="address" id="address" type="text" value=<%=employee.getAddress()%>></td>
+				</tr>
+				<tr>
+				<td>就业意向城市：</td><td><input name="intentionalCity" id="intentionalCity" type="text" value=<%=employee.getIntentionalCity()%>>&nbsp;&nbsp;</td>
+				<td>就业意向岗位：</td><td><input name="intentionalPost" id="intentionalPost" type="text" value=<%=employee.getIntentionalPost()%>></td>
+				</tr>
+				<tr>
+				<td>云豆号：</td><td><input name="e_mail" id="e_mail" type="text" value=<%=employee.getE_mail()%>>&nbsp;&nbsp;</td>
+				</tr>
+			</table>
+			<input type="submit" value="保存">
+		</form>
+		<div id="msg" style="display:none;">
+			
+		</div>
+	</div>
+	</section>
+	<%@ include file="../common/footer.jsp"%>
+</body>
+</html>
+<script type="text/javascript" src="/ShareBike/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+$("form input").attr("disabled","disabled");
+var v=document.getElementById('e_mail');
+v.onblur=function(){
+	if(v.value==null){
+		v.value='';
+	}
+}
+
+$("#edit").click(function(){
+ $("form input").removeAttr("disabled");
+ 
+
+/* 	$("#phone").val(employee.phone); */
+
+  
+});
+
+});
+
+
+</script>

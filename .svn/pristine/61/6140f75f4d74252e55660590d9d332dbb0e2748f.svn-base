@@ -1,0 +1,90 @@
+package com.zszd.ai.service;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.zszd.ai.model.Requirements;
+/**
+ * 
+ * @ClassName       RequirementsService
+ * @Description    需求管理模块
+ * @author            lizx
+ * @date           2018-1-21        上午11:43:25
+ */
+public interface RequirementsService {
+    /**
+     * 
+     * @Title          queryAllRequirementInfo
+     * @Description    查询所有需求信息
+     * @Tags           @return   
+     * @Return         List<Requirements>   
+     * @throws
+     * @author           lizx
+     * @date           2018-1-21        上午11:43:32
+     */
+	List<Requirements> queryAllRequirementInfo(); 
+	/**
+	 * 
+	 * @Title          addRequirementsInfo
+	 * @Description    新增需求信息
+	 * @Tags           @param requirements
+	 * @Tags           @return   
+	 * @Return         int   
+	 * @throws
+	 * @author           lizx
+	 * @date           2018-1-21        上午11:43:38
+	 */
+	int addRequirementsInfo(Requirements requirements);
+    /**
+     * 
+     * @Title          getRequirementsById
+     * @Description    根据需求ID得到需求信息
+     * @Tags           @param id
+     * @Tags           @return   
+     * @Return         Requirements   
+     * @throws
+     * @author           lizx
+     * @date           2018-1-21        上午11:43:45
+     */
+	Requirements getRequirementsById(int id);
+    /**
+     * 
+     * @Title          updateRequirementsInfo
+     * @Description    更新需求信息
+     * @Tags           @param requirements
+     * @Tags           @return   
+     * @Return         int   
+     * @throws
+     * @author           lizx
+     * @date           2018-1-21        上午11:43:53
+     */
+	int updateRequirementsInfo(Requirements requirements);
+	/**
+	 * 
+	 * @Title          queryAllRequirementInfoByCompanyId
+	 * @Description    查看本公司的需求
+	 * @Tags           @return   
+	 * @Return         List<Requirements>   
+	 * @throws
+	 * @author           lizx
+	 * @date           2018-1-30        上午11:44:16
+	 */
+	List<Requirements> queryAllRequirementInfoByCompanyId(int companyId);
+	/**
+	 * 
+	 * @Title          queryAllRequirementInfoByCompanyIdAndName
+	 * @Description    查看自己创建或者解决的需求
+	 * @Tags           @param companyId
+	 * @Tags           @param name
+	 * @Tags           @return   
+	 * @Return         List<Requirements>   
+	 * @throws
+	 * @author           lizx
+	 * @date           2018-1-30        下午1:42:17
+	 */
+	List<Requirements> queryAllRequirementInfoByCompanyIdAndName(int companyId,
+			String name);
+	
+	
+}

@@ -1,0 +1,68 @@
+package com.zszd.ai.servlet;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.zszd.ai.constans.ScheduleTitle;
+import com.zszd.ai.service.ScheduleService;
+import com.zszd.ai.service.impl.ScheduleServiceImpl;
+/**
+ * 学习资料
+ * @author lizx 20180103
+ *
+ */
+@WebServlet(urlPatterns = { "/study" }, name = "study")
+public class StudyServlet extends HttpServlet {
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		this.doPost(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+		String opr = request.getParameter("opr");
+		ServletContext application = this.getServletContext();// 获取application
+		if ("download".equals(opr)) {
+			String name = request.getParameter("loginname");
+			String filepath=request.getParameter("studyId");
+			filepath= application.getRealPath(File.separator).replace("\\", "/")+filepath;
+		    //File.separator   windows是\,unix是/ 
+			String fileName=filepath.substring(filepath.lastIndexOf("/")+1);
+			
+			fileName = new String(fileName.getBytes(), "ISO-8859-1");
+			
+			response.setContentType("application/octet-stream");
+			response.setHeader("Content-Disposition", "attachment;filename="+fileName);
+		
+			File downFile=new File(filepath);
+			
+			InputStream is=new FileInputStream(downFile);
+			
+			OutputStream os=response.getOutputStream();
+			
+			byte[] b=new byte[1024];
+			int len=0;
+			while ((len=is.read(b))!=-1) {
+				os.write(b, 0, len);
+				os.flush();	
+			}	
+			is.close();
+			os.close();
+		}
+	}
+}

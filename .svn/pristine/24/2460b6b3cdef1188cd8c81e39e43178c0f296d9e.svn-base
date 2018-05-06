@@ -1,0 +1,20 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+<div id="right">
+	<form action="user?opr=modify" method="post">
+		<table>
+			<tr>
+				<td><span>请输入您新的登录密码：</span></td>
+			</tr>
+			<tr>
+				<td><input type="password" name="password"></td>
+			</tr>
+			<tr>
+				<td><input type="submit" value="提交修改 "></td>
+			</tr>
+		</table>
+	</form>
+</div>
+</section>
+<%@ include file="../common/footer.jsp"%>
+

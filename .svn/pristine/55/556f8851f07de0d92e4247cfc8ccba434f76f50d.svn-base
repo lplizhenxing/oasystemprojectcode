@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zszd.ai.dao.resource.ResourceDao">
+	<select id="queryPassedResourceInfoByType" resultType="Resources">
+		select * from resource where state = 1 and type = #{type}
+	</select>
+	
+	<select id="queryAllResourceInfoByType" resultType="Resources">
+		select * from resource where type = #{type}
+	</select>
+	
+	<insert id="insertResourceRecord" parameterType="Resources">
+		insert into resource (type,name,path,createBy) values (#{type},#{name},#{path},#{createBy})
+	</insert>
+	
+    <select id="getResourceById" resultType="Resources">
+		select * from resource where id = #{id}
+	</select>
+	
+	<update id="updateResourceInfo" parameterType="Resources">
+		update resource set state=#{state},name=#{name} ,showType=#{showType},
+		reviewTime =#{reviewTime},reviewBy=#{reviewBy} where id=#{id}	
+	</update>
+	
+	
+</mapper>

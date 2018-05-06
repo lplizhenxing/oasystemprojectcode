@@ -1,0 +1,106 @@
+package com.zszd.ai.dao.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.zszd.ai.dao.RequirementsDao;
+import com.zszd.ai.model.Requirements;
+import com.zszd.ai.utils.DataSourceUtil;
+
+public class RequirementsDaoImpl implements RequirementsDao {
+
+	@Override
+	public List<Requirements> queryAllRequirementInfo() {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Requirements requirements = null;
+		List<Requirements> requirementses = new ArrayList<Requirements>();
+
+		String sql = "select * from requirements order by submitTime desc";
+		try {
+			Object[] oo = null;
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				requirements = new Requirements();
+				requirements.setId(rs.getInt("id"));
+				requirements.setContent(rs.getString("content"));
+				requirements.setProjectId(rs.getInt("projectId"));
+				requirements.setResolveDevName(rs.getString("resolveDevName"));
+				requirements.setResolveTime(rs.getDate("resolveTime"));
+				requirements.setState(rs.getString("state"));
+				requirements.setSubmitTime(rs.getDate("submitTime"));
+				requirements.setTitle(rs.getString("title"));
+				requirements.setUserName(rs.getString("userName"));
+				requirementses.add(requirements);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return requirementses;
+	}
+
+	@Override
+	public int addRequirementsInfo(Connection conn, Requirements requirements) {
+		int row = 0;
+		PreparedStatement ps = null;
+		String sql = "insert into requirements (title,content,userName) "
+				+ "values (?,?,?)";
+		Object[] oo = { requirements.getTitle(), requirements.getContent(), requirements.getUserName() };
+		try {
+			row = DataSourceUtil.executeUpdate(conn, ps, sql, oo);
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, null);
+		}
+		return row;
+	}
+
+	@Override
+	public Requirements getRequirementsById(Connection conn, int id) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Requirements requirements = null;
+		String sql = "select * from requirements where id=?";
+		try {
+			Object[] oo = { id };
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				requirements = new Requirements();
+				requirements.setId(rs.getInt("id"));
+				requirements.setTitle(rs.getString("title"));
+				requirements.setContent(rs.getString("content"));
+				requirements.setSubmitTime(rs.getDate("submitTime"));
+				requirements.setUserName(rs.getString("userName"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, null, rs);
+		}
+
+		return requirements;
+	}
+
+	@Override
+	public int updateRequirementsInfo(Connection conn, Requirements requirements) {
+		int row = 0;
+		PreparedStatement ps = null;
+		String sql = "update requirements set title = ?,content=?  where id =?";
+		Object[] oo = { requirements.getTitle(),requirements.getContent(), requirements.getId() };
+		try {
+			row = DataSourceUtil.executeUpdate(conn, ps, sql, oo);
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, null);
+		}
+		return row;
+	}
+
+}

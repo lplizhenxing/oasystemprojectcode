@@ -1,0 +1,56 @@
+package com.zszd.ai.model;
+
+import java.util.Date;
+/**
+ * 演讲
+ * @author lizx 20180103
+ *
+ */
+public class Speech {
+
+	private int id;
+	private String userName;
+	private Date speechDate;
+	private String photo;
+	private String video;
+	private int clickNumber;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public Date getSpeechDate() {
+		return speechDate;
+	}
+	public void setSpeechDate(Date speechDate) {
+		this.speechDate = speechDate;
+	}
+	public String getPhoto() {
+		return photo;
+	}
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+	public String getVideo() {
+		return video;
+	}
+	public void setVideo(String video) {
+		this.video = video;
+	}
+	public int getClickNumber() {
+		return clickNumber;
+	}
+	public void setClickNumber(int clickNumber) {
+		this.clickNumber = clickNumber;
+	}
+	
+	
+	
+}

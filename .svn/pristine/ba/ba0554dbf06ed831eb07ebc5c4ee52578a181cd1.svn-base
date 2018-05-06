@@ -1,0 +1,72 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/userlogin.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<base href="<%=basePath%>">
+
+<title>学习资料下载页面</title>
+
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" type="text/css" href="static/css/userindex.css">
+<style>
+   #right ol  li{
+      margin-left:50px;
+      line-height:50px;
+   }
+</style>
+</head>
+<body>
+	<%@ include file="../common/userheader.jsp"%>
+	<section id="section"> 
+	<%@ include	file="../common/userleft.jsp"%>
+	<div id="right">
+	<br/>
+		<%
+			String studyId15 = "static/download/teacherwang/01JSTL Functions标签库.doc";
+			String studyId16 = "static/download/teacherwang/02标准标签库_0519.doc";
+			String studyId17 = "static/download/teacherwang/jakarta-taglibs-standard-1.1.2-src.zip";
+			String studyId18 = "static/download/teacherwang/jsp-api.rar";
+			String studyId19 = "static/download/teacherwang/servelet和线程安全.txt";
+			String studyId20 = "static/download/teacherwang/读取配置文件.txt";
+			String studyId21 = "static/download/teacherwang/随机验证图片.txt";
+			String studyId22 = "static/download/teacherwang/42班分享.zip";
+		%>
+		<h3>下载公司资料</h3>
+		<hr />
+		<ol>
+			<li><a
+				href='study?opr=download&studyId=<%=studyId15%>&loginname=<%=name%>'>01JSTL
+					Functions标签库下载链接</a>
+			</li>
+			<li><a
+				href='study?opr=download&studyId=<%=studyId16%>&loginname=<%=name%>'>02标准标签库_0519下载链接</a>
+				</li>
+			<li><a
+				href='study?opr=download&studyId=<%=studyId17%>&loginname=<%=name%>'>jakarta-taglibs-standard-1.1.2-src下载链接</a>
+			</li>
+			<li><a
+				href='study?opr=download&studyId=<%=studyId18%>&loginname=<%=name%>'>jsp-api下载链接</a>
+			</li>
+			<li><a
+				href='study?opr=download&studyId=<%=studyId19%>&loginname=<%=name%>'>servelet和线程安全下载链接</a>
+			</li>
+			<li><a
+				href='study?opr=download&studyId=<%=studyId20%>&loginname=<%=name%>'>读取配置文件下载链接</a>
+			</li>
+			<li><a
+				href='study?opr=download&studyId=<%=studyId21%>&loginname=<%=name%>'>随机验证图片下载链接</a>
+			</li>
+		</ol>
+	</div>
+	</section>
+	<%@ include file="../common/footer.jsp"%>
+</body>
+
+</html>

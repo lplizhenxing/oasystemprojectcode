@@ -1,0 +1,39 @@
+package com.zszd.ai.service;
+
+import java.util.List;
+
+import com.zszd.ai.model.Test;
+import com.zszd.ai.model.Testresults;
+/**
+ * 
+ * @ClassName       TestService
+ * @Description    工作日志接口（废弃）
+ * @author            lizx
+ * @date           2018-1-21        上午11:47:28
+ */
+public interface TestService {
+     
+	List<Test> getTestByToday();
+	
+	List<Test> queryALLTestInfo();
+	
+	boolean addTestResults(Testresults testresults);
+	
+	List<Testresults> queryTestResultsByUserName(String name);
+	
+	List<Testresults> queryALLTestResults();
+	
+	boolean addTestInfo(Test test);
+	
+	int deleteTestById(int id);
+	
+	Testresults queryTestResultInfoById(int id);
+	
+	int deleteTestresultsById(int id);
+	
+	int updateTestResultsInfo(Testresults testresults);
+	
+	Test queryTestInfoById(int id);
+	
+	int updateTestInfo(Test test);
+}

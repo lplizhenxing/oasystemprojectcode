@@ -1,0 +1,118 @@
+package com.zszd.ai.servlet;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
+import com.zszd.ai.constans.ScheduleTitle;
+import com.zszd.ai.service.PostService;
+import com.zszd.ai.service.ScheduleService;
+import com.zszd.ai.service.impl.PostServiceImpl;
+import com.zszd.ai.service.impl.ScheduleServiceImpl;
+/**
+ * 工作成果
+ * @author lizx 20180103
+ *
+ */
+@WebServlet(urlPatterns = { "/workresult" }, name = "workresult")
+public class WorkresultServlet extends HttpServlet {
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		this.doPost(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+		String path = request.getContextPath();
+		String basePath = request.getScheme() + "://"
+				+ request.getServerName() + ":" + request.getServerPort()
+				+ path + "/";
+		PostService postService = new PostServiceImpl();
+		String opr = request.getParameter("opr");
+		PrintWriter out = response.getWriter();
+		if ("upload".equals(opr)) {
+			String name = request.getParameter("loginname");
+
+			String uploadFileName = "";
+			String fieldName = "";
+			boolean isMultipart = ServletFileUpload
+					.isMultipartContent(request);
+			String uploadFilePath = request.getSession()
+					.getServletContext().getRealPath("static/upload/");
+			if (isMultipart) {
+				FileItemFactory factory = new DiskFileItemFactory();
+				ServletFileUpload upload = new ServletFileUpload(factory);
+				try {
+					List<FileItem> items = upload.parseRequest(request);
+					Iterator<FileItem> iter = items.iterator();
+					while (iter.hasNext()) {
+						FileItem item = iter.next();
+						if (item.isFormField()) {
+							fieldName = item.getFieldName();
+							if (fieldName.equals("user")) {
+								//out.print(item.getString("UTF-8")+ "正在上传今天的作业。<br/>");
+							}
+
+						} else {
+							String fileName = item.getName();
+							List<String> fillType = Arrays.asList("rar",
+									"7z", "zip");
+							String ext = fileName.substring(fileName
+									.lastIndexOf(".") + 1);
+							
+							if (!fillType.contains(ext)) {
+								out.print("<script type='text/javascript'>");
+								out.print("alert('注意压缩格式只能是rar,7z,zip,请重新上传！');");
+								out.print("location.href=\"" + basePath
+										+ "jsp/workresult/work_result_upload.jsp\";");
+								out.print("</script>");
+							} else {
+								if (fileName != null
+										&& !fieldName.equals("")) {
+									String	pre = fileName.substring(0,fileName
+									.lastIndexOf(".") );
+				                    fileName = pre + System.currentTimeMillis()
+									+ (int)(Math.random()*1000)+"."+ext;
+									File fullFile = new File(fileName);
+									File saveFile = new File(
+											uploadFilePath,
+											fullFile.getName());
+									item.write(saveFile);
+									uploadFileName = fullFile.getName();
+									out.print("<script type='text/javascript'>");
+									out.print("alert('您已经成功提交作业。上传的作业名称是：\\n"+ uploadFileName+"\');");
+									out.print("location.href=\"" + basePath
+											+ "jsp/workresult/work_result_upload.jsp\";");
+									out.print("</script>");									
+								}
+							}
+
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			}
+		}
+	}
+}

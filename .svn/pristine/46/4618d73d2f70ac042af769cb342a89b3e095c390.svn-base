@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zszd.ai.dao.SignRecordDao">
+	<select id="queryAllSignRecordInfoByName" resultType="SignRecord">
+		select *
+		from signRecord where userName = #{userName} order by id desc;
+	</select>
+
+	<select id="queryAllSignRecordInfoByNameAndSignDate" resultType="SignRecord">
+		select * from signRecord where userName = #{userName} and
+		substring(signTime,1,10)=substring(#{signDate},1,10) order by id desc;
+	</select>
+
+	<select id="queryAllSignRecordInfoByNameAndSignOutDate"
+		resultType="SignRecord">
+		select * from signRecord where userName = #{userName} and
+		substring(signOutTime,1,10)=substring(#{signOutDate},1,10) order by id
+		desc;
+	</select>
+
+	<update id="updateSignRecordInfoByNameAndSignDate">
+		update signRecord set signTime=#{signTime} where
+		userName=#{userName}
+	</update>
+
+	<update id="updateSignRecordInfoByNameAndSignOutDate">
+		update signRecord set signOutTime=#{signOutTime}
+		where userName=#{userName}
+	</update>
+
+	<insert id="insertSignRecordInfoByNameAndSignDate">
+		insert into signRecord (userName,signTime) values
+		(#{userName},#{signTime})
+	</insert>
+
+	<insert id="insertSignRecordInfoByNameAndSignOutDate">
+		insert into signRecord (userName,signOutTime) values
+		(#{userName},#{signOutTime})
+	</insert>
+
+	<select id="queryAllSignRecordInfo" resultType="SignRecord">
+		select * from signRecord  order by id desc 
+	</select>
+
+	<select id="queryAllSignRecordInfoByCompanyId" resultType="SignRecord">
+		select * from signRecord a , employee b where a.userName = b.abbr and  b.companyId = #{companyId}
+		order by a.id desc;
+	</select>
+
+	<select id="queryAllSignRecordInfoByCompanyIdAndName" resultType="SignRecord">
+		select *
+		from signRecord a, employee b where a.userName = b.abbr and  b.companyId = #{companyId}
+		and a.userName = #{userName} order by a.id desc;
+	</select>
+
+
+</mapper>

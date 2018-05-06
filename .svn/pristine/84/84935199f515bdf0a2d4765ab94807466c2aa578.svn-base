@@ -1,0 +1,16 @@
+@CHARSET "UTF-8";
+
+#registerpage{
+    padding-left:100px;
+}
+
+#registerpage form {
+	font-size: 25px;
+}
+
+#mess{
+	padding-top:10px;
+	padding-left:200px;
+	color:red;
+	font-weight:bolder;
+}

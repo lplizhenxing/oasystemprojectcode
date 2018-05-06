@@ -1,0 +1,42 @@
+package com.zszd.ai.model;
+
+import java.sql.Date;
+
+public class Order {
+private int id;
+private int goodsId;
+private String userName;
+private Date buyTime;
+private String address;
+public int getId() {
+	return id;
+}
+public void setId(int id) {
+	this.id = id;
+}
+public int getGoodsId() {
+	return goodsId;
+}
+public void setGoodsId(int goodsId) {
+	this.goodsId = goodsId;
+}
+public String getUserName() {
+	return userName;
+}
+public void setUserName(String userName) {
+	this.userName = userName;
+}
+public Date getBuyTime() {
+	return buyTime;
+}
+public void setBuyTime(Date buyTime) {
+	this.buyTime = buyTime;
+}
+public String getAddress() {
+	return address;
+}
+public void setAddress(String address) {
+	this.address = address;
+}
+
+}

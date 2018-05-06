@@ -1,0 +1,43 @@
+package com.zszd.ai.dao;
+
+import java.util.List;
+
+import com.zszd.ai.model.Employee;
+/**
+ * 员工DAO接口
+ * @author lizx 20180103
+ *
+ */
+public interface EmployeeDao {
+
+	List<Employee> queryAllEmployeeInfo();
+
+	int queryWorkPointByName(String name);
+
+	int queryIdByName(String name);
+
+	int updateEmployeeWorkPoint(Employee employee);
+
+	int queryWorkPointById(int id);
+
+	String queryNameById(int id);
+
+	int getEmployeeCountByGroupId(int groupId);
+	
+	Employee queryEmployeeInfoById(int id);
+
+	int updateEmployeeInfo(Employee employee);
+
+	String getEmployeeNameByLoginName(String loginname);
+
+	List<Integer> queryIdLikeName(String name);
+
+	Employee getEmployeeInfoByLoginName(String name);
+
+	int insert(Employee employee);
+
+	int queryWorkPointByAbbr(String name);
+
+	int updateAllInfo(Employee employee);
+
+}

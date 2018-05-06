@@ -1,0 +1,53 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/userlogin.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<base href="<%=basePath%>">
+<title>代办事项页面</title>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" type="text/css" href="static/css/userindex.css">
+</head>
+<body>
+	<%@ include file="../common/userheader.jsp"%>
+	<section id="section"> <%@ include
+		file="../common/userleft.jsp"%>
+	<div id="right">
+		<a href="jsp/schedule/schedule_add.jsp" style="color:red; font-size:26px">新增待办事项</a>
+		<table>
+			<c:if test="${requestScope.list!=null}">
+				<tr>
+					<th>待办事项名称&nbsp;&nbsp;</th>
+					<th>创建代办事项者&nbsp;&nbsp;</th>
+					<th>创建时间&nbsp;&nbsp;</th>
+					<th>完成代办事项者&nbsp;&nbsp;</th>
+					<th>完成时间&nbsp;&nbsp;</th>
+					<th>操作权限</th>
+				</tr>
+				<c:forEach items="${requestScope.list}" var="schedule">
+					<tr>
+						<td colspan="6"><br />
+						</td>
+					<tr>
+					<tr>
+						<td>${schedule.content}&nbsp;&nbsp;</td>
+						<td>${schedule.createName}&nbsp;&nbsp;</td>
+						<td>${schedule.createDate}&nbsp;&nbsp;</td>
+						<td>${schedule.finishName}&nbsp;&nbsp;</td>
+						<td>${schedule.finishDate}&nbsp;&nbsp;</td>
+						<td>暂不开放</td>
+					</tr>
+				</c:forEach>
+			</c:if>
+		</table>
+	</div>
+	</section>
+	<%@ include file="../common/footer.jsp"%>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+<div id="right">
+	<a href="sign?opr=sign" style="color:red; font-size:26px">每日签到</a> <a
+		href="sign?opr=signOut" style="color:red; font-size:26px">每日签退</a>
+	<table>
+		<c:if test="${requestScope.list!=null}">
+			<tr>
+				<th>员工名称&nbsp;&nbsp;</th>
+				<th>签到时间&nbsp;&nbsp;</th>
+				<th>签退时间&nbsp;&nbsp;</th>
+				<th>操作权限</th>
+			</tr>
+			<c:forEach items="${requestScope.list}" var="sign">
+				<tr>
+					<td colspan="4"><br />
+					</td>
+				<tr>
+				<tr>
+					<td>${sign.userName}&nbsp;&nbsp;</td>
+					<td>${sign.signTime}&nbsp;&nbsp;</td>
+					<td>${sign.signOutTime}&nbsp;&nbsp;</td>
+					<td>暂未开发</td>
+				</tr>
+			</c:forEach>
+		</c:if>
+	</table>
+</div>
+</section>
+<%@ include file="../common/footer.jsp"%>
+

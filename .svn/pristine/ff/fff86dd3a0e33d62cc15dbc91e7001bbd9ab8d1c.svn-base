@@ -1,0 +1,34 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+<div id="right">
+	<table>
+		<c:if test="${requestScope.list!=null}">
+			<tr>
+				<th>公司名称&nbsp;&nbsp;</th>
+				<th>所属班级&nbsp;&nbsp;</th>
+				<th>成立时间&nbsp;&nbsp;</th>
+				<th>操作权限&nbsp;&nbsp;</th>
+			</tr>
+			<c:forEach items="${requestScope.list}" var="company">
+				<tr>
+					<td colspan="4"><br /></td>
+				</tr>
+				<tr>
+					<td>${company.name}&nbsp;&nbsp;</td>
+					<td>${company.className}&nbsp;&nbsp;</td>
+					<td>${company.buildTime}&nbsp;&nbsp;</td>
+					<td><c:if test="${sessionScope.roleId == 1}">
+							<a href="company?opr=modify&companyId=${company.id}"
+								style="color:red">修改</a>
+							<a href="company?opr=delete&companyId=${company.id}"
+								style="color:red">删除</a>
+						</c:if>
+					</td>
+				</tr>
+			</c:forEach>
+		</c:if>
+	</table>
+</div>
+</section>
+<%@ include file="../common/footer.jsp"%>
+

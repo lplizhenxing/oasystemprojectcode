@@ -1,0 +1,19 @@
+package com.zszd.ai.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.zszd.ai.model.FunctionRole;
+
+public interface FunctionRoleDao {
+
+	List<FunctionRole> queryAllFunctionRoleInfo();
+
+	int addFunctionRoleInfo(FunctionRole functionRole);
+
+	List<FunctionRole> queryAllFunctionRoleInfoByRoleId(@Param("roleIdsessin")int roleIdsessin);
+
+	int delFunctionRoleConfigInfoById(@Param("id")int functionRoleId);
+
+}

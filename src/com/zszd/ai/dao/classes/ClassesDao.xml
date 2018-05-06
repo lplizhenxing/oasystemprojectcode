@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zszd.ai.dao.classes.ClassesDao">
+	<select id="queryAllClasses" resultType="classes">
+		select * from classes
+		where state = 1
+	</select>
+	<insert id="insertClasses" parameterType="classes">
+		insert into classes
+		(className,classLeader,classTeacher) values
+		(#{className},#{classLeader},#{classTeacher})
+
+	</insert>
+	<update id="updateClassesById" parameterType="classes">
+		update classes set
+		className=#{className}
+		,classLeader=#{classLeader},classTeacher=#{classTeacher}
+		where id=#{id}
+	</update>
+
+	<update id="deleteClassByClassId">
+		update classes set state=0
+		where id=#{id}
+	</update>
+
+	<select id="queryClassByClassId" resultType="classes">
+		select * from
+		classes where state=1 and id=#{id}
+	</select>
+
+	<select id="queryAllClassesByClassLeader" resultType="classes">
+		select *
+		from
+		classes where state=1 and classLeader = #{name}
+	</select>
+
+	<select id="getClassesCount" resultType="int">
+		select count(1)
+		from
+		classes
+		where state=1
+		<if test="queryClassName != null">
+			and className like CONCAT('%',#{queryClassName},'%')
+		</if>
+		<if test="queryClassLeader != null">
+			and classLeader like CONCAT('%',#{queryClassLeader},'%')
+		</if>
+		<if test="queryClassTeacher != null">
+			and classTeacher like CONCAT('%',#{queryClassTeacher},'%')
+		</if>
+	</select>
+
+	<select id="getClassesListBy" resultType="classes">
+		select *
+		from
+		classes
+		where state=1
+		<if test="queryClassName != null">
+			and className like CONCAT('%',#{queryClassName},'%')
+		</if>
+		<if test="queryClassLeader != null">
+			and classLeader like CONCAT('%',#{queryClassLeader},'%')
+		</if>
+		<if test="queryClassTeacher != null">
+			and classTeacher like CONCAT('%',#{queryClassTeacher},'%')
+		</if>
+		limit #{currentPageNo},#{pageSize}
+	</select>
+
+</mapper>

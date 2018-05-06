@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zszd.ai.dao.DrawDao">
+	<select id="findAllDraw" resultType="Draw">
+	    select * from draw order by drawTime desc
+	</select>
+
+	<select id="findDrawByName" resultType="Draw">
+		select drawTime,workpoint,prizeName from draw where loginName=#{name}
+	</select>
+
+	<insert id="addDrawRecord" parameterType="Draw">
+		insert into draw(loginName,drawTime,workpoint,prizeName) values(#{loginName},#{drawTime},#{workpoint},#{prizeName})
+	</insert>
+</mapper>

@@ -1,0 +1,40 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/userlogin.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<base href="<%=basePath%>">
+<title>文件上传页面</title>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" type="text/css" href="static/css/userindex.css">
+</head>
+<body>
+	<%@ include file="../common/userheader.jsp"%>
+	<section id="section">
+    <%@ include file="../common/userleft.jsp"%>
+	<div id="right">
+	<br/>
+		<table>
+           <c:choose >
+                <c:when test="${requestScope.message eq '文件上传成功'}">
+					${requestScope.message}
+					<a href="listFile?opr=list">查看已上传文件</a>
+			    </c:when>
+			    
+           		<c:otherwise ><%-- test="${requestScope.message eq '单个文件超出最大值'|'上传文件的总的大小超出限制的最大值！'|'文件上传失败'|null}" --%>  
+					${requestScope.message}
+					<a href="jsp/workresult/work_result_upload.jsp">文件上传失败请处理后重新上传</a>
+				</c:otherwise>
+				
+		   </c:choose>
+		 </table>
+	</div>
+	</section>
+	<%@ include file="../common/footer.jsp"%>
+</body>
+</html>

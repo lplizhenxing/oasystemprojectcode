@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Context>
+	<Resource name="zszd" auth="Container" type="javax.sql.DataSource"
+		maxActive="100" maxIdle="30" maxWait="1000" username="root" password="root"
+		driverClassName="com.mysql.jdbc.Driver"
+		url="jdbc:mysql://127.0.0.1:3306/db_zszd?useUnicode=true&amp;characterEncoding=utf-8"/>
+</Context>

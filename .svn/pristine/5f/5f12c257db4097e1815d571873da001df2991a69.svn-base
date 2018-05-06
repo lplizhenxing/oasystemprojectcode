@@ -1,0 +1,59 @@
+<%@page import="com.zszd.ai.service.impl.ComplaintServiceImpl"%>
+<%@page import="com.zszd.ai.model.Complaint"%>
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<%
+	String alert = (String) session.getAttribute("alert");
+	if(alert != null && alert != "") {
+		out.print(alert);
+	}
+%>
+<%
+	List<Complaint> complaintList = new ComplaintServiceImpl().queryComplaint();
+%>
+<html>
+  <head>
+    <base href="<%=basePath%>">
+    
+    <title>My JSP 'complaint_search.jsp' starting page</title>
+    
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
+	<!--
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	-->
+
+  </head>
+  
+  <body>
+  
+  	<table width="400" border="1">
+   		<tr>
+   			<td>投诉编号</td>
+   			<td>投诉内容</td>
+   			<td>投诉时间</td>
+   			<td>操作</td>
+   		</tr>
+    <%
+    	for(Complaint comp : complaintList) {
+    %>
+   		<tr>
+   			<td><%=comp.getId() %></td>
+   			<td><%=comp.getContent() %></td>
+   			<td><%=comp.getCreateionDate() %></td>
+   			<td><a href="<%=basePath%>jsp/complaint/complaint_feedback?id=<%=comp.getId() %>">反馈</a></td>
+   		</tr>
+    <%		
+    	}
+    %>
+    </table>
+  </body>
+</html>

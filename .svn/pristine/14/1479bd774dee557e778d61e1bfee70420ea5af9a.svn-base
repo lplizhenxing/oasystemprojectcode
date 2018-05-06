@@ -1,0 +1,123 @@
+package com.zszd.ai.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.zszd.ai.dao.LeaveDao;
+import com.zszd.ai.model.Leave;
+import com.zszd.ai.service.LeaveService;
+import com.zszd.ai.utils.MyBatisUtil;
+
+public class LeaveServiceImpl implements LeaveService {
+
+	@Override
+	public int addLeaveInfo(Leave leave) {
+		SqlSession sqlSession = null;
+		int rows =0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(LeaveDao.class)
+					.addLeaveInfo(leave);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+		
+	}
+
+	@Override
+	public List<Leave> queryAllLeaveInfo() {
+		SqlSession sqlSession = null;
+		List<Leave> leaves = new ArrayList<Leave>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			leaves = sqlSession.getMapper(LeaveDao.class)
+					.queryAllLeaveInfo();
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return leaves;
+	}
+
+	@Override
+	public List<Leave> queryAllLeaveInfoByName(String name) {
+		SqlSession sqlSession = null;
+		List<Leave> leaves = new ArrayList<Leave>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			leaves = sqlSession.getMapper(LeaveDao.class)
+					.queryAllLeaveInfoByName(name);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return leaves;
+	}
+
+	@Override
+	public int rejectLeaveInfo(Leave leave) {
+		SqlSession sqlSession = null;
+		int rows =0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(LeaveDao.class)
+					.rejectLeaveInfo(leave);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+
+	@Override
+	public int approveLeaveInfo(Leave leave) {
+		SqlSession sqlSession = null;
+		int rows =0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(LeaveDao.class)
+					.approveLeaveInfo(leave);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+
+	@Override
+	public int cancelLeaveByLeaveId(int leaveId) {
+		SqlSession sqlSession = null;
+		int rows =0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			rows = sqlSession.getMapper(LeaveDao.class)
+					.cancelLeaveByLeaveId(leaveId);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return rows;
+	}
+}

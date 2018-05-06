@@ -1,0 +1,240 @@
+package com.zszd.ai.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.zszd.ai.dao.EmployeeDao;
+import com.zszd.ai.model.Employee;
+import com.zszd.ai.service.EmployeeService;
+import com.zszd.ai.utils.MyBatisUtil;
+/**
+ * 员工接口实现
+ * @author lizx 20180103
+ *
+ */
+public class EmployeeServiceImpl implements EmployeeService{
+
+	@Override
+	public List<Employee> queryAllEmployeeInfo() {
+		SqlSession sqlSession = null;
+		List<Employee> employees = new ArrayList<Employee>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			employees = sqlSession.getMapper(EmployeeDao.class).queryAllEmployeeInfo();
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return employees;
+	}
+
+	@Override
+	public int queryWorkPointByName(String name) {
+		SqlSession sqlSession = null;
+		int workPoint = 0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			workPoint = sqlSession.getMapper(EmployeeDao.class).queryWorkPointByName(name);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return workPoint;
+	}
+
+	@Override
+	public String queryNameById(int id) {
+		SqlSession sqlSession = null;
+		String name = null;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			name = sqlSession.getMapper(EmployeeDao.class).queryNameById(id);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return name;
+	}
+
+	@Override
+	public int getEmployeeCountByGroupId(int groupId) {
+		SqlSession sqlSession = null;
+		int num = 0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			num = sqlSession.getMapper(EmployeeDao.class).getEmployeeCountByGroupId(groupId);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return num;
+	}
+
+	@Override
+	public Employee queryEmployeeInfoById(int id) {
+		SqlSession sqlSession = null;
+		Employee employee = new Employee();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			employee = sqlSession.getMapper(EmployeeDao.class).queryEmployeeInfoById(id);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return employee;
+	}
+
+	@Override
+	public int updateEmployeeInfo(Employee employee) {
+		SqlSession sqlSession = null;
+		int num = 0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			num = sqlSession.getMapper(EmployeeDao.class).updateEmployeeInfo(employee);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return num;
+	}
+	
+	@Override
+	public int updateAllInfo(Employee employee) {
+		SqlSession sqlSession = null;
+		int num = 0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			num = sqlSession.getMapper(EmployeeDao.class).updateAllInfo(employee);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return num;
+	}
+
+	@Override
+	public String getEmployeeNameByLoginName(String loginname) {
+		SqlSession sqlSession = null;
+		String name = null;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			name = sqlSession.getMapper(EmployeeDao.class).getEmployeeNameByLoginName(loginname);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return name;
+	}
+
+	@Override
+	public Employee getEmployeeInfoByLoginName(String name) {
+		SqlSession sqlSession = null;
+		Employee employee = new Employee();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			employee = sqlSession.getMapper(EmployeeDao.class).getEmployeeInfoByLoginName(name);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return employee;
+	}
+
+	@Override
+	public int queryWorkPointByAbbr(String name) {
+		SqlSession sqlSession = null;
+		int num = 0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			num = sqlSession.getMapper(EmployeeDao.class).queryWorkPointByAbbr(name);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return num;
+	}
+
+	@Override
+	public int insert(Employee employee) {
+		SqlSession sqlSession = null;
+		int num = 0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			num = sqlSession.getMapper(EmployeeDao.class).insert(employee);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return num;
+	}
+
+	@Override
+	public int queryIdByName(String name) {
+		SqlSession sqlSession = null;
+		int id = 0;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			id = sqlSession.getMapper(EmployeeDao.class).queryIdByName(name);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return id;
+	}
+
+	@Override
+	public List<Integer> queryIdLikeName(String name) {
+		SqlSession sqlSession = null;
+		List<Integer> list = new ArrayList<Integer>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			list = sqlSession.getMapper(EmployeeDao.class).queryIdLikeName(name);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return list;
+	}
+
+}

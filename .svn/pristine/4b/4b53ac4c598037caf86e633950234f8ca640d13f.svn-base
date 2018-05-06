@@ -1,0 +1,60 @@
+package com.zszd.ai.dao;
+
+import java.util.List;
+
+import com.zszd.ai.model.Department;
+
+public interface DepartmentDao {
+	/**
+	 * 
+	 * @Title          insertDepartment
+	 * @Description    添加部门信息
+	 * @Tags           @param department
+	 * @Tags           @return   
+	 * @Return         int   
+	 * @throws
+	 * @author           lvjc
+	 * @date           2018-1-21        下午8:38:26
+	 */
+	int insertDepartment(Department department);
+	/**
+	 * 
+	 * @Title          updateDepartment
+	 * @Description    修改部门信息
+	 * @Tags           @param department
+	 * @Tags           @return   
+	 * @Return         int   
+	 * @throws
+	 * @author           lvjc
+	 * @date           2018-1-21        下午8:38:39
+	 */
+	int updateDepartment(Department department);
+
+	// // 删除状态为0的部门
+	// int deleteDepartmentByState();
+	/**
+	 * 
+	 * @Title          queryDepartmentById
+	 * @Description    通过查询部门信息
+	 * @Tags           @param id
+	 * @Tags           @return   
+	 * @Return         Department   
+	 * @throws
+	 * @author           lvjc
+	 * @date           2018-1-21        下午8:38:47
+	 */
+	Department queryDepartmentById(int id);
+
+	/**
+	 * 
+	 * 
+	 * @Title          queryDepartmentInfo
+	 * @Description    查询所有部门信息
+	 * @Tags           @return   
+	 * @Return         List<Department>   
+	 * @throws
+	 * @author           lvjc
+	 * @date           2018-1-21        下午8:39:08
+	 */
+	List<Department> queryDepartmentInfo();
+}

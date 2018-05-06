@@ -1,0 +1,37 @@
+package com.zszd.ai.service.impl;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import com.zszd.ai.dao.OrderDao;
+import com.zszd.ai.dao.impl.OrderDaoImpl;
+import com.zszd.ai.model.Order;
+import com.zszd.ai.model.Post;
+import com.zszd.ai.service.OrderService;
+import com.zszd.ai.utils.DataSourceUtil;
+public class OrderServiceImpl implements OrderService {
+OrderDao orderDao=new OrderDaoImpl();
+	@Override
+	public boolean addOrderInfo(Order order) {
+		Connection conn = null;
+		boolean flag = false;
+		conn = DataSourceUtil.getConnection();
+		try {
+			conn.setAutoCommit(false);
+			int row1 = orderDao.addOrderInfo(conn, order);
+			flag = true;
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(null, conn, null);
+		}
+		return flag;
+	}
+
+}

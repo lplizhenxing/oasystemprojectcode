@@ -1,0 +1,61 @@
+<%@page import="com.zszd.ai.service.impl.ReportServiceImpl"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.text.DateFormat"%>
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/userlogin.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<base href="<%=basePath%>">
+<title>汇报页面</title>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="stylesheet" type="text/css" href="static/css/userindex.css">
+</head>
+<body>
+	<%@ include file="../common/userheader.jsp"%>
+	<section id="section"> <%@ include
+		file="../common/userleft.jsp"%>
+	<div id="right">
+		<h3>工作日志集合记录</h3>
+		<table>
+			<c:if test="${requestScope.list!=null }">
+				<tr>
+					<th>员工名称</th>
+					<th>日志类型</th>
+					<th>问题和风险</th>
+					<th>完成的工作</th>
+					<th>明日计划</th>
+					<th>备注</th>
+					<th>提交日期</th>
+					<th>操作权限</th>
+				</tr>
+				<c:forEach items="${requestScope.list}" var="report">
+					<tr>
+						<td colspan="8"><hr /></td>
+					<tr>
+					<tr>
+						<td style="width:100px">${report.username}</td>
+						<td style="width:50px">${report.typename}</td>
+						<td style="width:100px">${report.question}</td>
+						<td style="width:100px">${report.finishwork}</td>
+						<td style="width:100px">${report.plan}</td>
+						<td style="width:100px">${report.remark}</td>
+						<td style="width:100px">${report.createDate}</td>
+						<td><c:if test="${sessionScope.roleId == 6}">
+								<a href='report?opr=modify&reportId=${report.id}'
+									style="color:red;">修改 </a>
+							</c:if></td>
+					</tr>
+				</c:forEach>
+			</c:if>
+		</table>
+	</div>
+	</section>
+	<%@ include file="../common/footer.jsp"%>
+</body>
+</html>

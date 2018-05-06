@@ -1,0 +1,44 @@
+package com.zszd.ai.service;
+
+import java.util.List;
+
+import com.zszd.ai.model.Classes;
+
+
+
+public interface ClassesService {
+	/**
+	 * 
+	 * @Title          queryAllClasses
+	 * @Description    查询所有班级
+	 * @Tags           @return   
+	 * @Return         List<Classes>   
+	 * @throws
+	 * @author           lvjc
+	 * @date           Jan 28, 2018        4:13:19 PM
+	 */
+	List<Classes> queryAllClasses();
+	/**
+	 * 
+	 * @Title          insertClasses
+	 * @Description    添加班级
+	 * @Tags           @return   
+	 * @Return         int   
+	 * @throws
+	 * @author           lvjc
+	 * @date           Jan 28, 2018        4:13:39 PM
+	 */
+	int insertClasses(Classes classes);
+	/**
+	 * 
+	 * @Title          updateClassesById
+	 * @Description    通过id修改班级
+	 * @Tags           @param id
+	 * @Tags           @return   
+	 * @Return         int   
+	 * @throws
+	 * @author           lvjc
+	 * @date           Jan 28, 2018        4:13:52 PM
+	 */
+	int updateClassesById(Classes classes );
+}

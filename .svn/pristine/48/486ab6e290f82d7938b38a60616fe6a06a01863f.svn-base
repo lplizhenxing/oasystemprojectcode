@@ -1,0 +1,55 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+<div id="right">
+	<form action="bugs?opr=submitModify" method="post">
+		<input type="hidden" value="${requestScope.bugs.id}" name="id"><br />
+		<table>
+			<tr>
+				<td style="width:80px">修改bug标题：&nbsp;&nbsp;</td>
+				<td><input id="bugsTitle" type="text" name="bugsTitle"
+					value="${requestScope.bugs.title}" /></td>
+			</tr>
+			<tr>
+				<td style="width:80px">修改bug内容：&nbsp;&nbsp;</td>
+				<td><textarea id="bugsContent" name="bugsContent" rows="20"
+						cols="70">${requestScope.bugs.content}</textarea></td>
+			</tr>
+			<tr>
+				<td style="width:80px"><input type="submit" value="提交修改 ">
+				</td>
+				<td><input type="reset" value="重置"></td>
+			</tr>
+		</table>
+	</form>
+</div>
+</section>
+<%@ include file="../common/footer.jsp"%>
+<script type="text/javascript">
+	$(function() {
+		$("form").submit(function() {
+			var postTitle = $("#bugsTitle").val();
+			if (postTitle.trim() == "") {
+				alert("标题不能为空！");
+				return false;
+			}
+
+			var postContent = $("#bugsContent").val();
+			if (postContent.trim() == "") {
+				alert("内容不能为空！");
+				return false;
+			}
+
+			if (postContent.indexOf("<") != -1) {
+				alert("内容不能包含<符合，为了不非法注入代码！");
+				return false;
+			}
+
+			if (postContent.indexOf(">") != -1) {
+				alert("内容不能包含>符合，为了不非法注入代码！");
+				return false;
+			}
+
+			return true;
+		});
+	});
+</script>

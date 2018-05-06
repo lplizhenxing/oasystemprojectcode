@@ -1,0 +1,67 @@
+package com.zszd.ai.dao.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.zszd.ai.dao.SpeechDao;
+import com.zszd.ai.model.Speech;
+import com.zszd.ai.utils.DataSourceUtil;
+/**
+ * 演讲DAO实现类
+ * @author lizx 20180103
+ *
+ */
+public class SpeechDaoImpl implements SpeechDao {
+
+	@Override
+	public List<Speech> queryAllSpeechInfo() {
+		Connection conn = DataSourceUtil.getConnection();
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Speech speech = null;
+		List<Speech> speechs = new ArrayList<Speech>();
+
+		String sql = "select * from speech";
+		try {
+			Object[] oo = null;
+			rs = DataSourceUtil.executeQuery(conn, ps, sql, oo);
+			while (rs.next()) {
+				speech = new Speech();
+				speech.setId(rs.getInt("id"));
+				speech.setUserName(rs.getString("userName"));
+				speech.setSpeechDate(rs.getDate("speechDate"));
+				speech.setPhoto(rs.getString("photo"));
+				speech.setVideo(rs.getString("video"));
+				speech.setClickNumber(rs.getInt("clickNumber"));
+				speechs.add(speech);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DataSourceUtil.colseAll(ps, conn, rs);
+		}
+
+		return speechs;
+
+	}
+
+	@Override
+	public int updateClickNumberByVideo(Connection conn, Speech speech) {
+		int row =0;
+		PreparedStatement ps=null;
+		String sql = "update speech set clickNumber = ?  where video =?";
+		Object[] oo={speech.getClickNumber(),speech.getVideo()};
+		try {	
+		    row=DataSourceUtil.executeUpdate(conn, ps, sql, oo);
+		}finally{
+			DataSourceUtil.colseAll(ps, conn,null);
+		}
+		return row;
+	}
+
+}

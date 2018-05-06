@@ -1,0 +1,13 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<script type='text/javascript' src="static/js/jquery.min.js"></script>
+<header id="header">
+	<p>
+		尊敬的<span>${sessionScope.login}</span>,第<span>${sessionScope.logincount}</span>次访问,
+		<c:if test="${sessionScope.roleId eq 6}">
+			<a href="user?opr=signOut" style="font-size:16px;">签退</a>
+		</c:if>
+		<a href="dologin?opr=logout" style="font-size:16px;">登出</a> <a
+			href="jsp/user/userindex.jsp" style="font-size:16px;">返回首页</a>
+	</p>
+</header>

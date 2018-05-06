@@ -1,0 +1,61 @@
+package com.zszd.ai.dao;
+
+import java.util.List;
+
+import com.zszd.ai.model.Company;
+
+
+public interface CompanyDao {
+	/**
+	 * 
+	 * 
+	 * @Title          insertCompany
+	 * @Description    添加公司信息
+	 * @Tags           @param company
+	 * @Tags           @return   
+	 * @Return         int   
+	 * @throws
+	 * @author           lvjc
+	 * @date           2018-1-21        下午8:40:00
+	 */
+	int insertCompany( Company company);
+	/**
+	 * 
+	 * @Title          updateCompany
+	 * @Description    修改公司信息
+	 * @Tags           @param company
+	 * @Tags           @return   
+	 * @Return         int   
+	 * @throws
+	 * @author           lvjc
+	 * @date           2018-1-21        下午8:39:53
+	 */
+	int updateCompany( Company company);
+//	// 删除状态为0的公司
+//	int deleteCompanyByState();
+	/**
+	 * 
+	 * @Title          queryCompanyById
+	 * @Description    通过查询公司信息
+	 * @Tags           @param id
+	 * @Tags           @return   
+	 * @Return         Company   
+	 * @throws
+	 * @author           lvjc
+	 * @date           2018-1-21        下午8:39:42
+	 */
+	Company queryCompanyById(int id);
+	/**
+	 * 
+	 * @Title          queryCompanyInfo
+	 * @Description    查询所有公司信息
+	 * @Tags           @return   
+	 * @Return         List<Company>   
+	 * @throws
+	 * @author           lvjc
+	 * @date           2018-1-21        下午8:39:30
+	 */
+	List<Company> queryCompanyInfo();
+	
+	
+}

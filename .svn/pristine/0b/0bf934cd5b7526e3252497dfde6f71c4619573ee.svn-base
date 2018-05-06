@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zszd.ai.dao.devgroup.DevgroupDao">
+	<select id="queryNameById">
+		select name from devgroup where id=#{id}
+	</select>
+	<select id="queryAllDevGroupInfo" resultMap="devgroup">
+		select a.*,b.name as
+		departmentName,c.name as companyName from devgroup a, department
+		b,company c
+		where a.departmentId = b.id and b.companyId = c.id
+		order by
+		a.departmentId;
+	</select>
+	<select id="queryDevGroupInfoById" resultMap="devgroup">
+		select *,(select
+		name from department where id=departmentId)as departmentName from
+		devgroup where id=#{id}
+	</select>
+	<resultMap id="devgroup" type="devgroup">
+		<result property="property" column="property" />
+	</resultMap>
+	<select id="getDevGroupCountByDepartmentId" resultType="int">
+		select
+		count(*) from devgroup where departmentId =#{id}
+	</select>
+	<update id="updateDevGroupInfo" parameterType="devgroup">
+		update devgroup
+		set
+		name=#{name},watchword=#{watchword},departmentId=#{departmentId}
+		where
+		id=#{id}
+	</update>
+	<delete id="deleteDevGroupById">
+		delete from devgroup where id=#{id}
+	</delete>
+	<insert id="insertDevGroup">
+		insert into devgroup (name,watchword,departmentId)
+		values(#{name},#{watchword},#{departmentId})
+	</insert>
+	<select id="queryAllDevGroupInfoByCompanyId" resultMap="devgroup">
+		select
+		a.*,(select name from department where id=departmentId)as
+		departmentName from devgroup a , department b
+		where a.departmentId = b.id and b.companyId = #{companyId}
+	</select>
+
+	<select id="getDevgroupCount" resultType="int">
+		select count(1) from devgroup a, department b,company c
+		where
+		a.departmentId = b.id and b.companyId = c.id
+		<if test="queryDepartmentName != null">
+			and b.name like CONCAT('%',#{queryDepartmentName},'%')
+		</if>
+		<if test="queryCompanyName != null">
+			and c.name like CONCAT('%',#{queryCompanyName},'%')
+		</if>
+		<if test="queryDevgroupName != null">
+			and a.name like CONCAT('%',#{queryDevgroupName},'%')
+		</if>
+	</select>
+
+	<select id="getDevgroupListBy" resultType="devgroup">
+		select a.*,b.name as departmentName,c.name as companyName from
+		devgroup a, department b,company c
+		where a.departmentId = b.id and
+		b.companyId = c.id
+		<if test="queryDepartmentName != null">
+			and b.name like CONCAT('%',#{queryDepartmentName},'%')
+		</if>
+		<if test="queryCompanyName != null">
+			and c.name like CONCAT('%',#{queryCompanyName},'%')
+		</if>
+		<if test="queryDevgroupName != null">
+			and a.name like CONCAT('%',#{queryDevgroupName},'%')
+		</if>
+		limit #{currentPage},#{pageSize}
+	</select>
+
+</mapper>

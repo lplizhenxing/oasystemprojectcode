@@ -1,0 +1,34 @@
+package com.zszd.ai.model;
+
+import java.util.Date;
+/**
+ * 敏感词
+ * @author lizx 20180103
+ *
+ */
+public class Sensitivewords {
+
+	private int id;
+	private String content;
+	private Date contentDate;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	public Date getContentDate() {
+		return contentDate;
+	}
+	public void setContentDate(Date contentDate) {
+		this.contentDate = contentDate;
+	}
+
+	
+}

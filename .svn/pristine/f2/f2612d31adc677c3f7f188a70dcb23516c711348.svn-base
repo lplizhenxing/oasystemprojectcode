@@ -1,0 +1,50 @@
+package com.zszd.ai.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.zszd.ai.dao.RoleDao;
+import com.zszd.ai.model.Role;
+import com.zszd.ai.service.RoleService;
+import com.zszd.ai.utils.MyBatisUtil;
+
+public class RoleServiceImpl implements RoleService {
+
+	@Override
+	public List<Role> queryAllRoleInfo() {
+		SqlSession sqlSession = null;
+		List<Role> roles = new ArrayList<Role>();
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			roles = sqlSession.getMapper(RoleDao.class)
+					.queryAllRoleInfo();
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return roles;
+	}
+
+	public String queryRoleNameByRoleId(int roleId) {
+		SqlSession sqlSession = null;
+		String name  =null;
+		try {
+			sqlSession = MyBatisUtil.createSqlSession();
+			name = sqlSession.getMapper(RoleDao.class)
+					.queryRoleNameByRoleId(roleId);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		} finally {
+			MyBatisUtil.closeSqlSession(sqlSession);
+		}
+		return name;
+	}
+
+}
